@@ -1,10 +1,13 @@
 from flask import Flask, render_template
 from extensions import db, migrate
 from application.routes.employee_routes import employee_routes
+from application.category_routes import category_routes
+
 def create_app():
     app = Flask(__name__)
 
     app.register_blueprint(employee_routes)
+    app.register_blueprint(category_routes)
     @app.route("/")
     def home():
         return render_template("home.html")
