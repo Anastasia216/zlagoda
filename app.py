@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template
 from extensions import db, migrate
-from sqlite_db import get_db_connection
-from routes.employee_routes import employee_routes
+from application.routes.employee_routes import employee_routes
 def create_app():
     app = Flask(__name__)
 
@@ -16,7 +15,7 @@ def create_app():
     migrate.init_app(app, db)
 
     with app.app_context():
-        from database import models  # важливо: після init_app
+        pass
 
 
     return app
