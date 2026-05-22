@@ -1,6 +1,7 @@
 from flask import(Blueprint, render_template, request, redirect, url_for, jsonify)
-from database.queries.employee_queries import (get_all_employees, get_all_cashiers, get_employee_by_id, get_employee_by_surname, create_employee, update_employee, delete_employee, update_employee, delete_employee)
-from validation.employee_validation import(validate_employee)
+from application.queries.employee_queries import (get_all_employees, get_employee_by_id, create_employee,
+                                                  update_employee, delete_employee)
+from application.validation.employee_validation import(validate_employee)
 employee_routes = Blueprint('employee_routes', __name__)
 
 @employee_routes.route('/employees')
