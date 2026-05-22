@@ -1,0 +1,56 @@
+from flask import(Blueprint, render_template, request, redirect, url_for, jsonify)
+from database.queries.employee_queries import (get_all_employees, get_all_cashiers, get_employee_by_id, get_employee_by_surname, create_employee, update_employee, delete_employee, update_employee, delete_employee)
+from validation.employee_validation import(validate_employee)
+employee_routes = Blueprint('employee_routes', __name__)
+
+@employee_routes.route('/employees')
+def employee_list():
+    search = request.args.get('search','')
+    employees = get_all_employees(search)
+    return render_template('employees/list.html', employees=employees, search=search)
+
+@employee_routes.route('/employees/add')
+def employee_add_page():
+    return render_template('employees/add.html')
+
+@employee_routes.route('/employees/add', methods=['POST'])
+def add_employee():
+    data = request.form
+    errors = validate_employee(data)
+    if errors:
+        return render_template('employees/add.html', errors=errors, old=data)
+    create_employee(data)
+    return redirect(url_for('employee.employee_list'))
+
+@employee_routes.route('/employees/<int:id_employee>/edit')
+def employee_edit_page(id_employee):
+    employee = get_employee_by_id(id_employee)
+    return render_template('employees/edit.html', employee=employee)
+
+@employee_routes.route('/employees/<int:id_employee>/edit', methods=['POST'])
+def employee_edit(id_employee):
+    data = request.form
+    errors = validate_employee(data)
+    if errors:
+        employee = get_employee_by_id(id_employee)
+        return render_template('employees/edit.html', errors=errors, old=data)
+    update_employee(id_employee,data)
+    return redirect(url_for('employee.employee_list'))
+
+@employee_routes.route('/employees/<int:id_employee>/delete')
+def employee_delete_route(id_employee):
+    delete_employee(id_employee)
+    return jsonify({
+        'success':True
+    })
+
+@employee_routes.route('/employees/reports')
+def employee_reports_page():
+    return render_template('employees/reports.html')
+
+#@employee_routes.route('/employees/reports', methods=['POST'])
+#def employee_reports():
+##############################################################
+###################################################################
+# need to write it later
+###################################################################
