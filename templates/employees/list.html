@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Employees</h1>
+
+<form method="GET">
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Search..."
+        value="{{ search }}"
+    >
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+<div class="container">
+
+    <table border="1">
+
+        <tr>
+            <th>ID</th>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Salary</th>
+        </tr>
+
+        {% for employee in employees %}
+
+        <tr id="employee-{{ employee.id }}">
+
+            <td>{{ employee.id }}</td>
+            <td>{{ employee.surname }}</td>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.role }}</td>
+            <td>{{ employee.salary }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <div class="buttons">
+
+        <a href="/employees/add">
+            <button>
+                Add
+            </button>
+        </a>
+
+        <button onclick="editEmployee()">
+            Edit
+        </button>
+
+        <button onclick="deleteEmployee()">
+            Delete
+        </button>
+
+        <a href="/employees/report">
+            <button>
+                Report
+            </button>
+        </a>
+
+    </div>
+
+</div>
+
+<script
+    src="{{ url_for('static',
+    filename='js/employees.js') }}"
+></script>
+
+{% endblock %}

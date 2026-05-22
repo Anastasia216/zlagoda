@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for
 from extensions import db, migrate
 from sqlite_db import get_db_connection
+from routes.employee_routes import employee_routes
 def create_app():
     app = Flask(__name__)
 
+    app.register_blueprint(employee_routes)
     @app.route("/")
     def home():
         return render_template("home.html")
+
     app.config.from_object("configure.Config")
 
     db.init_app(app)
