@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        /* 🔎 search bar */
+        .search-box {
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            width: 300px;
+            padding: 8px;
+        }
+
+        /* 🔘 buttons */
+        .actions {
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            margin-right: 5px;
+            border: none;
+            cursor: pointer;
+            color: white;
+        }
+
+        .add { background: green; }
+        .edit { background: orange; }
+        .delete { background: red; }
+        .report { background: blue; }
+
+        /* 📊 table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f2f2f2;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>📂 Categories</h1>
+
+<!-- 🔎 SEARCH -->
+<div class="search-box">
+    <input type="text" placeholder="Search category...">
+</div>
+
+<!-- 🔘 BUTTONS -->
+<div class="actions">
+    <a href="/categories/add">
+        <button class="btn add">➕ Add new</button>
+    </a>
+
+    <a href="#">
+        <button class="btn edit">✏ Edit</button>
+    </a>
+
+    <a href="#">
+        <button class="btn delete">🗑 Delete</button>
+    </a>
+
+    <a href="#">
+        <button class="btn report">📊 Report</button>
+    </a>
+</div>
+
+<!-- 📊 TABLE -->
+<table>
+<th>Actions</th>
+    <tbody>
+    {% for c in categories %}
+    <tr>
+
+        <td>{{ c.category_number }}</td>
+        <td>{{ c.category_name }}</td>
+
+        <td>
+            <a href="/categories/edit/{{ c.category_number }}">
+                <button class="btn edit">
+                    Edit
+                </button>
+            </a>
+
+            <a href="/categories/delete/{{ c.category_number }}"
+               onclick="return confirm('Delete category?')">
+
+                <button class="btn delete">
+                    Delete
+                </button>
+            </a>
+        </td>
+
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+</body>
+</html>
