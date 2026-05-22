@@ -1,6 +1,6 @@
 from flask import (Blueprint, render_template, request, redirect, url_for, jsonify)
-from database.queries.customer_cards_queries import (get_all_customer_cards, get_all_customer_cards_with_percent, get_customer_card_by_number, create_customer_card, update_customer_card, delete_customer_card)
-from validation.customer_card_validation import validate_customer_card
+from application.queries.customer_cards_queries import (get_all_customer_cards, get_customer_card_by_number, create_customer_card, update_customer_card, delete_customer_card)
+from application.validation.customer_card_validation import validate_customer_card
 customer_card_routes = Blueprint("customer_card_routes", __name__)
 
 @customer_card_routes.route('/customer_card')
