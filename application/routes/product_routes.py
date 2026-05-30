@@ -1,9 +1,9 @@
-from flask import Blueprint, Flask, render_template, request, redirect, url_for
+from flask import Blueprint, Flask, render_template, request, redirect, url_for, jsonify
 from sqlite_db import get_db_connection
 
-products_routes = Blueprint("products_routes", __name__)
+product_routes = Blueprint("product_routes", __name__)
 
-@products_routes.route("/products")
+@product_routes.route("/products")
 def products():
     conn = get_db_connection()
     products = conn.execute("""SELECT p.id_product, 
@@ -15,11 +15,16 @@ def products():
                                 JOIN categories c
                                 ON p.category_number = c.category_number
                                 ORDER BY p.product_name""").fetchall()
+    categories = conn.execute("""
+            SELECT *
+            FROM categories
+            ORDER BY category_name
+        """).fetchall()
     conn.close()
-    return render_template("products/products.html", products=products)
+    return render_template("products/products.html", products=products, categories=categories)
 
 
-@products_routes.route("/products/add", methods=["GET", "POST"])
+@product_routes.route("/products/add", methods=["GET", "POST"])
 def add_product():
     conn = get_db_connection()
     categories = conn.execute("""SELECT *
@@ -45,11 +50,24 @@ def add_product():
     conn.close()
     return render_template("products/add.html", categories=categories)
 
+@product_routes.route("/products/get/<int:id_product>")
+def get_product(id_product):
 
-@products_routes.route("/products/edit/<int:id_product>", methods=["GET", "POST"])
+    conn = get_db_connection()
+
+    product = conn.execute("""
+        SELECT *
+        FROM products
+        WHERE id_product = ?
+    """, (id_product,)).fetchone()
+
+    conn.close()
+
+    return jsonify(dict(product))
+@product_routes.route("/products/edit/<int:id_product>", methods=["GET", "POST"])
 def edit_product(id_product):
     conn = get_db_connection()
-    product = conn.execute("""SELECT * 
+    product = conn.execute("""SELECT *
                               FROM products
                               WHERE id_product = ?""", (id_product,)).fetchone()
 
@@ -71,12 +89,14 @@ def edit_product(id_product):
 
         conn.commit()
         conn.close()
-        return redirect(url_for("products_routes.products"))
+        return jsonify({
+            "success": True
+        })
     conn.close()
     return render_template("products/edit.html", product=product, categories=categories)
 
 
-@products_routes.route("/products/delete/<int:id_product>")
+@product_routes.route("/products/delete/<int:id_product>")
 def delete_product(id_product):
     conn = get_db_connection()
     conn.execute("""DELETE

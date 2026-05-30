@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Employees | Zlagoda</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Inter', sans-serif;
+            min-height:100vh;
+            overflow-x:hidden;
+            color:#0f172a;
+
+            background:
+                    radial-gradient(circle at top left,
+                    rgba(59,130,246,0.12),
+                    transparent 28%),
+
+                    radial-gradient(circle at bottom right,
+                    rgba(168,85,247,0.10),
+                    transparent 24%),
+
+                    linear-gradient(
+                            135deg,
+                            #f8fbff 0%,
+                            #f4f7ff 55%,
+                            #f7f5ff 100%
+                    );
+        }
+
+        /* BACKGROUND */
+
+        .blur{
+            position:fixed;
+            border-radius:50%;
+            filter:blur(90px);
+            z-index:-1;
+        }
+
+        .blur1{
+            width:320px;
+            height:320px;
+            background:rgba(59,130,246,0.08);
+            top:-120px;
+            left:-80px;
+        }
+
+        .blur2{
+            width:280px;
+            height:280px;
+            background:rgba(236,72,153,0.08);
+            bottom:-80px;
+            right:-60px;
+        }
+
+        /* MAIN */
+
+        .container{
+            padding:30px 48px 40px;
+        }
+
+        /* HEADER */
+
+        .topbar{
+            display:flex;
+            align-items:center;
+            margin-bottom:34px;
+        }
+
+        .logo h1{
+            font-size:42px;
+            font-weight:800;
+            letter-spacing:-2px;
+            line-height:1.15;
+            padding-right:4px;
+
+            background:linear-gradient(to right, #2563eb, #7c3aed);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+
+        /* SEARCH */
+
+        .search-wrapper{
+            width:100%;
+            margin-bottom:28px;
+        }
+
+        .search-form{
+            width:100%;
+        }
+
+        .search-bar{
+            width:100%;
+            height:68px;
+
+            border:none;
+            outline:none;
+
+            padding:0 28px;
+
+            border-radius:24px;
+
+            font-size:17px;
+            font-weight:500;
+
+            background:rgba(255,255,255,0.78);
+            backdrop-filter:blur(14px);
+
+            box-shadow:
+                    0 10px 35px rgba(15,23,42,0.06),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+
+            transition:0.25s;
+        }
+
+        .search-bar:focus{
+            box-shadow:
+                    0 16px 40px rgba(59,130,246,0.12),
+                    inset 0 1px 0 rgba(255,255,255,1);
+        }
+
+        /* TABLE */
+
+        .table-container{
+            width:100%;
+
+            background:rgba(255,255,255,0.74);
+            backdrop-filter:blur(14px);
+
+            border-radius:34px;
+
+            overflow:hidden;
+
+            box-shadow:
+                    0 12px 40px rgba(15,23,42,0.06),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        thead{
+            background:rgba(241,245,249,0.85);
+        }
+
+        th{
+            text-align:left;
+            padding:24px 28px;
+
+            font-size:14px;
+            font-weight:700;
+            color:#475569;
+
+            letter-spacing:0.5px;
+        }
+
+        td{
+            padding:24px 28px;
+
+            font-size:15px;
+            font-weight:500;
+
+            border-top:1px solid rgba(226,232,240,0.8);
+        }
+
+        tr{
+            transition:0.2s;
+        }
+
+        tbody tr:hover{
+            background:rgba(248,250,252,0.85);
+        }
+
+        /* BACK BUTTON */
+
+        .back-btn{
+            width:58px;
+            height:58px;
+
+            flex-shrink:0;
+
+            border:none;
+            border-radius:20px;
+
+            cursor:pointer;
+
+            font-size:28px;
+            font-weight:700;
+
+            color:#2563eb;
+
+            background:rgba(255,255,255,0.82);
+            backdrop-filter:blur(14px);
+
+            box-shadow:
+                    0 10px 30px rgba(15,23,42,0.08),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+
+            transition:0.25s;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            margin-right:18px;
+        }
+
+        .back-btn:hover{
+            transform:translateY(-3px);
+
+            background:#eff6ff;
+
+            box-shadow:
+                    0 14px 35px rgba(37,99,235,0.14),
+                    inset 0 1px 0 rgba(255,255,255,1);
+        }
+
+        /* ACTION BUTTONS */
+
+        .actions{
+            display:flex;
+            gap:12px;
+        }
+
+        .edit-btn,
+        .delete-btn{
+            border:none;
+            border-radius:14px;
+
+            padding:11px 18px;
+
+            font-size:14px;
+            font-weight:600;
+
+            cursor:pointer;
+
+            transition:0.2s;
+        }
+
+        .edit-btn{
+            background:#eff6ff;
+            color:#2563eb;
+        }
+
+        .edit-btn:hover{
+            background:#dbeafe;
+        }
+
+        .delete-btn{
+            background:#fff1f2;
+            color:#e11d48;
+        }
+
+        .delete-btn:hover{
+            background:#ffe4e6;
+        }
+
+        /* FLOATING BUTTONS */
+
+        .floating-buttons{
+            position:fixed;
+
+            right:40px;
+            bottom:34px;
+
+            display:flex;
+            flex-direction:row;
+            gap:18px;
+        }
+
+        .main-btn{
+            min-width:150px;
+            height:62px;
+
+            border:none;
+            border-radius:22px;
+
+            font-size:16px;
+            font-weight:700;
+
+            cursor:pointer;
+
+            color:white;
+
+            box-shadow:
+                    0 14px 35px rgba(15,23,42,0.16);
+
+            transition:0.25s;
+        }
+
+        .main-btn:hover{
+            transform:translateY(-4px);
+        }
+
+        .add-btn{
+            background:linear-gradient(135deg, #2563eb, #4f46e5);
+        }
+
+        .report-btn{
+            background:linear-gradient(135deg, #7c3aed, #a855f7);
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:1000px){
+
+            .table-container{
+                overflow-x:auto;
+            }
+
+            table{
+                min-width:1200px;
+            }
+        }
+
+        @media(max-width:760px){
+
+            .container{
+                padding:24px;
+            }
+
+            .logo h1{
+                font-size:34px;
+            }
+
+            .floating-buttons{
+                right:20px;
+                bottom:20px;
+            }
+
+            .main-btn{
+                min-width:130px;
+                height:58px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="blur blur1"></div>
+<div class="blur blur2"></div>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="topbar">
+
+        <button class="back-btn"
+                onclick="window.location.href='/'">
+            ←
+        </button>
+
+        <div class="logo">
+            <h1>Employees</h1>
+        </div>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <div class="search-wrapper">
+
+        <form class="search-form" method="GET" action="/employees">
+
+            <input type="text"
+                   name="search"
+                   class="search-bar"
+                   placeholder="Search employees..."
+                   value="{{ search }}">
+
+        </form>
+
+    </div>
+
+    <!-- TABLE -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>Surname</th>
+                <th>Name</th>
+                <th>Patronymic</th>
+                <th>Role</th>
+                <th>Salary</th>
+                <th>Date of Birth</th>
+                <th>Date of Start</th>
+                <th>Phone Number</th>
+                <th>City</th>
+                <th>Street</th>
+                <th>ZIP Code</th>
+                <th>Actions</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for employee in employees %}
+
+            <tr>
+
+                <td>{{ employee['id_employee'] }}</td>
+
+                <td>{{ employee['empl_surname'] }}</td>
+
+                <td>{{ employee['empl_name'] }}</td>
+
+                <td>{{ employee['empl_patronymic'] }}</td>
+
+                <td>{{ employee['empl_role'] }}</td>
+
+                <td>{{ employee['salary'] }}</td>
+
+                <td>{{ employee['date_of_birth'] }}</td>
+
+                <td>{{ employee['date_of_start'] }}</td>
+
+                <td>{{ employee['phone_number'] }}</td>
+
+                <td>{{ employee['city'] }}</td>
+
+                <td>{{ employee['street'] }}</td>
+
+                <td>{{ employee['zip_code'] }}</td>
+
+                <td>
+
+                    <div class="actions">
+
+                        <button
+                                class="edit-btn"
+                                onclick="window.location.href='/employees/{{ employee['id_employee'] }}/edit'">
+
+                            Edit
+
+                        </button>
+
+                        <button
+                                class="delete-btn"
+                                onclick="deleteEmployee('{{ employee['id_employee'] }}')">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- FLOATING BUTTONS -->
+
+<div class="floating-buttons">
+
+    <button class="main-btn add-btn"
+            onclick="window.location.href='/employees/add'">
+        Add
+    </button>
+
+    <button class="main-btn report-btn"
+            onclick="window.location.href='/employees/report'">
+        Report
+    </button>
+
+</div>
+
+<script>
+
+    async function deleteEmployee(idEmployee){
+
+        const confirmDelete = confirm(
+            "Are you sure you want to delete this employee?"
+        );
+
+        if(confirmDelete){
+
+            const response = await fetch(`/employees/${idEmployee}/delete`);
+
+            const result = await response.json();
+
+            if(result.success){
+
+                location.reload();
+
+            }else{
+
+                alert("Failed to delete employee.");
+
+            }
+        }
+    }
+
+</script>
+
+</body>
+</html>

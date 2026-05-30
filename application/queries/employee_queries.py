@@ -89,7 +89,6 @@ def update_employee(id_employee, data):
                    'zip_code = ? '
                    'WHERE id_employee=?',
     (
-        id_employee,
         data['empl_surname'],
         data['empl_name'],
         data['empl_patronymic'],
@@ -100,7 +99,8 @@ def update_employee(id_employee, data):
         data['phone_number'],
         data['city'],
         data['street'],
-        data['zip_code']
+        data['zip_code'],
+        id_employee,
     ))
     conn.commit()
     conn.close()
