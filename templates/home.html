@@ -1,29 +1,704 @@
- <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>ZLAGODA Dashboard</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Zlagoda Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Inter', sans-serif;
+            min-height:100vh;
+            overflow-x:hidden;
+            color:#0f172a;
+
+            background:
+                    radial-gradient(circle at top left,
+                    rgba(59,130,246,0.14),
+                    transparent 28%),
+
+                    radial-gradient(circle at bottom right,
+                    rgba(168,85,247,0.12),
+                    transparent 24%),
+
+                    linear-gradient(
+                            135deg,
+                            #f8fbff 0%,
+                            #f4f7ff 55%,
+                            #f7f5ff 100%
+                    );
+        }
+
+        /* BACKGROUND GLOW */
+
+        .blur{
+            position:fixed;
+            border-radius:50%;
+            filter:blur(90px);
+            z-index:-1;
+        }
+
+        .blur1{
+            width:320px;
+            height:320px;
+            background:rgba(59,130,246,0.10);
+            top:-120px;
+            left:-80px;
+        }
+
+        .blur2{
+            width:280px;
+            height:280px;
+            background:rgba(236,72,153,0.08);
+            bottom:-80px;
+            right:-60px;
+        }
+
+        /* MAIN */
+
+        .container{
+            padding:28px 52px 34px;
+            max-width:1500px;
+            margin:auto;
+        }
+
+        /* HEADER */
+
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            margin-bottom:42px;
+        }
+
+        .logo h1{
+            font-size:44px;
+            font-weight:800;
+            letter-spacing:-2px;
+
+            background:linear-gradient(to right, #2563eb, #7c3aed);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+
+        .logo p{
+            margin-top:6px;
+            font-size:15px;
+            color:#64748b;
+            font-weight:500;
+        }
+
+        /* USER */
+
+        .user-wrapper{
+            position:relative;
+        }
+
+        .user-btn{
+            width:62px;
+            height:62px;
+
+            border:none;
+            border-radius:22px;
+
+            background:rgba(255,255,255,0.80);
+            backdrop-filter:blur(14px);
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            cursor:pointer;
+
+            box-shadow:
+                    0 12px 30px rgba(15,23,42,0.08),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+
+            transition:0.25s;
+        }
+
+        .user-btn:hover{
+            transform:translateY(-3px);
+        }
+
+        .user-btn svg{
+            width:30px;
+            height:30px;
+            fill:#334155;
+        }
+
+        /* POPUP */
+
+        .user-popup{
+            position:absolute;
+
+            top:78px;
+            right:0;
+
+            width:300px;
+
+            background:rgba(255,255,255,0.90);
+            backdrop-filter:blur(18px);
+
+            border-radius:30px;
+
+            padding:24px;
+
+            box-shadow:
+                    0 25px 70px rgba(15,23,42,0.12);
+
+            display:none;
+
+            z-index:999;
+        }
+
+        .user-popup::before{
+            content:'';
+
+            position:absolute;
+
+            top:-10px;
+            right:28px;
+
+            width:22px;
+            height:22px;
+
+            background:rgba(255,255,255,0.90);
+
+            transform:rotate(45deg);
+
+            border-radius:4px;
+        }
+
+        .user-popup.active{
+            display:block;
+            animation:popup 0.22s ease;
+        }
+
+        @keyframes popup{
+
+            from{
+                opacity:0;
+                transform:translateY(-10px);
+            }
+
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        .profile{
+            display:flex;
+            align-items:center;
+            gap:14px;
+
+            margin-bottom:22px;
+        }
+
+        .profile-avatar{
+            width:60px;
+            height:60px;
+
+            border-radius:20px;
+
+            background:linear-gradient(135deg, #dbeafe, #ede9fe);
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .profile-avatar svg{
+            width:30px;
+            fill:#2563eb;
+        }
+
+        .profile h3{
+            font-size:18px;
+            margin-bottom:4px;
+        }
+
+        .profile p{
+            color:#64748b;
+            font-size:13px;
+        }
+
+        .popup-buttons{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+        }
+
+        .profile-btn,
+        .logout-btn{
+
+            border:none;
+            border-radius:18px;
+
+            padding:15px;
+
+            font-size:15px;
+            font-weight:600;
+
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        .profile-btn{
+            background:#eef2ff;
+            color:#4f46e5;
+        }
+
+        .profile-btn:hover{
+            background:#e0e7ff;
+        }
+
+        .logout-btn{
+            background:#fff1f2;
+            color:#e11d48;
+        }
+
+        .logout-btn:hover{
+            background:#ffe4e6;
+        }
+
+        /* LAYOUT */
+
+        .dashboard{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:32px;
+        }
+
+        .top-row,
+        .bottom-row{
+            display:flex;
+            justify-content:center;
+            gap:34px;
+            flex-wrap:wrap;
+        }
+
+        /* CARDS */
+
+        .card{
+            position:relative;
+            overflow:hidden;
+
+            width:390px;
+            min-height:250px;
+
+            padding:34px;
+
+            border-radius:36px;
+
+            background:rgba(255,255,255,0.72);
+            backdrop-filter:blur(14px);
+
+            text-decoration:none;
+            color:#0f172a;
+
+            box-shadow:
+                    0 12px 40px rgba(15,23,42,0.06),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+
+            transition:0.32s;
+        }
+
+        .card:hover{
+            transform:translateY(-8px);
+
+            box-shadow:
+                    0 24px 60px rgba(15,23,42,0.10),
+                    inset 0 1px 0 rgba(255,255,255,1);
+        }
+
+        .card::before{
+            content:'';
+            position:absolute;
+
+            width:220px;
+            height:220px;
+
+            border-radius:50%;
+
+            top:-110px;
+            right:-90px;
+
+            opacity:0.12;
+        }
+
+        /* ICON */
+
+        .icon-box{
+            width:82px;
+            height:82px;
+
+            border-radius:26px;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            margin-bottom:42px;
+
+            box-shadow:
+                    0 10px 25px rgba(0,0,0,0.08),
+                    inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        .icon-box svg{
+            width:40px;
+            height:40px;
+            fill:white;
+        }
+
+        /* TITLE */
+
+        .card h3{
+            font-size:34px;
+            font-weight:760;
+            letter-spacing:-1px;
+        }
+
+        /* ARROW */
+
+        .arrow-circle{
+            position:absolute;
+
+            right:28px;
+            bottom:28px;
+
+            width:58px;
+            height:58px;
+
+            border-radius:50%;
+
+            background:rgba(255,255,255,0.94);
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            font-size:30px;
+            color:#334155;
+
+            box-shadow:
+                    0 8px 20px rgba(0,0,0,0.08);
+
+            transition:0.25s;
+        }
+
+        .card:hover .arrow-circle{
+            transform:translateX(4px);
+        }
+
+        /* COLORS */
+
+        .employees::before{
+            background:#6366f1;
+        }
+
+        .employees .icon-box{
+            background:linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+
+        .customer-cards::before{
+            background:#ec4899;
+        }
+
+        .customer-cards .icon-box{
+            background:linear-gradient(135deg, #ec4899, #f472b6);
+        }
+
+        .products::before{
+            background:#10b981;
+        }
+
+        .products .icon-box{
+            background:linear-gradient(135deg, #10b981, #34d399);
+        }
+
+        .categories::before{
+            background:#f59e0b;
+        }
+
+        .categories .icon-box{
+            background:linear-gradient(135deg, #f59e0b, #fbbf24);
+        }
+
+        .checks::before{
+            background:#06b6d4;
+        }
+
+        .checks .icon-box{
+            background:linear-gradient(135deg, #06b6d4, #67e8f9);
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:1300px){
+
+            .top-row,
+            .bottom-row{
+                flex-direction:column;
+                align-items:center;
+            }
+        }
+
+        @media(max-width:760px){
+
+            .container{
+                padding:24px;
+            }
+
+            .card{
+                width:100%;
+                min-height:220px;
+            }
+
+            .logo h1{
+                font-size:36px;
+            }
+
+            .card h3{
+                font-size:30px;
+            }
+
+            .topbar{
+                margin-bottom:34px;
+            }
+        }
+
+    </style>
 </head>
+
 <body>
 
-<h1>🛒 ZLAGODA SYSTEM</h1>
-<h3>Main menu</h3>
+<div class="blur blur1"></div>
+<div class="blur blur2"></div>
 
-<hr>
+<div class="container">
 
-<h2>📦 Products</h2>
-<p>Manage store products and prices</p>
+    <!-- HEADER -->
 
-<h2>📂 Categories</h2>
-<a href="/categories">➡ Open Categories</a>
+    <div class="topbar">
 
-<hr>
+        <div class="logo">
+            <h1>Zlagoda</h1>
+            <p>Retail Enterprise System</p>
+        </div>
 
-<h2>👨‍💼 Employees</h2>
-<p>Coming soon...</p>
-<a href="/employees">➡ Open Employees</a>
+        <!-- USER -->
 
-<h2>🧾 Receipts</h2>
-<p>Coming soon...</p>
+        <div class="user-wrapper">
+
+            <button class="user-btn" onclick="togglePopup()">
+
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
+                </svg>
+
+            </button>
+
+            <div class="user-popup" id="popup">
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
+                        </svg>
+                    </div>
+
+                    <div>
+                        <h3>Anastasiia</h3>
+                        <p>Authorized user</p>
+                    </div>
+
+                </div>
+
+                <div class="popup-buttons">
+
+                    <button class="profile-btn"
+                            onclick="window.location.href='/profile'">
+                        User Information
+                    </button>
+
+                    <button class="logout-btn"
+                            onclick="logout()">
+                        Log out
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- DASHBOARD -->
+
+    <div class="dashboard">
+
+        <!-- TOP ROW -->
+
+        <div class="top-row">
+
+            <!-- EMPLOYEES -->
+
+            <a href="{{ url_for('employee_routes.employees') }}"
+               class="card employees">
+
+                <div class="icon-box">
+
+                    <!-- FIXED EMPLOYEE ICON -->
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 11c1.66 0 2.99-1.79 2.99-4S17.66 3 16 3s-3 1.79-3 4 1.34 4 3 4zm-8 0c1.66 0 3-1.79 3-4S9.66 3 8 3 5 4.79 5 7s1.34 4 3 4zm0 2c-2.67 0-8 1.34-8 4v3h10v-3c0-1.08.39-2.06 1.02-2.9C10.02 13.39 8.72 13 8 13zm8 0c-.93 0-2.05.15-3.18.43 1.3.89 2.18 2.2 2.18 3.57v3h9v-3c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+
+                </div>
+
+                <h3>Employees</h3>
+
+                <div class="arrow-circle">→</div>
+
+            </a>
+
+            <!-- CUSTOMER CARDS -->
+
+            <a href="{{ url_for('customer_card_routes.customer_cards') }}"
+               class="card customer-cards">
+
+                <div class="icon-box">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 12H3V7h18zm-9-2h6v-2h-6zm-7 0h4v-2H5zm0-4h13V9H5z"/>
+                    </svg>
+
+                </div>
+
+                <h3>Customer Cards</h3>
+
+                <div class="arrow-circle">→</div>
+
+            </a>
+
+        </div>
+
+        <!-- BOTTOM ROW -->
+
+        <div class="bottom-row">
+
+            <!-- PRODUCTS -->
+
+            <a href="{{ url_for('product_routes.products') }}"
+               class="card products">
+
+                <div class="icon-box">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10
+                    0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9
+                    2-2-.9-2-2-2zM7.16 14h9.45c.75
+                    0 1.41-.41 1.75-1.03L22 6H6.21l-.94-2H1v2h3l3.6
+                    7.59-1.35 2.44C5.52 17.37 6.48 19 8 19h12v-2H8l1.16-2z"/>
+                    </svg>
+
+                </div>
+
+                <h3>Products</h3>
+
+                <div class="arrow-circle">→</div>
+
+            </a>
+
+            <!-- CATEGORIES -->
+
+            <a href="{{ url_for('category_routes.categories') }}"
+               class="card categories">
+
+                <div class="icon-box">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 3H3v7h7V3zm11 0h-7v7h7V3zM10 14H3v7h7v-7zm11 0h-7v7h7v-7z"/>
+                    </svg>
+
+                </div>
+
+                <h3>Categories</h3>
+
+                <div class="arrow-circle">→</div>
+
+            </a>
+
+            <!-- CHECKS -->
+
+            <a href="{{ url_for('receipt_routes.receipts') }}"
+               class="card checks">
+
+                <div class="icon-box">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 2h12v2H6V2zm0 4h12l1 14H5L6 6zm3 3v2h6V9H9zm0 4v2h4v-2H9z"/>
+                    </svg>
+
+                </div>
+
+                <h3>Receipts</h3>
+
+                <div class="arrow-circle">→</div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    const popup = document.getElementById('popup');
+
+    function togglePopup(){
+        popup.classList.toggle('active');
+    }
+
+    window.addEventListener('click', function(e){
+
+        if(!e.target.closest('.user-wrapper')){
+            popup.classList.remove('active');
+        }
+
+    });
+
+    function logout(){
+
+        const confirmLogout = confirm(
+            "Do you want to log out from your account?"
+        );
+
+        if(confirmLogout){
+
+            window.location.href = "/login";
+        }
+    }
+
+</script>
 
 </body>
 </html>

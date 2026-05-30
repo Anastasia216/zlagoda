@@ -5,30 +5,30 @@ from application.validation.employee_validation import(validate_employee)
 employee_routes = Blueprint('employee_routes', __name__)
 
 @employee_routes.route('/employees')
-def employee_list():
+def employees():
     search = request.args.get('search','')
     employees = get_all_employees(search)
-    return render_template('employees/list.html', employees=employees, search=search)
+    return render_template('employees/employees.html', employees=employees, search=search)
 
 @employee_routes.route('/employees/add')
-def employee_add_page():
+def employees_add_page():
     return render_template('employees/add.html')
 
 @employee_routes.route('/employees/add', methods=['POST'])
-def add_employee():
+def add_employees():
     data = request.form
     errors = validate_employee(data)
     if errors:
         return render_template('employees/add.html', errors=errors, old=data)
     create_employee(data)
-    return redirect(url_for('employee.employee_list'))
+    return redirect(url_for('employee_routes.employees'))
 
-@employee_routes.route('/employees/<int:id_employee>/edit')
-def employee_edit_page(id_employee):
+@employee_routes.route('/employees/<id_employee>/edit')
+def employees_edit_page(id_employee):
     employee = get_employee_by_id(id_employee)
     return render_template('employees/edit.html', employee=employee)
 
-@employee_routes.route('/employees/<int:id_employee>/edit', methods=['POST'])
+@employee_routes.route('/employees/<id_employee>/edit', methods=['POST'])
 def employee_edit(id_employee):
     data = request.form
     errors = validate_employee(data)
@@ -36,9 +36,9 @@ def employee_edit(id_employee):
         employee = get_employee_by_id(id_employee)
         return render_template('employees/edit.html', errors=errors, old=data)
     update_employee(id_employee,data)
-    return redirect(url_for('employee.employee_list'))
+    return redirect(url_for('employee_routes.employees'))
 
-@employee_routes.route('/employees/<int:id_employee>/delete')
+@employee_routes.route('/employees/<id_employee>/delete')
 def employee_delete_route(id_employee):
     delete_employee(id_employee)
     return jsonify({
@@ -46,7 +46,7 @@ def employee_delete_route(id_employee):
     })
 
 @employee_routes.route('/employees/reports')
-def employee_reports_page():
+def employees_reports_page():
     return render_template('employees/reports.html')
 
 #@employee_routes.route('/employees/reports', methods=['POST'])
