@@ -6,18 +6,61 @@ store_product_routes = Blueprint('store_product_routes', __name__)
 @store_product_routes.route("/store_products")
 def store_products():
     conn = get_db_connection()
-    store_products = conn.execute("""SELECT sp.UPC,
-                                            sp.UPC_prom,
-                                            sp.selling_price,
-                                            sp.products_number,
-                                            sp.promotional_product,
-        
-                                            p.product_name,
-                                            p.manufacturer
-                                     FROM store_products sp
-                                     JOIN products p
-                                        ON sp.id_product =  p.id_product
-                                     ORDER BY sp.products_number DESC""").fetchall()
+
+    #Filters
+    upc = request.args.get("UPC", "").strip()
+    promotional = request.args.get("promotional", "").strip()
+    sort = request.args.get("sort", "").strip()
+    product_name = request.args.get("product_name", "").strip()
+
+    query = """SELECT sp.UPC,
+                      sp.UPC_prom,
+                      sp.selling_price,
+                      sp.products_number,
+                      sp.promotional_product,
+                      
+                      p.product_name,
+                      p.manufacturer
+               FROM store_products sp
+                JOIN products p
+                     ON sp.id_product = p.id_product
+               WHERE 1=1"""
+    params =[]
+    #search by upc
+    if upc:
+        query += """
+        AND sp.UPC
+        LIKE ?"""
+        params.append(f"%{upc}%")
+
+    #search by product_name
+    if product_name:
+        query += """
+        AND p.product_name
+        LIKE ?"""
+        params.append(
+            f"%{product_name}%"
+        )
+
+    #promotional
+    if promotional == "yes":
+        query += """
+        AND sp.promotional_product = 1"""
+    #non_promotional
+    elif promotional == "no":
+        query += """
+        AND sp.promotional_product = 0"""
+
+    #sort
+    if sort == "name":
+        query += """
+        ORDER BY p.product_name"""
+    else:
+        query += """
+        ORDER BY sp.products_number DESC"""
+
+
+    store_products = conn.execute(query, params).fetchall()
 
     conn.close()
     return render_template("store_products/store_products.html",store_products=store_products)
