@@ -276,6 +276,226 @@
             background:linear-gradient(135deg, #7c3aed, #a855f7);
         }
 
+/* MODAL */
+
+    .modal{
+        display:none;
+
+        position:fixed;
+        inset:0;
+
+        background:rgba(15,23,42,0.35);
+
+        backdrop-filter:blur(6px);
+
+        align-items:center;
+        justify-content:center;
+
+        z-index:1000;
+    }
+
+    .modal-content{
+
+        width:700px;
+        max-width:92%;
+
+       background:
+                    radial-gradient(circle at top left,
+                    rgba(59,130,246,0.12),
+                    transparent 28%),
+
+                    radial-gradient(circle at bottom right,
+                    rgba(168,85,247,0.10),
+                    transparent 24%),
+
+                    linear-gradient(
+                            135deg,
+                            #f8fbff 0%,
+                            #f4f7ff 55%,
+                            #f7f5ff 100%
+                    );
+
+        backdrop-filter:blur(10px);
+
+        border-radius:30px;
+
+        padding:34px;
+
+        position:relative;
+
+        box-shadow:
+                0 25px 60px rgba(15,23,42,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+
+    .modal-content h2{
+
+        font-size:34px;
+        font-weight:800;
+        margin-left:48px;
+        margin-bottom:28px;
+    }
+
+    .close-btn{
+
+        position:absolute;
+
+        top:32px;
+        left:20px;
+
+        width:42px;
+        height:42px;
+
+        border:none;
+        border-radius:12px;
+
+        cursor:pointer;
+
+        background:#f8fafc;
+
+        font-size:20px;
+        box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+    }
+
+    .close-btn:hover{
+                transform:translateY(-3px);
+                box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+            }
+
+    .form-group{
+        margin-bottom:18px;
+    }
+
+    .form-group label{
+
+        display:block;
+
+        margin-bottom:8px;
+
+        font-size:16px;
+        font-weight:600;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select{
+    width:100%;
+
+        border:none;
+        outline:none;
+
+        border-radius:18px;
+
+        padding:15px 18px;
+
+        font-size:15px;
+
+        background:rgba(255,255,255,0.9);
+
+        box-shadow:
+            0 10px 35px rgba(15,23,42,0.06),
+            inset 0 1px 0 rgba(255,255,255,0.9);
+
+        color:#0f172a;
+
+        appearance:none;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+
+        cursor:pointer;
+    }
+    .form-group{
+        position:relative;
+    }
+
+    .form-group:has(select)::after{
+
+        content:"⌄";
+
+        position:absolute;
+
+        right:18px;
+        top:35px;
+
+        font-size:18px;
+
+        color:#64748b;
+
+        pointer-events:none;
+    }
+
+    .form-group textarea{
+        min-height:120px;
+        resize:vertical;
+    }
+
+    .modal-buttons{
+
+        display:flex;
+        justify-content:flex-end;
+        gap:12px;
+
+        margin-top:28px;
+    }
+
+        .save-btn{
+             appearance:none;
+             -webkit-appearance:none;
+
+            border:none;
+
+            padding:13px 24px;
+
+            border-radius:14px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+            color:white;
+
+            background:linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #4f46e5
+            );
+            box-shadow:
+                            0 5px 25px rgba(15,23,42,0.16);
+        }
+        .save-btn:hover{
+                transform:translateY(-3px);
+                box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+            }
+
+        .reset-btn{
+
+            border:none;
+
+            padding:13px 24px;
+
+            border-radius:14px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+            background:#f1f5f9;
+
+            color:#334155;
+            box-shadow:
+                            0 5px 25px rgba(15,23,42,0.16);
+        }
+        .reset-btn:hover{
+                   transform:translateY(-3px);
+                   box-shadow:
+                           0 5px 25px rgba(15,23,42,0.16);
+                }
+
+        /* RESPONSIVE */
 
         @media(max-width:1300px){
 
@@ -287,12 +507,241 @@
                 min-width:1200px;
             }
         }
+        @media(max-width:760px){
+        .container{
+            padding:24px;
+        }
+        .logo h1{
+            font-size:34px;
+        }
+        .floating-buttons{
+            right:20px;
+            bottom:20px;
+        }
+        .main-btn{
+            min-width:130px;
+            height:58px;
+        }
+    }
 
     </style>
 </head>
 
 <body>
+<div id="addModal" class="modal">
 
+    <div class="modal-content">
+
+        <button class="close-btn"
+                onclick="closeAddModal()">
+            ✕
+        </button>
+
+        <h2>Add Check</h2>
+
+        <form id="addForm">
+
+            <div class="form-group">
+
+                <label>Print Date</label>
+
+                <input type="text"
+                       id="new_print_date"
+                       name="print_date"
+                       required>
+
+            </div>
+            <div class="form-group">
+
+                <label>Sum Total</label>
+
+                <input type="text"
+                       id="new_sum_total"
+                       name="sum_total"
+                       required>
+
+            </div>
+            <div class="form-group">
+
+                <label>VAT</label>
+
+                <input type="text"
+                       id="new_vat"
+                       name="vat"
+                       required>
+
+            </div>
+            <div class="form-group">
+
+                <label>Employee</label>
+
+                <select id="new_id_employee"
+                        name="id_employee"
+                        required>
+
+                    {% for employee in employees %}
+
+                    <option value="{{ employee['id_employee'] }}">
+                        {{ employee['id_employee'] }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+            <div class="form-group">
+
+                <label>Card Number</label>
+
+                <select id="new_card_number"
+                        name="card_number"
+                        required>
+
+                    {% for customer_card in customer_cards %}
+
+                    <option value="{{ customer_card['card_number'] }}">
+                        {{ customer_card['card_number'] }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="modal-buttons">
+
+                <button type="button"
+                        class="reset-btn"
+                        onclick="document.getElementById('addForm').reset()">
+
+                    Reset
+
+                </button>
+
+                <button type="submit"
+                        class="save-btn">
+
+                    Add
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<div id="editModal" class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-btn"
+                onclick="closeEditModal()">
+            ✕
+        </button>
+
+        <h2>Edit Receipt</h2>
+
+        <form id="editForm" method="POST">
+
+            <input type="hidden"
+                   id="check_number">
+
+            <div class="form-group">
+
+                <label>Print Date</label>
+
+                <input type="text"
+                       id="print_date"
+                       name="print_date"
+                       required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Total Sum</label>
+
+                <input type="text"
+                       id="sum_total"
+                       name="sum_total"
+                       required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>VAT</label>
+
+                <input id="vat"
+                          name="vat"
+                          required>
+
+            </div>
+            <div class="form-group">
+
+                <label>Employee</label>
+
+                <select id="id_employee"
+                        name="id_employee">
+
+                    {% for employee in employees %}
+
+                    <option value="{{ employee['id_employee'] }}">
+                        {{ employee['id_employee'] }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+            <div class="form-group">
+
+                <label>Customer Card</label>
+
+                <select id="card_number"
+                        name="card_number">
+
+                    {% for customer_card in customer_cards %}
+
+                    <option value="{{ customer_card['card_number'] }}">
+                        {{ customer_card['card_number'] }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="modal-buttons">
+
+                <button type="button"
+                        class="reset-btn"
+                        onclick="resetForm()">
+
+                    Reset
+
+                </button>
+
+                <button type="submit"
+                        class="save-btn">
+
+                    Save
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 <div class="blur blur1"></div>
 <div class="blur blur2"></div>
 
@@ -311,14 +760,20 @@
 
     </div>
 
-    <div class="search-wrapper">
+        <div class="search-wrapper">
 
-        <input type="text"
-               class="search-bar"
-               placeholder="Search receipts...">
+        <form id="searchForm"
+              method="GET"
+              action="/receipts">
 
+            <input type="text"
+                   name="search"
+                   class="search-bar"
+                   placeholder="Search checks..."
+                   value="{{ search if search else '' }}">
+
+        </form>
     </div>
-
     <div class="table-container">
 
         <table>
@@ -327,12 +782,12 @@
 
             <tr>
                 <th>Check Number</th>
+                <th>Details</th>
                 <th>Print Date</th>
                 <th>Total Sum</th>
                 <th>VAT</th>
                 <th>Cashier</th>
                 <th>Customer Card</th>
-                <th>Customer</th>
                 <th>Actions</th>
             </tr>
 
@@ -342,39 +797,19 @@
 
             {% for receipt in receipts %}
 
-            <tr>
+            <tr id="receipt-row-{{ receipt['check_number'] }}">
 
                 <td>{{ receipt['check_number'] }}</td>
 
-                <td>{{ receipt['print_date'] }}</td>
+                <td class="id-employee">{{ receipt['id_employee'] }}</td>
 
-                <td>{{ receipt['sum_total'] }}</td>
+                <td class="customer-card">{{ receipt['card_number'] or '-' }}</td>
 
-                <td>{{ receipt['vat'] }}</td>
+                <td class="print-date">{{ receipt['print_date'] }}</td>
 
-                <td>
-                    {{ receipt['empl_surname'] }}
-                    {{ receipt['empl_name'] }}
-                </td>
+                <td class="sum-total">{{ receipt['sum_total'] }}</td>
 
-                <td>
-                    {{ receipt['card_number'] if receipt['card_number'] else '—' }}
-                </td>
-
-                <td>
-
-                    {% if receipt['cust_surname'] %}
-
-                        {{ receipt['cust_surname'] }}
-                        {{ receipt['cust_name'] }}
-
-                    {% else %}
-
-                        —
-
-                    {% endif %}
-
-                </td>
+                <td class="vat">{{ receipt['vat'] }}</td>
 
                 <td>
 
@@ -382,7 +817,7 @@
 
                         <button
                                 class="edit-btn"
-                                onclick="window.location.href='/receipts/edit/{{ receipt['check_number'] }}'">
+                                onclick="openEditModal('{{ receipt['check_number'] }}')">
 
                             Edit
 
@@ -412,17 +847,19 @@
 
 </div>
 
+<!-- FLOATING BUTTONS -->
+
 <div class="floating-buttons">
 
-    <button class="main-btn"
-            onclick="window.location.href='/receipts/add'">
+    <button class="main-btn add-btn"
+            onclick="openAddModal()">
 
-        Add Receipt
+        Add
 
     </button>
 
     <button class="main-btn report-btn"
-            onclick="window.location.href='/receipts/reports'">
+            onclick="window.location.href='/receipts/report'">
 
         Reports
 
@@ -442,11 +879,237 @@
         if(confirmDelete){
 
             window.location.href =
-                `/receipts/delete/${checkNumber}`;
+                `/receipt/delete/${checkNumber}`;
 
         }
     }
 
+</script>
+<script>
+
+let originalData = {};
+
+function openEditModal(checkNumber){
+
+    fetch(`/receipts/get/${checkNumber}`)
+        .then(response => response.json())
+        .then(receipt => {
+
+            originalData = {...receipt};
+
+            document.getElementById("check_number").value =
+                receipt.check_number;
+
+            document.getElementById("print_date").value =
+                receipt.print_date;
+
+            document.getElementById("sum_total").value =
+                receipt.sum_total;
+
+            document.getElementById("vat").value =
+                receipt.vat;
+
+            document.getElementById("card_number").value =
+                receipt.card_number;
+
+            document.getElementById("id_employee").value =
+                receipt.id_employee;
+
+            document.getElementById("editForm").action =
+                `/receipts/edit/${receipt.check_number}`;
+
+            document.getElementById("editModal").style.display =
+                "flex";
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Failed to load product data.");
+        });
+}
+
+function closeEditModal(){
+
+    document.getElementById("editModal").style.display =
+        "none";
+}
+
+function resetForm(){
+
+    document.getElementById("print_date").value =
+        originalData.print_date;
+
+    document.getElementById("sum_total").value =
+        originalData.sum_total;
+
+    document.getElementById("vat").value =
+        originalData.vat;
+
+    document.getElementById("id_employee").value =
+        originalData.id_employee;
+
+    document.getElementById("card_number").value =
+        originalData.card_number;
+
+    document.getElementById("check_number").value =
+        originalData.check_number;
+
+}
+document
+    .getElementById("editForm")
+    .addEventListener("submit", saveReceipt);
+
+async function saveReceipt(event){
+
+    event.preventDefault();
+
+    const form =
+        document.getElementById("editForm");
+
+    const response = await fetch(
+        form.action,
+        {
+            method: "POST",
+            body: new FormData(form)
+        }
+    );
+
+    const result = await response.json();
+
+    if(result.success){
+
+        const id =
+            document.getElementById(
+                "check_number"
+            ).value;
+
+        const row =
+            document.getElementById(
+                `receipt-row-${id}`
+            );
+
+        row.querySelector(".print-date").textContent =
+            document.getElementById(
+                "print_date"
+            ).value;
+
+        row.querySelector(".sum-total").textContent =
+            document.getElementById(
+                "sum_total"
+            ).value;
+
+        row.querySelector(".vat").textContent =
+            document.getElementById(
+                "vat"
+            ).value;
+
+        const employeeSelect =
+            document.getElementById(
+                "id_employee"
+            );
+
+        row.querySelector(".employee").textContent =
+            employeeSelect.options[
+                employeeSelect.selectedIndex
+            ].text;
+
+        const cardSelect =
+            document.getElementById(
+                "card_number"
+            );
+
+        row.querySelector(".customer_card").textContent =
+            cardSelect.options[
+                cardSelect.selectedIndex
+            ].text;
+
+        closeEditModal();
+    }
+}
+</script>
+<script>
+
+function openAddModal(){
+
+    document.getElementById("addForm").reset();
+
+    document.getElementById("addModal").style.display =
+        "flex";
+}
+
+function closeAddModal(){
+
+    document.getElementById("addModal").style.display =
+        "none";
+}
+
+document
+    .getElementById("addForm")
+    .addEventListener("submit", addReceipt);
+async function addReceipt(event){
+
+    event.preventDefault();
+
+    const form =
+        document.getElementById("addForm");
+
+    const response = await fetch(
+        "/receipts/add",
+        {
+            method:"POST",
+            body:new FormData(form)
+        }
+    );
+
+    const result = await response.json();
+
+    if(result.success){
+
+        location.reload();
+
+    }else{
+
+        alert("Failed to add receipt.");
+
+    }
+}
+
+</script>
+<script>
+
+const searchInput =
+    document.querySelector(".search-bar");
+
+searchInput.addEventListener("input", () => {
+
+    clearTimeout(window.searchTimer);
+
+    window.searchTimer = setTimeout(() => {
+
+        document
+            .getElementById("searchForm")
+            .submit();
+
+    }, 300);
+
+});
+
+</script>
+<script>
+window.addEventListener("load", () => {
+
+    const search =
+        document.querySelector(".search-bar");
+
+    if(search.value.length > 0){
+
+        search.focus();
+
+        search.setSelectionRange(
+            search.value.length,
+            search.value.length
+        );
+    }
+});
 </script>
 
 </body>

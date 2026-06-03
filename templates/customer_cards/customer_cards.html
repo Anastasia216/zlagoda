@@ -82,10 +82,8 @@
             font-size:42px;
             font-weight:800;
             letter-spacing:-2px;
-            margin:0;
             line-height:1.15;
             padding-right:4px;
-
             background:linear-gradient(to right, #2563eb, #7c3aed);
             -webkit-background-clip:text;
             -webkit-text-fill-color:transparent;
@@ -266,17 +264,13 @@
             background:#ffe4e6;
         }
 
-        /* FLOATING BUTTONS */
+        /* FLOATING BUTTON */
 
         .floating-buttons{
             position:fixed;
 
             right:40px;
             bottom:34px;
-
-            display:flex;
-            flex-direction:row;
-            gap:18px;
         }
 
         .main-btn{
@@ -293,6 +287,8 @@
 
             color:white;
 
+            background:linear-gradient(135deg, #2563eb, #4f46e5);
+
             box-shadow:
                     0 14px 35px rgba(15,23,42,0.16);
 
@@ -302,7 +298,6 @@
         .main-btn:hover{
             transform:translateY(-4px);
         }
-
         .add-btn{
             background:linear-gradient(135deg, #2563eb, #4f46e5);
         }
@@ -311,45 +306,531 @@
             background:linear-gradient(135deg, #7c3aed, #a855f7);
         }
 
+/* MODAL */
+
+    .modal{
+        display:none;
+
+        position:fixed;
+        inset:0;
+
+        background:rgba(15,23,42,0.35);
+
+        backdrop-filter:blur(6px);
+
+        align-items:center;
+        justify-content:center;
+
+        z-index:1000;
+    }
+
+    .modal-content{
+
+        width:900px;
+        max-width:95%;
+
+       background:
+                    radial-gradient(circle at top left,
+                    rgba(59,130,246,0.12),
+                    transparent 28%),
+
+                    radial-gradient(circle at bottom right,
+                    rgba(168,85,247,0.10),
+                    transparent 24%),
+
+                    linear-gradient(
+                            135deg,
+                            #f8fbff 0%,
+                            #f4f7ff 55%,
+                            #f7f5ff 100%
+                    );
+
+        backdrop-filter:blur(10px);
+
+        border-radius:30px;
+
+        padding:34px;
+
+        position:relative;
+
+        box-shadow:
+                0 25px 60px rgba(15,23,42,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+
+    .modal-content h2{
+
+        font-size:34px;
+        font-weight:800;
+        margin-left:48px;
+        margin-bottom:28px;
+    }
+
+    .close-btn{
+
+        position:absolute;
+
+        top:32px;
+        left:20px;
+
+        width:42px;
+        height:42px;
+
+        border:none;
+        border-radius:12px;
+
+        cursor:pointer;
+
+        background:#f8fafc;
+
+        font-size:20px;
+        box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+    }
+
+    .close-btn:hover{
+                transform:translateY(-3px);
+                box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+            }
+
+    .form-group{
+        margin-bottom:18px;
+    }
+
+    .form-group label{
+
+        display:block;
+
+        margin-bottom:8px;
+
+        font-size:16px;
+        font-weight:600;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select{
+    width:100%;
+
+        border:none;
+        outline:none;
+
+        border-radius:18px;
+
+        padding:15px 18px;
+
+        font-size:15px;
+
+        background:rgba(255,255,255,0.9);
+
+        box-shadow:
+            0 10px 35px rgba(15,23,42,0.06),
+            inset 0 1px 0 rgba(255,255,255,0.9);
+
+        color:#0f172a;
+
+        appearance:none;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+
+        cursor:pointer;
+    }
+    .form-group{
+        position:relative;
+        margin-bottom: 4px
+    }
+
+    .form-group:has(select)::after{
+
+        content:"⌄";
+
+        position:absolute;
+
+        right:18px;
+        top:35px;
+
+        font-size:18px;
+
+        color:#64748b;
+
+        pointer-events:none;
+    }
+    input::-webkit-contacts-auto-fill-button,
+    input::-webkit-credentials-auto-fill-button {
+        visibility: hidden;
+        display: none !important;
+        pointer-events: none;
+    }
+    .form-group textarea{
+        min-height:120px;
+        resize:vertical;
+    }
+
+    .modal-buttons{
+
+        display:flex;
+        justify-content:flex-end;
+        gap:12px;
+
+        margin-top:28px;
+    }
+
+    .save-btn{
+         appearance:none;
+         -webkit-appearance:none;
+
+        border:none;
+
+        padding:13px 24px;
+
+        border-radius:14px;
+
+        font-weight:700;
+
+        cursor:pointer;
+
+        color:white;
+
+        background:linear-gradient(
+                135deg,
+                #2563eb,
+                #4f46e5
+        );
+        box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+    }
+    .save-btn:hover{
+                transform:translateY(-3px);
+                box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+            }
+
+    .reset-btn{
+
+        border:none;
+
+        padding:13px 24px;
+
+        border-radius:14px;
+
+        font-weight:700;
+
+        cursor:pointer;
+
+        background:#f1f5f9;
+
+        color:#334155;
+        box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+    }
+
+    .reset-btn:hover{
+                transform:translateY(-3px);
+                box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+            }
+    .form-grid{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:18px;
+    }
+
+    .form-group.full-width{
+        grid-column:1 / -1;
+    }
         /* RESPONSIVE */
 
-        @media(max-width:1000px){
+    @media(max-width:1000px){
+    .table-container{
+            overflow-x:auto;
+        }
+        table{
+            min-width:1000px;
+        }
+    }
 
-            .table-container{
-                overflow-x:auto;
-            }
+    @media(max-width:760px){
+        .container{
+            padding:24px;
+        }
+        .logo h1{
+            font-size:34px;
+        }
+        .floating-buttons{
+            right:20px;
+            bottom:20px;
+        }
+        .main-btn{
+            min-width:130px;
+            height:58px;
+        }
+    }
+    @media(max-width:760px){
 
-            table{
-                min-width:900px;
-            }
+        .form-grid{
+            grid-template-columns:1fr;
         }
 
-        @media(max-width:760px){
-
-            .container{
-                padding:24px;
-            }
-
-            .logo h1{
-                font-size:34px;
-            }
-
-            .floating-buttons{
-                right:20px;
-                bottom:20px;
-            }
-
-            .main-btn{
-                min-width:130px;
-                height:58px;
-            }
+        .modal-content{
+            width:95%;
         }
+    }
 
-    </style>
+
+</style>
 </head>
 
 <body>
+<div id="addModal" class="modal">
 
+        <div class="modal-content">
+
+            <button class="close-btn"
+                    onclick="closeAddModal()">
+                ✕
+            </button>
+
+            <h2>Add Customer Card</h2>
+
+            <form id="addForm">
+                <div class="form-grid">
+                    <div class="form-group">
+
+                        <label>Card Number</label>
+
+                        <input type="text"
+                            id="new_card_number"
+                            name="card_number"
+                            required>
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Customer Surname</label>
+
+                        <input type="text"
+                               id="new_cust_surname"
+                               name="cust_surname"
+                               required>
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Customer Name</label>
+
+                        <input type="text"
+                               id="new_cust_name"
+                               name="cust_name"
+                               required>
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Customer Patronymic</label>
+
+                        <input type="text"
+                               id="new_cust_patronymic"
+                               name="cust_patronymic">
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Phone Number</label>
+
+                        <input type="text"
+                               id="new_phone_number"
+                               name="phone_number"
+                               required>
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>City</label>
+
+                        <input type="text"
+                               id="new_city"
+                               name="city">
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Street</label>
+
+                        <input type="text"
+                               id="new_street"
+                               name="street">
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Zip Code</label>
+
+                        <input type="text"
+                               id="new_zip_code"
+                               name="zip_code">
+
+                    </div>
+                    <div class="form-group">
+
+                        <label>Percent</label>
+
+                        <input type="text"
+                               id="new_percent"
+                               name="percent"
+                               required>
+
+                    </div>
+                </div>
+        <div class="modal-buttons">
+
+                    <button type="button"
+                            class="reset-btn"
+                            onclick="document.getElementById('addForm').reset()">
+
+                        Reset
+
+                    </button>
+
+                    <button type="submit"
+                            class="save-btn">
+
+                        Add
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+</div>
+<div id="editModal" class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-btn"
+                onclick="closeEditModal()">
+            ✕
+        </button>
+
+        <h2>Edit Customer Card</h2>
+
+        <form id="editForm" method="POST">
+            <input type="hidden"
+                    id="card_number"
+                    name="card_number">
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Customer Surname</label>
+
+                    <input type="text"
+                           id="cust_surname"
+                           name="cust_surname"
+                           required>
+
+                </div>
+                <div class="form-group">
+
+                    <label>Customer Name</label>
+
+                    <input type="text"
+                           id="cust_name"
+                           name="cust_name"
+                           required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Customer Patronymic</label>
+
+                    <input type="text"
+                           id="cust_patronymic"
+                           name="cust_patronymic">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Phone Number</label>
+
+                    <input type="text"
+                           id="phone_number"
+                           name="phone_number"
+                           required>
+
+                </div>
+                <div class="form-group">
+
+                    <label>City</label>
+
+                    <input type="text"
+                           id="city"
+                           name="city">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Street</label>
+
+                    <input type="text"
+                           id="street"
+                           name="street">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Zip Code</label>
+
+                    <input type="text"
+                           id="zip_code"
+                           name="zip_code">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Percent</label>
+
+                    <input type="text"
+                           id="percent"
+                           name="percent"
+                           required>
+
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+
+                <button type="button"
+                        class="reset-btn"
+                        onclick="resetForm()">
+
+                    Reset
+
+                </button>
+
+                <button type="submit"
+                        class="save-btn">
+
+                    Save
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 <div class="blur blur1"></div>
 <div class="blur blur2"></div>
 
@@ -372,11 +853,19 @@
 
     <!-- SEARCH -->
 
-    <div class="search-wrapper">
+        <div class="search-wrapper">
 
-        <input type="text"
-               class="search-bar"
-               placeholder="Search customer cards...">
+        <form id="searchForm"
+              method="GET"
+              action="/customer_cards">
+
+            <input type="text"
+                   name="search"
+                   class="search-bar"
+                   placeholder="Search Сustomer Сards..."
+                   value="{{ search if search else '' }}">
+
+        </form>
 
     </div>
 
@@ -389,10 +878,15 @@
             <thead>
 
             <tr>
-                <th>Card Number</th>
+                <th>ID</th>
+                <th>Customer Surname</th>
                 <th>Customer Name</th>
+                <th>Customer Patronymic</th>
                 <th>Phone Number</th>
-                <th>Discount</th>
+                <th>City</th>
+                <th>Street</th>
+                <th>Zip Code</th>
+                <th>Percent</th>
                 <th>Actions</th>
             </tr>
 
@@ -402,26 +896,37 @@
 
             {% for customer_card in customer_cards %}
 
-            <tr>
-
-                <td>{{ customer_card['card_number'] }}</td>
+            <tr id="customer_card-row-{{ customer_card['card_number'] }}">
 
                 <td>
-                    {{ customer_card['cust_surname'] }}
-                    {{ customer_card['cust_name'] }}
-                </td>
+                    {{ customer_card['card_number'] }}</td>
 
-                <td>{{ customer_card['phone_number'] }}</td>
+                <td class="cust_surname">
+                    {{ customer_card['cust_surname'] }}</td>
 
-                <td>{{ customer_card['percent'] }}%</td>
+                <td class="cust_name">
+                    {{ customer_card['cust_name'] }}</td>
 
+                <td class="cust_patronymic">
+                    {{ customer_card['cust_patronymic'] }}</td>
+
+                <td class="phone_number">
+                    {{ customer_card['phone_number'] }}</td>
+
+                <td class="city">{{ customer_card['city'] }}</td>
+
+                <td class="street">{{ customer_card['street'] }}</td>
+
+                <td class="zip_code">{{ customer_card['zip_code'] }}</td>
+
+                <td class="percent">{{ customer_card['percent'] }}</td>
                 <td>
 
                     <div class="actions">
 
                         <button
                                 class="edit-btn"
-                                onclick="window.location.href='/customer_cards/{{ customer_card['card_number'] }}/edit'">
+                                onclick="openEditModal('{{ customer_card['card_number'] }}')">
 
                             Edit
 
@@ -429,7 +934,7 @@
 
                         <button
                                 class="delete-btn"
-                                onclick="deleteCard('{{ customer_card['card_number'] }}')">
+                                onclick="deleteCustomerCard('{{ customer_card['card_number'] }}')">
 
                             Delete
 
@@ -451,17 +956,18 @@
 
 </div>
 
-<!-- FLOATING BUTTONS -->
+<!-- FLOATING BUTTON -->
 
 <div class="floating-buttons">
 
     <button class="main-btn add-btn"
-            onclick="window.location.href='/add-customer-card'">
-        Add
-    </button>
+        onclick="openAddModal()">
 
+        Add
+
+    </button>
     <button class="main-btn report-btn"
-            onclick="window.location.href='/customer-cards-report'">
+            onclick="window.location.href='/customer_cards/report'">
         Report
     </button>
 
@@ -469,7 +975,7 @@
 
 <script>
 
-    function deleteCard(cardId){
+    function deleteCustomerCard(cardNumber){
 
         const confirmDelete = confirm(
             "Are you sure you want to delete this customer card?"
@@ -477,22 +983,259 @@
 
         if(confirmDelete){
 
-            /*
-                Here you can send request to backend
-                Example:
-                fetch(`/delete-customer-card/${cardId}`, {
-                    method: 'DELETE'
-                })
-            */
+            window.location.href = `/customer_cards/${cardNumber}/delete`;
 
-            alert("Customer card deleted successfully.");
-
-            // Optional reload:
-            // location.reload();
         }
     }
 
 </script>
+<script>
 
+let originalData = {};
+
+function openEditModal(cardNumber){
+
+    fetch(`/customer_cards/get/${cardNumber}`)
+        .then(response => response.json())
+        .then(customer_card => {
+
+            originalData = {...customer_card};
+
+            document.getElementById("cust_surname").value =
+    customer_card.cust_surname;
+
+document.getElementById("cust_name").value =
+    customer_card.cust_name;
+
+document.getElementById("cust_patronymic").value =
+    customer_card.cust_patronymic;
+
+document.getElementById("phone_number").value =
+    customer_card.phone_number;
+
+document.getElementById("city").value =
+    customer_card.city;
+
+            document.getElementById("street").value =
+                customer_card.street;
+
+            document.getElementById("zip_code").value =
+                customer_card.zip_code;
+
+            document.getElementById("percent").value =
+                customer_card.percent;
+
+            document.getElementById("card_number").value =
+                customer_card.card_number;
+
+            document.getElementById("editForm").action =
+                `/customer_cards/${customer_card.card_number}/edit`;
+
+            document.getElementById("editModal").style.display =
+                "flex";
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Failed to load customer card data.");
+        });
+}
+
+function closeEditModal(){
+
+    document.getElementById("editModal").style.display =
+        "none";
+}
+
+function resetForm(){
+
+    document.getElementById("cust_surname").value =
+        originalData.cust_surname;
+
+    document.getElementById("cust_name").value =
+        originalData.cust_name;
+
+    document.getElementById("cust_patronymic").value =
+        originalData.cust_patronymic || "";
+
+    document.getElementById("phone_number").value =
+        originalData.phone_number;
+
+    document.getElementById("city").value =
+       originalData.city || "";
+
+    document.getElementById("street").value =
+        originalData.street || "";
+
+    document.getElementById("zip_code").value =
+        originalData.zip_code || "";
+
+    document.getElementById("percent").value =
+        originalData.percent;
+
+    document.getElementById("card_number").value =
+        originalData.card_number;
+}
+document
+    .getElementById("editForm")
+    .addEventListener("submit", saveCustomerCard);
+
+async function saveCustomerCard(event){
+
+    event.preventDefault();
+
+    const form =
+        document.getElementById("editForm");
+
+    const response = await fetch(
+        form.action,
+        {
+            method: "POST",
+            body: new FormData(form)
+        }
+    );
+
+    const result = await response.json();
+
+    if(result.success){
+
+        const id =
+            document.getElementById(
+                "card_number"
+            ).value;
+
+        const row =
+            document.getElementById(
+                `customer_card-row-${id}`
+            );
+        row.querySelector(".cust_surname").textContent =
+            document.getElementById(
+                "cust_surname"
+            ).value;
+
+        row.querySelector(".cust_name").textContent =
+            document.getElementById(
+                "cust_name"
+            ).value;
+
+        row.querySelector(".cust_patronymic").textContent =
+            document.getElementById(
+                "cust_patronymic"
+            ).value;
+
+        row.querySelector(".phone_number").textContent =
+            document.getElementById(
+                "phone_number"
+            ).value;
+
+            row.querySelector(".city").textContent =
+            document.getElementById(
+                "city"
+            ).value;
+
+        row.querySelector(".street").textContent =
+            document.getElementById(
+                "street"
+            ).value;
+
+        row.querySelector(".zip_code").textContent =
+            document.getElementById(
+                "zip_code"
+            ).value;
+
+        row.querySelector(".percent").textContent =
+            document.getElementById(
+                "percent"
+            ).value;
+
+        closeEditModal();
+    }
+}
+</script>
+<script>
+
+function openAddModal(){
+
+    document.getElementById("addForm").reset();
+
+    document.getElementById("addModal").style.display =
+        "flex";
+}
+
+function closeAddModal(){
+
+    document.getElementById("addModal").style.display =
+        "none";
+}
+
+document
+    .getElementById("addForm")
+    .addEventListener("submit", addCustomerCard);
+
+async function addCustomerCard(event){
+
+    event.preventDefault();
+
+    const form =
+        document.getElementById("addForm");
+
+    const response = await fetch(
+        "/customer_cards/add",
+        {
+            method:"POST",
+            body:new FormData(form)
+        }
+    );
+
+    const result = await response.json();
+
+    if(result.success){
+
+        location.reload();
+
+    }else{
+
+        alert("Failed to add customer card.");
+
+    }
+}
+
+</script>
+<script>
+
+const searchInput =
+    document.querySelector(".search-bar");
+
+searchInput.addEventListener("input", () => {
+
+    clearTimeout(window.searchTimer);
+
+    window.searchTimer = setTimeout(() => {
+
+        document
+            .getElementById("searchForm")
+            .submit();
+
+    }, 300);
+
+});
+
+</script>
+<script>
+window.addEventListener("load", () => {
+
+    const search =
+        document.querySelector(".search-bar");
+
+    if(search.value.length > 0){
+
+        search.focus();
+
+        search.setSelectionRange(
+            search.value.length,
+            search.value.length
+        );
+    }
+});
+</script>
 </body>
 </html>

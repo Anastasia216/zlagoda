@@ -5,65 +5,47 @@ product_routes = Blueprint("product_routes", __name__)
 
 @product_routes.route("/products")
 def products():
+    search = request.args.get("search", "").strip()
     conn = get_db_connection()
-
-    #Filters
-    product_name = request.args.get("product_name", "").strip()
-    category = request.args.get("category", "").strip()
-    sort = request.args.get("sort", "").strip()
-
-    query = """SELECT p.id_product,
-                      p.product_name,
-                      c.category_name,
-                      p.manufacturer,
-                      p.characteristics
-               FROM products p
-                JOIN categories c
-                     ON p.category_number = c.category_number
-               WHERE 1=1"""
-
-    params = []
-
-    #search by product_name
-    if product_name:
-        query += """
-        AND p.product_name LIKE ?"""
-        params.append(f"%{product_name}%")
-
-    #search by category
-    if category:
-        query += """
-        AND c.category_name LIKE ?"""
-        params.append(f"%{category}%")
-
-    #sort
-    if sort == "category":
-        query += """
-        ORDER BY c.category_name"""
-    else:
-        query += """
-        ORDER BY p.product_name"""
-
-    products = conn.execute(query, params).fetchall()
-
-    conn.close()
-    return render_template( "products/products.html", products=products)
-    products = conn.execute("""SELECT p.id_product, 
-                                      p.product_name, 
-                                      c.category_name, 
-                                      p.manufacturer, 
-                                      p.characteristics
-                                FROM products p
-                                JOIN categories c
-                                ON p.category_number = c.category_number
-                                ORDER BY p.product_name""").fetchall()
     categories = conn.execute("""
-            SELECT *
-            FROM categories
-            ORDER BY category_name
-        """).fetchall()
+           SELECT *
+           FROM categories
+           ORDER BY category_name
+       """).fetchall()
+    if search:
+        products = conn.execute("""
+            SELECT p.id_product,
+                   p.product_name,
+                   c.category_name,
+                   p.manufacturer,
+                   p.characteristics
+            FROM products p
+            JOIN categories c
+                 ON p.category_number = c.category_number
+            WHERE p.product_name LIKE ?
+               OR p.manufacturer LIKE ?
+               OR c.category_name LIKE ?
+            ORDER BY p.product_name
+        """, (
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%"
+        )).fetchall()
+    else:
+
+        products = conn.execute("""
+                    SELECT p.id_product,
+                           p.product_name,
+                           c.category_name,
+                           p.manufacturer,
+                           p.characteristics
+                    FROM products p
+                    JOIN categories c
+                         ON p.category_number = c.category_number
+                    ORDER BY p.product_name
+                """).fetchall()
     conn.close()
-    return render_template("products/products.html", products=products, categories=categories)
+    return render_template("products/products.html", products=products, categories=categories, search=search)
 
 
 @product_routes.route("/products/add", methods=["GET", "POST"])

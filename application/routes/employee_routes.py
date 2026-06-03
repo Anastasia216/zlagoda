@@ -17,11 +17,15 @@ def employees_add_page():
 @employee_routes.route('/employees/add', methods=['POST'])
 def add_employees():
     data = request.form
-    errors = validate_employee(data)
-    if errors:
-        return render_template('employees/add.html', errors=errors, old=data)
     create_employee(data)
-    return redirect(url_for('employee_routes.employees'))
+    return jsonify({
+        "success": True
+    })
+
+@employee_routes.route('/employees/get/<id_employee>')
+def get_employee(id_employee):
+    id_employee = get_employee_by_id(id_employee)
+    return jsonify(dict(id_employee))
 
 @employee_routes.route('/employees/<id_employee>/edit')
 def employees_edit_page(id_employee):
@@ -31,12 +35,14 @@ def employees_edit_page(id_employee):
 @employee_routes.route('/employees/<id_employee>/edit', methods=['POST'])
 def employee_edit(id_employee):
     data = request.form
-    errors = validate_employee(data)
-    if errors:
-        employee = get_employee_by_id(id_employee)
-        return render_template('employees/edit.html', errors=errors, old=data)
+    # errors = validate_employee(data)
+    # if errors:
+    #     employee = get_employee_by_id(id_employee)
+    #     return render_template('employees/edit.html', errors=errors, old=data)
     update_employee(id_employee,data)
-    return redirect(url_for('employee_routes.employees'))
+    return jsonify({
+        "success": True
+    })
 
 @employee_routes.route('/employees/<id_employee>/delete')
 def employee_delete_route(id_employee):

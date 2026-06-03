@@ -1,17 +1,29 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from sqlite_db import get_db_connection
 
 category_routes = Blueprint("category_routes", __name__)
 
 @category_routes.route('/categories')
 def categories():
+    search = request.args.get("search", "").strip()
     conn = get_db_connection()
-    categories = conn.execute("""SELECT * 
+    if search:
+
+        categories = conn.execute("""
+                                SELECT *
+                                FROM categories
+                                WHERE category_name LIKE ?
+                                ORDER BY category_name
+                            """, (f"%{search}%",)).fetchall()
+
+    else:
+
+        categories = conn.execute("""SELECT * 
                                  FROM categories 
                                  ORDER BY category_name
                               """).fetchall()
     conn.close()
-    return render_template("categories/categories.html", categories=categories)
+    return render_template("categories/categories.html", categories=categories, search=search)
 
 @category_routes.route("/categories/add", methods=["GET", "POST"])
 def add_category():
@@ -21,11 +33,29 @@ def add_category():
         conn.execute(""" INSERT INTO categories (category_name)
                         VALUES (?)""", (name,))
         conn.commit()
+        category_id = conn.execute("""
+                SELECT last_insert_rowid()
+            """).fetchone()[0]
         conn.close()
-        return redirect(url_for("category_routes.categories"))
+        return jsonify({
+            "success": True,
+            "category_number": category_id
+    })
+
+@category_routes.route("/categories/get/<int:category_number>")
+def get_category(category_number):
+
+    conn = get_db_connection()
+
+    category = conn.execute("""
+        SELECT *
+        FROM categories
+        WHERE category_number = ?
+    """, (category_number,)).fetchone()
 
     conn.close()
-    return render_template("categories/add.html")
+
+    return jsonify(dict(category))
 
 @category_routes.route("/categories/edit/<int:category_number>", methods=["GET", "POST"])
 def edit_category(category_number):
@@ -41,9 +71,9 @@ def edit_category(category_number):
         conn.commit()
         conn.close()
 
-        return redirect(url_for("category_routes.categories"))
-    conn.close()
-    return render_template("categories/edit.html", category=category)
+    return jsonify({
+        "success": True
+    })
 
 @category_routes.route("/categories/delete/<int:category_number>")
 def delete_category(category_number):
