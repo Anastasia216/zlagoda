@@ -1,3 +1,5 @@
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from extensions import db
 from sqlalchemy import CheckConstraint, ForeignKey
 
@@ -100,3 +102,10 @@ class User(db.Model):
     username = db.Column(db.VARCHAR(50), nullable=False, unique=True)
     password_hash = db.Column(db.VARCHAR(255), nullable=False)
     role = db.Column(db.VARCHAR(10), nullable=False)
+
+    #passwords
+def set_password(self, password):
+    self.password_hash = generate_password_hash(password)
+
+def check_password(self, password):
+    return check_password_hash(self.password_hash, password)

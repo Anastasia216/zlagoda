@@ -537,7 +537,7 @@
                     </button>
 
                     <button class="logout-btn"
-                            onclick="logout()">
+                            onclick="window.location.href='/logout'">
                         Log out
                     </button>
 
@@ -579,7 +579,6 @@
             </a>
 
             <!-- CUSTOMER CARDS -->
-
             <a href="{{ url_for('customer_card_routes.customer_cards') }}"
                class="card customer-cards">
 

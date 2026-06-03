@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zlagoda Login</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Inter', sans-serif;
+            min-height:100vh;
+            overflow:hidden;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            background:
+                    radial-gradient(circle at top left,
+                    rgba(59,130,246,0.14),
+                    transparent 28%),
+
+                    radial-gradient(circle at bottom right,
+                    rgba(168,85,247,0.12),
+                    transparent 24%),
+
+                    linear-gradient(
+                            135deg,
+                            #f8fbff 0%,
+                            #f4f7ff 55%,
+                            #f7f5ff 100%
+                    );
+        }
+
+        .blur{
+            position:fixed;
+            border-radius:50%;
+            filter:blur(90px);
+            z-index:-1;
+        }
+
+        .blur1{
+            width:320px;
+            height:320px;
+            background:rgba(59,130,246,0.10);
+            top:-120px;
+            left:-80px;
+        }
+
+        .blur2{
+            width:280px;
+            height:280px;
+            background:rgba(236,72,153,0.08);
+            bottom:-80px;
+            right:-60px;
+        }
+
+        .login-card{
+
+            width:100%;
+            max-width:460px;
+
+            padding:48px;
+
+            border-radius:36px;
+
+            background:rgba(255,255,255,0.75);
+            backdrop-filter:blur(16px);
+
+            box-shadow:
+                    0 20px 60px rgba(15,23,42,0.10),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+
+        .logo{
+            text-align:center;
+            margin-bottom:36px;
+        }
+
+        .logo h1{
+
+            font-size:48px;
+            font-weight:800;
+            letter-spacing:-2px;
+
+            background:linear-gradient(
+                    to right,
+                    #2563eb,
+                    #7c3aed
+            );
+
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+
+        .logo p{
+            margin-top:8px;
+            color:#64748b;
+            font-size:15px;
+            font-weight:500;
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:28px;
+            color:#0f172a;
+            font-size:28px;
+        }
+
+        .input-group{
+            margin-bottom:20px;
+        }
+
+        .input-group label{
+            display:block;
+            margin-bottom:8px;
+            font-size:14px;
+            font-weight:600;
+            color:#475569;
+        }
+
+        .input-group input{
+
+            width:100%;
+
+            padding:16px;
+
+            border:none;
+            outline:none;
+
+            border-radius:18px;
+
+            background:#f8fafc;
+
+            font-size:15px;
+
+            transition:0.2s;
+        }
+
+        .input-group input:focus{
+
+            box-shadow:
+                    0 0 0 3px rgba(37,99,235,0.15);
+        }
+
+        .login-btn{
+
+            width:100%;
+
+            padding:16px;
+
+            border:none;
+            border-radius:18px;
+
+            background:linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+            );
+
+            color:white;
+
+            font-size:16px;
+            font-weight:700;
+
+            cursor:pointer;
+
+            transition:0.25s;
+        }
+
+        .login-btn:hover{
+            transform:translateY(-2px);
+        }
+
+        .error-message{
+
+            margin-bottom:18px;
+
+            padding:14px;
+
+            border-radius:14px;
+
+            background:#fff1f2;
+
+            color:#e11d48;
+
+            text-align:center;
+
+            font-size:14px;
+            font-weight:600;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="blur blur1"></div>
+<div class="blur blur2"></div>
+
+<div class="login-card">
+
+    <div class="logo">
+        <h1>Zlagoda</h1>
+        <p>Retail Enterprise System</p>
+    </div>
+
+    <h2>Sign In</h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="error-message">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <div class="input-group">
+            <label>Username</label>
+
+            <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter username"
+                    required>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+
+            <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter password"
+                    required>
+        </div>
+
+        <button type="submit" class="login-btn">
+            Log In
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
