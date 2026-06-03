@@ -1,27 +1,40 @@
-from sqlite_db import get_db_connection
+from app import create_app
+from extensions import db
+from database.models import User, Employee
+from werkzeug.security import generate_password_hash
+from datetime import date
 
-conn = get_db_connection()
+app = create_app()
 
-cursor = conn.cursor()
+with app.app_context():
 
-# cursor.execute("""
-#     INSERT INTO products
-#     (category_number, manufacturer, product_name, characteristics)
-#     VALUES (?, ?, ?, ?)
-# """, (1, 'Coca-Cola Company', 'Coca-Cola', 'Carbonated soft drink, 0.5L bottle'))
-#
-# cursor.execute("""
-#     INSERT INTO products
-#     (category_number, manufacturer, product_name, characteristics)
-#     VALUES (?, ?, ?, ?)
-# """, (1, 'PepsiCo', 'Pepsi', 'Carbonated soft drink, 1L bottle'))
-#
-# cursor.execute("""
-#     INSERT INTO products
-#     (category_number, manufacturer, product_name, characteristics)
-#     VALUES (?, ?, ?, ?)
-# """, (2, 'Nestle', 'KitKat', 'Milk chocolate wafer bar, 41.5g'))
+    employee = Employee(
+        id_employee="E001",
+        empl_surname="Admin",
+        empl_name="System",
+        empl_patronymic=None,
+        empl_role="manager",
+        salary=10000,
+        date_of_birth=date(2000, 1, 1),
+        date_of_start=date.today(),
+        phone_number="+380000000000",
+        city="Kyiv",
+        street="Main",
+        zip_code="00000"
+    )
 
-conn.commit()
+    db.session.add(employee)
+    db.session.commit()
 
-conn.close()
+    user = User(
+        id_user="U001",
+        id_employee="E001",
+        username="admin",
+        password_hash=generate_password_hash("admin123"),
+        role="manager"
+    )
+
+    db.session.add(user)
+    db.session.commit()
+
+    print("Admin user created")
