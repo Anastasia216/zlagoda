@@ -57,9 +57,30 @@ def add_product():
 
     if request.method == "POST":
         category_number = request.form["category_number"]
-        manufacturer = request.form["manufacturer"]
-        product_name = request.form["product_name"]
-        characteristics = request.form["characteristics"]
+        manufacturer = request.form["manufacturer"].strip()
+        product_name = request.form["product_name"].strip()
+        characteristics = request.form["characteristics"].strip()
+        #validation
+        if not product_name:
+            conn.close()
+            return "Product name cannot be empty"
+
+        if len(product_name) > 100:
+            conn.close()
+            return "Product name is too long (max 100)"
+
+        if not manufacturer:
+            conn.close()
+            return "Manufacturer cannot be empty"
+
+        if len(manufacturer) > 100:
+            conn.close()
+            return "Manufacturer is too long (max 100)"
+
+        if len(characteristics) > 500:
+            conn.close()
+            return "Characteristics are too long (max 500)"
+        
         conn.execute("""INSERT INTO products ( 
                             category_number, 
                             manufacturer, 
