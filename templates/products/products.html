@@ -305,198 +305,347 @@
         .report-btn{
             background:linear-gradient(135deg, #7c3aed, #a855f7);
         }
-        /* MODAL */
 
-.modal{
-    display:none;
+/* MODAL */
 
-    position:fixed;
-    inset:0;
+    .modal{
+        display:none;
 
-    background:rgba(15,23,42,0.35);
+        position:fixed;
+        inset:0;
 
-    backdrop-filter:blur(6px);
+        background:rgba(15,23,42,0.35);
 
-    align-items:center;
-    justify-content:center;
+        backdrop-filter:blur(6px);
 
-    z-index:1000;
-}
+        align-items:center;
+        justify-content:center;
 
-.modal-content{
+        z-index:1000;
+    }
 
-    width:700px;
-    max-width:92%;
+    .modal-content{
 
-    background:rgba(255,255,255,0.95);
+        width:700px;
+        max-width:92%;
 
-    backdrop-filter:blur(10px);
+       background:
+                    radial-gradient(circle at top left,
+                    rgba(59,130,246,0.12),
+                    transparent 28%),
 
-    border-radius:30px;
+                    radial-gradient(circle at bottom right,
+                    rgba(168,85,247,0.10),
+                    transparent 24%),
 
-    padding:34px;
+                    linear-gradient(
+                            135deg,
+                            #f8fbff 0%,
+                            #f4f7ff 55%,
+                            #f7f5ff 100%
+                    );
 
-    position:relative;
+        backdrop-filter:blur(10px);
 
-    box-shadow:
-            0 25px 60px rgba(15,23,42,0.15),
-            inset 0 1px 0 rgba(255,255,255,0.9);
-}
+        border-radius:30px;
 
-.modal-content h2{
+        padding:34px;
 
-    font-size:32px;
-    font-weight:800;
-    margin-left:48px;
-    margin-bottom:28px;
-}
+        position:relative;
 
-.close-btn{
+        box-shadow:
+                0 25px 60px rgba(15,23,42,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+    }
 
-    position:absolute;
 
-    top:32px;
-    left:20px;
+    .modal-content h2{
 
-    width:42px;
-    height:42px;
+        font-size:34px;
+        font-weight:800;
+        margin-left:48px;
+        margin-bottom:28px;
+    }
 
-    border:none;
-    border-radius:12px;
+    .close-btn{
 
-    cursor:pointer;
+        position:absolute;
 
-    background:#f8fafc;
+        top:32px;
+        left:20px;
 
-    font-size:20px;
-}
+        width:42px;
+        height:42px;
 
-.close-btn:hover{
-    background:#e2e8f0;
-}
+        border:none;
+        border-radius:12px;
 
-.form-group{
-    margin-bottom:18px;
-}
+        cursor:pointer;
 
-.form-group label{
+        background:#f8fafc;
 
-    display:block;
+        font-size:20px;
+        box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+    }
 
-    margin-bottom:8px;
+    .close-btn:hover{
+                transform:translateY(-3px);
+                box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+            }
 
-    font-size:14px;
-    font-weight:600;
-}
+    .form-group{
+        margin-bottom:18px;
+    }
 
-.form-group input,
-.form-group textarea,
-.form-group select{
+    .form-group label{
 
+        display:block;
+
+        margin-bottom:8px;
+
+        font-size:16px;
+        font-weight:600;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select{
     width:100%;
 
-    border:none;
-    outline:none;
+        border:none;
+        outline:none;
 
-    border-radius:18px;
+        border-radius:18px;
 
-    padding:15px 18px;
+        padding:15px 18px;
 
-    font-size:15px;
+        font-size:15px;
 
-    background:#f8fafc;
-}
+        background:rgba(255,255,255,0.9);
 
-.form-group textarea{
-    min-height:120px;
-    resize:vertical;
-}
+        box-shadow:
+            0 10px 35px rgba(15,23,42,0.06),
+            inset 0 1px 0 rgba(255,255,255,0.9);
 
-.modal-buttons{
+        color:#0f172a;
 
-    display:flex;
-    justify-content:flex-end;
-    gap:12px;
+        appearance:none;
+        -webkit-appearance:none;
+        -moz-appearance:none;
 
-    margin-top:28px;
-}
+        cursor:pointer;
+    }
+    .form-group{
+        position:relative;
+    }
 
-.save-btn{
+    .form-group:has(select)::after{
 
-    border:none;
+        content:"⌄";
 
-    padding:13px 24px;
+        position:absolute;
 
-    border-radius:14px;
+        right:18px;
+        top:35px;
 
-    font-weight:700;
+        font-size:18px;
 
-    cursor:pointer;
+        color:#64748b;
 
-    color:white;
+        pointer-events:none;
+    }
 
-    background:linear-gradient(
-            135deg,
-            #2563eb,
-            #4f46e5
-    );
-}
+    .form-group textarea{
+        min-height:120px;
+        resize:vertical;
+    }
 
-.reset-btn{
+    .modal-buttons{
 
-    border:none;
+        display:flex;
+        justify-content:flex-end;
+        gap:12px;
 
-    padding:13px 24px;
+        margin-top:28px;
+    }
 
-    border-radius:14px;
+    .save-btn{
+         appearance:none;
+         -webkit-appearance:none;
 
-    font-weight:700;
+        border:none;
 
-    cursor:pointer;
+        padding:13px 24px;
 
-    background:#f1f5f9;
+        border-radius:14px;
 
-    color:#334155;
-}
+        font-weight:700;
+
+        cursor:pointer;
+
+        color:white;
+
+        background:linear-gradient(
+                135deg,
+                #2563eb,
+                #4f46e5
+        );
+        box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+    }
+    .save-btn:hover{
+                transform:translateY(-3px);
+                box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+            }
+
+    .reset-btn{
+
+        border:none;
+
+        padding:13px 24px;
+
+        border-radius:14px;
+
+        font-weight:700;
+
+        cursor:pointer;
+
+        background:#f1f5f9;
+
+        color:#334155;
+        box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+    }
+
+    .reset-btn:hover{
+                transform:translateY(-3px);
+                box-shadow:
+                        0 5px 25px rgba(15,23,42,0.16);
+            }
 
         /* RESPONSIVE */
 
-        @media(max-width:1000px){
-
-            .table-container{
-                overflow-x:auto;
-            }
-
-            table{
-                min-width:1000px;
-            }
+    @media(max-width:1000px){
+    .table-container{
+            overflow-x:auto;
         }
-
-        @media(max-width:760px){
-
-            .container{
-                padding:24px;
-            }
-
-            .logo h1{
-                font-size:34px;
-            }
-
-            .floating-buttons{
-                right:20px;
-                bottom:20px;
-            }
-
-            .main-btn{
-                min-width:130px;
-                height:58px;
-            }
+        table{
+            min-width:1000px;
         }
+    }
+
+    @media(max-width:760px){
+        .container{
+            padding:24px;
+        }
+        .logo h1{
+            font-size:34px;
+        }
+        .floating-buttons{
+            right:20px;
+            bottom:20px;
+        }
+        .main-btn{
+            min-width:130px;
+            height:58px;
+        }
+    }
 
     </style>
 </head>
 
 <body>
+<div id="addModal" class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-btn"
+                onclick="closeAddModal()">
+            ✕
+        </button>
+
+        <h2>Add Product</h2>
+
+        <form id="addForm">
+
+            <div class="form-group">
+
+                <label>Product Name</label>
+
+                <input type="text"
+                       id="new_product_name"
+                       name="product_name"
+                       required>
+
+            </div>
+            <div class="form-group">
+
+                <label>Characteristics</label>
+
+                <input type="text"
+                       id="new_characteristics"
+                       name="product_name"
+                       required>
+
+            </div>
+            <div class="form-group">
+
+                <label>Manufacturer</label>
+
+                <input type="text"
+                       id="new_manufacturer"
+                       name="manufacturer"
+                       required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Category</label>
+
+                <select id="new_category_number"
+                        name="category_number"
+                        required>
+
+                    {% for category in categories %}
+
+                    <option value="{{ category['category_number'] }}">
+                        {{ category['category_name'] }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="modal-buttons">
+
+                <button type="button"
+                        class="reset-btn"
+                        onclick="document.getElementById('addForm').reset()">
+
+                    Reset
+
+                </button>
+
+                <button type="submit"
+                        class="save-btn">
+
+                    Add
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 <div id="editModal" class="modal">
 
     <div class="modal-content">
@@ -539,8 +688,9 @@
 
                 <label>Characteristics</label>
 
-                <textarea id="characteristics"
-                          name="characteristics"></textarea>
+                <input id="characteristics"
+                          name="characteristics"
+                          required>
 
             </div>
 
@@ -609,11 +759,19 @@
 
     <!-- SEARCH -->
 
-    <div class="search-wrapper">
+        <div class="search-wrapper">
 
-        <input type="text"
-               class="search-bar"
-               placeholder="Search products...">
+        <form id="searchForm"
+              method="GET"
+              action="/products">
+
+            <input type="text"
+                   name="search"
+                   class="search-bar"
+                   placeholder="Search products..."
+                   value="{{ search if search else '' }}">
+
+        </form>
 
     </div>
 
@@ -690,13 +848,15 @@
 
 </div>
 
-<!-- FLOATING BUTTON -->
+<!-- FLOATING BUTTONS -->
 
 <div class="floating-buttons">
 
     <button class="main-btn add-btn"
-            onclick="window.location.href='/products/add'">
-        Add Product
+        onclick="openAddModal()">
+
+        Add
+
     </button>
     <button class="main-btn report-btn"
             onclick="window.location.href='/products/report'">
@@ -841,6 +1001,92 @@ async function saveProduct(event){
         closeEditModal();
     }
 }
+</script>
+<script>
+
+function openAddModal(){
+
+    document.getElementById("addForm").reset();
+
+    document.getElementById("addModal").style.display =
+        "flex";
+}
+
+function closeAddModal(){
+
+    document.getElementById("addModal").style.display =
+        "none";
+}
+
+document
+    .getElementById("addForm")
+    .addEventListener("submit", addCategory);
+
+async function addCategory(event){
+
+    event.preventDefault();
+
+    const form =
+        document.getElementById("addForm");
+
+    const response = await fetch(
+        "/categories/add",
+        {
+            method:"POST",
+            body:new FormData(form)
+        }
+    );
+
+    const result = await response.json();
+
+    if(result.success){
+
+        location.reload();
+
+    }else{
+
+        alert("Failed to add category.");
+
+    }
+}
+
+</script>
+<script>
+
+const searchInput =
+    document.querySelector(".search-bar");
+
+searchInput.addEventListener("input", () => {
+
+    clearTimeout(window.searchTimer);
+
+    window.searchTimer = setTimeout(() => {
+
+        document
+            .getElementById("searchForm")
+            .submit();
+
+    }, 300);
+
+});
+
+</script>
+<script>
+window.addEventListener("load", () => {
+
+    const search =
+        document.querySelector(".search-bar");
+
+    if(search.value.length > 0){
+
+        search.focus();
+
+        search.setSelectionRange(
+            search.value.length,
+            search.value.length
+        );
+    }
+});
 </script>
 </body>
 </html>
