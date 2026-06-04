@@ -1,9 +1,11 @@
 from flask import Blueprint, Flask, render_template, request, redirect, url_for, jsonify
 from sqlite_db import get_db_connection
-
+from application.decorators import login_required, role_required
 product_routes = Blueprint("product_routes", __name__)
 
 @product_routes.route("/products")
+@login_required
+@role_required("manager","cashier")
 def products():
     search = request.args.get("search", "").strip()
     conn = get_db_connection()
@@ -49,6 +51,8 @@ def products():
 
 
 @product_routes.route("/products/add", methods=["GET", "POST"])
+@login_required
+@role_required("manager")
 def add_product():
     conn = get_db_connection()
     categories = conn.execute("""SELECT *
@@ -96,6 +100,8 @@ def add_product():
     return render_template("products/add.html", categories=categories)
 
 @product_routes.route("/products/get/<int:id_product>")
+@login_required
+@role_required("manager","cashier")
 def get_product(id_product):
 
     conn = get_db_connection()
@@ -110,6 +116,8 @@ def get_product(id_product):
 
     return jsonify(dict(product))
 @product_routes.route("/products/edit/<int:id_product>", methods=["GET", "POST"])
+@login_required
+@role_required("manager")
 def edit_product(id_product):
     conn = get_db_connection()
     product = conn.execute("""SELECT *
@@ -142,6 +150,8 @@ def edit_product(id_product):
 
 
 @product_routes.route("/products/delete/<int:id_product>")
+@login_required
+@role_required("manager")
 def delete_product(id_product):
     conn = get_db_connection()
     conn.execute("""DELETE

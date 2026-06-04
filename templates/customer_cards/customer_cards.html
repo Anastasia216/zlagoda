@@ -931,7 +931,7 @@
                             Edit
 
                         </button>
-
+                        {% if session["role"] == "manager" %}
                         <button
                                 class="delete-btn"
                                 onclick="deleteCustomerCard('{{ customer_card['card_number'] }}')">
@@ -939,7 +939,7 @@
                             Delete
 
                         </button>
-
+                        {% endif %}
                     </div>
 
                 </td>
@@ -959,7 +959,7 @@
 <!-- FLOATING BUTTON -->
 
 <div class="floating-buttons">
-
+    {% if session["role"] == "manager" %}
     <button class="main-btn add-btn"
         onclick="openAddModal()">
 
@@ -970,7 +970,7 @@
             onclick="window.location.href='/customer_cards/report'">
         Report
     </button>
-
+    {% endif %}
 </div>
 
 <script>

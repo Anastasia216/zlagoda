@@ -1,9 +1,12 @@
 from flask import Blueprint, Flask, render_template, request, redirect, url_for
 from sqlite_db import get_db_connection
+from application.decorators import login_required, role_required
 
 store_product_routes = Blueprint('store_product_routes', __name__)
 
 @store_product_routes.route("/store_products")
+@login_required
+@role_required("manager","cashier")
 def store_products():
     conn = get_db_connection()
 
@@ -67,6 +70,8 @@ def store_products():
 
 
 @store_product_routes.route("/store_products/add", methods=["GET", "POST"])
+@login_required
+@role_required("manager")
 def add_store_product():
     conn = get_db_connection()
     products = conn.execute("""SELECT *
@@ -102,6 +107,8 @@ def add_store_product():
 
 
 @store_product_routes.route("/store_products/edit/<string:upc>", methods=["GET", "POST"])
+@login_required
+@role_required("manager")
 def edit_store_product(upc):
     conn = get_db_connection()
     store_product = conn.execute("""SELECT *
@@ -140,6 +147,8 @@ def edit_store_product(upc):
 
 
 @store_product_routes.route("/store_products/delete/<string:upc>")
+@login_required
+@role_required("manager")
 def delete_store_product(upc):
     conn = get_db_connection()
 
