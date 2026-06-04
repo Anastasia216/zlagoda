@@ -814,7 +814,7 @@
                 <td>
 
                     <div class="actions">
-
+                        {% if session["role"] == "cashier" %}
                         <button
                                 class="edit-btn"
                                 onclick="openEditModal('{{ receipt['check_number'] }}')">
@@ -822,7 +822,8 @@
                             Edit
 
                         </button>
-
+                        {% endif %}
+                        {% if session["role"] == "manager" %}
                         <button
                                 class="delete-btn"
                                 onclick="deleteReceipt('{{ receipt['check_number'] }}')">
@@ -830,7 +831,7 @@
                             Delete
 
                         </button>
-
+                        {% endif %}
                     </div>
 
                 </td>
@@ -850,21 +851,23 @@
 <!-- FLOATING BUTTONS -->
 
 <div class="floating-buttons">
-
+    {% if session["role"] == "cashier" %}
     <button class="main-btn add-btn"
             onclick="openAddModal()">
 
         Add
 
     </button>
+    {% endif %}
 
+    {% if session["role"] == "manager" %}
     <button class="main-btn report-btn"
             onclick="window.location.href='/receipts/report'">
 
         Reports
 
     </button>
-
+    {% endif %}
 
 </div>
 

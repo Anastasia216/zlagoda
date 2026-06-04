@@ -815,7 +815,7 @@
                 <td>
 
                     <div class="actions">
-
+                        {% if session["role"] == "manager" %}
                         <button
                                 class="edit-btn"
                                 onclick="openEditModal('{{ product['id_product'] }}')">
@@ -831,7 +831,7 @@
                             Delete
 
                         </button>
-
+                        {% endif %}
                     </div>
 
                 </td>
@@ -851,7 +851,7 @@
 <!-- FLOATING BUTTONS -->
 
 <div class="floating-buttons">
-
+    {% if session["role"] == "manager" %}
     <button class="main-btn add-btn"
         onclick="openAddModal()">
 
@@ -862,7 +862,7 @@
             onclick="window.location.href='/products/report'">
         Report
     </button>
-
+    {% endif %}
 </div>
 
 <script>

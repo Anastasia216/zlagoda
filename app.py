@@ -1,4 +1,6 @@
+import secrets
 from flask import Flask, render_template
+from application.decorators import login_required
 
 from application.routes.receipt_routes import receipt_routes
 from extensions import db, migrate
@@ -18,10 +20,12 @@ def create_app():
     app.register_blueprint(customer_card_routes)
     app.register_blueprint(receipt_routes)
     @app.route("/")
+    @login_required
     def home():
         return render_template("home.html")
 
     app.config.from_object("configure.Config")
+    app.config["SESSION_PERMANENT"] = False
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -36,7 +40,7 @@ def create_app():
 
 app = create_app()
 
-app.secret_key = "zlagoda_secret_key"
+app.secret_key = secrets.token_urlsafe(32)
 
 if __name__ == "__main__":
     app.run(debug=True)

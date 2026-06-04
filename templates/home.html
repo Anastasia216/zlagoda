@@ -481,6 +481,30 @@
             }
         }
 
+        .close-modal-btn{
+
+        margin-top:20px;
+
+        border:none;
+        border-radius:18px;
+
+        padding:14px 22px;
+
+        background:#eef2ff;
+        color:#4f46e5;
+
+        font-size:15px;
+        font-weight:600;
+
+        cursor:pointer;
+
+        transition:0.2s;
+    }
+
+    .close-modal-btn:hover{
+        background:#e0e7ff;
+    }
+
     </style>
 </head>
 
@@ -523,8 +547,8 @@
                     </div>
 
                     <div>
-                        <h3>Anastasiia</h3>
-                        <p>Authorized user</p>
+                        <h3>{{ session["username"] }}</h3>
+                        <p>{{ session["role"] }}</p>
                     </div>
 
                 </div>
@@ -532,7 +556,7 @@
                 <div class="popup-buttons">
 
                     <button class="profile-btn"
-                            onclick="window.location.href='/profile'">
+                            onclick="showProfile()">
                         User Information
                     </button>
 
@@ -548,7 +572,41 @@
         </div>
 
     </div>
+<div id="profileModal"
+     onclick="outsideClick(event)"
+     style="
+     display:none;
+     position:fixed;
+     top:0;
+     left:0;
+     width:100%;
+     height:100%;
+     background:rgba(0,0,0,0.4);
+     z-index:9999;
+     ">
 
+    <div id="profileWindow"
+         style="
+        background:white;
+        width:500px;
+        margin:100px auto;
+        padding:30px;
+        border-radius:20px;
+        position:relative;
+    ">
+
+        <h2>User Information</h2>
+
+        <div id="profileContent"></div>
+
+        <button class="close-modal-btn"
+                onclick="closeProfileModal()">
+            Close
+        </button>
+
+    </div>
+
+</div>
     <!-- DASHBOARD -->
 
     <div class="dashboard">
@@ -558,7 +616,7 @@
         <div class="top-row">
 
             <!-- EMPLOYEES -->
-
+             {% if session["role"] == "manager" %}
             <a href="{{ url_for('employee_routes.employees') }}"
                class="card employees">
 
@@ -577,7 +635,7 @@
                 <div class="arrow-circle">→</div>
 
             </a>
-
+             {% endif %}
             <!-- CUSTOMER CARDS -->
             <a href="{{ url_for('customer_card_routes.customer_cards') }}"
                class="card customer-cards">
@@ -603,7 +661,6 @@
         <div class="bottom-row">
 
             <!-- PRODUCTS -->
-
             <a href="{{ url_for('product_routes.products') }}"
                class="card products">
 
@@ -626,7 +683,7 @@
             </a>
 
             <!-- CATEGORIES -->
-
+            {% if session["role"] == "manager" %}
             <a href="{{ url_for('category_routes.categories') }}"
                class="card categories">
 
@@ -643,7 +700,7 @@
                 <div class="arrow-circle">→</div>
 
             </a>
-
+            {% endif %}
             <!-- CHECKS -->
 
             <a href="{{ url_for('receipt_routes.receipts') }}"
@@ -697,6 +754,39 @@
         }
     }
 
+    function showProfile(){
+
+    fetch("/profile")
+        .then(response => response.json())
+        .then(data => {
+
+            document.getElementById("profileContent").innerHTML = `
+                <p><b>Name:</b> ${data.empl_name}</p>
+                <p><b>Surname:</b> ${data.empl_surname}</p>
+                <p><b>Role:</b> ${data.empl_role}</p>
+                <p><b>Phone:</b> ${data.phone_number}</p>
+                <p><b>City:</b> ${data.city}</p>
+                <p><b>Street:</b> ${data.street}</p>
+                <p><b>Start date:</b> ${data.date_of_start}</p>
+            `;
+
+            document.getElementById("profileModal").style.display = "block";
+        });
+    }
+
+    function closeProfileModal(){
+    document.getElementById("profileModal").style.display = "none";
+    }
+
+    function outsideClick(event) {
+
+        const windowBox =
+            document.getElementById("profileWindow");
+
+        if (!windowBox.contains(event.target)) {
+            closeProfileModal();
+        }
+    }
 </script>
 
 </body>
