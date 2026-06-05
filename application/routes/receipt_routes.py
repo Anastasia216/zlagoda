@@ -31,6 +31,15 @@ def receipts():
         ORDER BY cust_surname
     """).fetchall()
 
+    products = conn.execute("""
+            SELECT sp.UPC,
+                   p.product_name
+            FROM store_products sp
+            JOIN products p
+                 ON p.id_product = sp.id_product
+            ORDER BY p.product_name
+        """).fetchall()
+
 #cahier
     if session.get("role") == "cashier":
 
@@ -131,40 +140,10 @@ def receipts():
                 LEFT JOIN customer_cards c ON r.card_number = c.card_number
                 ORDER BY r.print_date DESC
             """).fetchall()
-    employees = conn.execute("""
-            SELECT *
-            FROM employees
-            WHERE empl_role = 'Cashier'
-            ORDER BY empl_surname
-        """).fetchall()
-
-    customer_cards = conn.execute("""
-            SELECT *
-            FROM customer_cards
-            ORDER BY cust_surname
-        """).fetchall()
-    products = conn.execute("""
-        SELECT sp.UPC,
-               p.product_name
-        FROM store_products sp
-        JOIN products p
-             ON p.id_product = sp.id_product
-        ORDER BY p.product_name
-    """).fetchall()
 
     conn.close()
 
     return render_template("receipts/receipts.html", receipts=receipts,products=products, employees=employees, customer_cards=customer_cards, search=search)
-
-    conn.close()
-
-    return render_template(
-        "receipts/receipts.html",
-        receipts=receipts,
-        employees=employees,
-        customer_cards=customer_cards,
-        search=search
-    )
 
 @receipt_routes.route("/receipts/add", methods=["GET", "POST"])
 @login_required
@@ -290,11 +269,7 @@ def edit_receipt(check_number):
         finally:
             conn.close()
 
-        conn.commit()
-        conn.close()
-        return jsonify({
-            "success": True
-        })
+
     conn.close()
 
     return render_template(  "receipts/edit.html", receipt=receipt, employees=employees, customer_cards=customer_cards
@@ -330,14 +305,7 @@ def get_receipt(check_number):
 
     return jsonify(dict(receipt))
 
-@receipt_routes.route("/receipts/<check_number>/sales")
-def get_receipt_sales(check_number):
 
-    conn = get_db_connection()
-
-    sales = conn.execute("""
-         SELECT
-            s.UPC,
 @receipt_routes.route("/receipts/details/<string:check_number>")
 @login_required
 @role_required("manager", "cashier")
@@ -357,10 +325,6 @@ def receipt_details(check_number):
             ON sp.UPC = s.UPC
 
         JOIN products p
-            ON p.id_product = sp.id_product
-            ON s.UPC = sp.UPC
-
-        JOIN products p
             ON sp.id_product = p.id_product
 
         WHERE s.check_number = ?
@@ -368,7 +332,8 @@ def receipt_details(check_number):
 
     conn.close()
 
-    return jsonify([dict(row) for row in sales])
+    return jsonify([dict(row) for row in products])
+
 @receipt_routes.route("/products/get-price/<upc>")
 def get_price(upc):
 
@@ -383,7 +348,34 @@ def get_price(upc):
     conn.close()
 
     return jsonify(dict(product))
-    return jsonify([
-        dict(product)
-        for product in products
-    ])
+    # return jsonify([
+    #     dict(product)
+    #     for product in products
+    # ])
+@receipt_routes.route("/receipts/<check_number>/sales")
+def get_receipt_sales(check_number):
+
+    conn = get_db_connection()
+
+    sales = conn.execute("""
+         SELECT
+            s.UPC,
+            p.product_name,
+            s.product_number,
+            s.selling_price
+
+        FROM sales s
+
+        JOIN store_products sp
+            ON sp.UPC = s.UPC
+
+        JOIN products p
+            ON p.id_product = sp.id_product
+
+        WHERE s.check_number = ?
+    """, (check_number,)).fetchall()
+
+    conn.close()
+
+    return jsonify([dict(row) for row in sales])
+
