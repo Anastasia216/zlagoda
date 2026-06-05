@@ -592,6 +592,72 @@
 
         cursor:pointer;
     }
+
+    .dropdown{
+    position:relative;
+}
+
+.dropdown-btn{
+    height:68px;
+    min-width:180px;
+
+    padding:0 20px;
+
+    border:none;
+    border-radius:24px;
+
+    font-size:15px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    background:rgba(255,255,255,0.78);
+    backdrop-filter:blur(14px);
+
+    box-shadow:
+        0 10px 35px rgba(15,23,42,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.dropdown-btn::after{
+    content:"⌄";
+    margin-left:10px;
+    color:#64748b;
+}
+
+.dropdown-menu{
+    position:absolute;
+    top:75px;
+    left:0;
+
+    width:100%;
+
+    background:rgba(255,255,255,0.95);
+    backdrop-filter:blur(14px);
+
+    border-radius:20px;
+
+    box-shadow:0 20px 60px rgba(15,23,42,0.12);
+
+    display:none;
+
+    z-index:1000;
+}
+
+.dropdown-item{
+    padding:14px 16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.dropdown-item:hover{
+    background:#eff6ff;
+    color:#2563eb;
+}
         /* RESPONSIVE */
 
     @media(max-width:1000px){
@@ -905,50 +971,62 @@
 
     <!-- SEARCH -->
 
-        <div class="search-wrapper">
+<div class="search-wrapper">
 
-            <form id="searchForm"
-                method="GET"
-                action="/customer_cards"
-                style="display:flex; gap:16px; width:100%;">
+    <form id="searchForm"
+          class="search-form"
+          method="GET"
+          action="/customer_cards"
+          style="display:flex; gap:16px;">
 
-            <input
-                type="text"
-                name="search"
-                class="search-bar"
-                placeholder="Search customer..."
-                value="{{ search if search else '' }}">
+        <input type="text"
+               name="search"
+               class="search-bar"
+               placeholder="Search customers..."
+               value="{{ search if search else '' }}">
 
-                <div class="category-filter">
+        <!-- PERCENT DROPDOWN -->
+        <div class="dropdown">
 
-                     <select name="percent"
-                             class="filter-select"
-                             onchange="this.form.submit()">
+            <button type="button"
+                    class="dropdown-btn"
+                    onclick="togglePercentDropdown()">
 
-                        <option value="">
-                            All discounts
-                        </option>
+                {{ percent if percent else 'All discounts' }}
 
-            {% for p in percents %}
+            </button>
 
-                        <option value="{{ p['percent'] }}"
-                             {% if percent == p['percent']|string %}
-                                selected
-                            {% endif %}>
+            <div class="dropdown-menu" id="percentDropdown">
 
-                            {{ p['percent'] }}%
+                <div class="dropdown-item"
+                     onclick="selectPercent('')">
+                    All discounts
+                </div>
 
-                        </option>
+                <div class="dropdown-item"
+                     onclick="selectPercent('5')">5%</div>
 
-            {% endfor %}
+                <div class="dropdown-item"
+                     onclick="selectPercent('10')">10%</div>
 
-        </select>
+                <div class="dropdown-item"
+                     onclick="selectPercent('15')">15%</div>
 
-    </div>
+                <div class="dropdown-item"
+                     onclick="selectPercent('20')">20%</div>
 
-</form>
+            </div>
 
-    </div>
+        </div>
+
+        <input type="hidden"
+               name="percent"
+               id="percentInput"
+               value="{{ percent if percent else '' }}">
+
+    </form>
+
+</div>
 
     <!-- TABLE -->
 
@@ -1317,6 +1395,37 @@ window.addEventListener("load", () => {
         );
     }
 });
+</script>
+<script>
+
+function togglePercentDropdown(){
+
+    const menu =
+        document.getElementById("percentDropdown");
+
+    menu.style.display =
+        menu.style.display === "block"
+            ? "none"
+            : "block";
+}
+
+function selectPercent(percent){
+
+    document.getElementById("percentInput").value = percent;
+
+    document.getElementById("searchForm").submit();
+}
+
+document.addEventListener("click", function(event){
+
+    const dropdown =
+        document.querySelector(".dropdown");
+
+    if(!dropdown.contains(event.target)){
+        document.getElementById("percentDropdown").style.display = "none";
+    }
+});
+
 </script>
 </body>
 </html>
