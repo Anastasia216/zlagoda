@@ -1,16 +1,56 @@
 from sqlite_db import get_db_connection
 
-def get_all_employees(search=''):
+def get_all_employees(search='', role=''):
+
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT * '
-                   'FROM employees '
-                   'WHERE empl_surname LIKE ? '
-                   '    OR empl_name LIKE ? '
-                   'ORDER BY empl_surname ', (
-        f"%{search}%",
-        f"%{search}%",
-    ))
+
+    if search and role:
+        cursor.execute("""
+            SELECT *
+            FROM employees
+            WHERE (
+                empl_surname LIKE ?
+                OR empl_name LIKE ?
+            )
+            AND empl_role = ?
+            ORDER BY empl_surname
+        """,
+        (
+            f"%{search}%",
+            f"%{search}%",
+            role
+        ))
+
+    elif search:
+        cursor.execute("""
+            SELECT *
+            FROM employees
+            WHERE empl_surname LIKE ?
+               OR empl_name LIKE ?
+            ORDER BY empl_surname
+        """,
+        (
+            f"%{search}%",
+            f"%{search}%"
+        ))
+
+    elif role:
+        cursor.execute("""
+            SELECT *
+            FROM employees
+            WHERE empl_role = ?
+            ORDER BY empl_surname
+        """,
+        (role,))
+
+    else:
+        cursor.execute("""
+            SELECT *
+            FROM employees
+            ORDER BY empl_surname
+        """)
+
     employees = cursor.fetchall()
     conn.close()
     return employees
@@ -112,6 +152,19 @@ def delete_employee(id_employee):
                    'WHERE id_employee = ?', (id_employee,))
     conn.commit()
     conn.close()
+
+def get_all_roles():
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+                       SELECT DISTINCT empl_role
+                       FROM employees
+                       ORDER BY empl_role
+                       """)
+
+        roles = cursor.fetchall()
+        conn.close()
+        return roles
 
 
 

@@ -1,6 +1,6 @@
 from flask import(Blueprint, render_template, request, redirect, url_for, jsonify)
 from application.queries.employee_queries import (get_all_employees, get_employee_by_id, create_employee,
-                                                  update_employee, delete_employee)
+                                                  update_employee, delete_employee,get_all_roles)
 from application.validation.employee_validation import(validate_employee)
 from application.decorators import login_required, role_required
 employee_routes = Blueprint('employee_routes', __name__)
@@ -9,10 +9,13 @@ employee_routes = Blueprint('employee_routes', __name__)
 @login_required
 @role_required('manager')
 def employees():
-    search = request.args.get('search','')
-    employees = get_all_employees(search)
-    return render_template('employees/employees.html', employees=employees, search=search)
+    search = request.args.get('search', '').strip()
+    role = request.args.get('role', '').strip()
+    employees = get_all_employees(search, role)
+    roles = get_all_roles()
 
+    return render_template(
+        'employees/employees.html', employees=employees, search=search, role=role, roles=roles)
 @employee_routes.route('/employees/add')
 @login_required
 @role_required('manager')
