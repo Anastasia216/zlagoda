@@ -1,5 +1,5 @@
 from flask import (Blueprint, render_template, request, redirect, url_for, jsonify)
-from application.queries.customer_cards_queries import (get_all_customer_cards, get_customer_card_by_number, create_customer_card, update_customer_card, delete_customer_card)
+from application.queries.customer_cards_queries import (get_all_customer_cards, get_customer_card_by_number, create_customer_card, update_customer_card, delete_customer_card, get_all_percents)
 from application.validation.customer_card_validation import validate_customer_card
 from application.decorators import login_required, role_required
 customer_card_routes = Blueprint("customer_card_routes", __name__)
@@ -8,9 +8,12 @@ customer_card_routes = Blueprint("customer_card_routes", __name__)
 @login_required
 @role_required("manager","cashier")
 def customer_cards():
-    search = request.args.get('search', '')
-    customer_cards = get_all_customer_cards(search)
-    return render_template("customer_cards/customer_cards.html", customer_cards=customer_cards, search=search)
+    search = request.args.get('search', '').strip()
+    percent = request.args.get('percent', '').strip()
+
+    customer_cards = get_all_customer_cards( search, percent)
+    percents = get_all_percents()
+    return render_template("customer_cards/customer_cards.html", customer_cards=customer_cards, search=search, percents=percents, percent=percent)
 
 @customer_card_routes.route('/customer_cards/add')
 @login_required

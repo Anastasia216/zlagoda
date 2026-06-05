@@ -1,19 +1,58 @@
 from sqlite_db import get_db_connection
 
-def get_all_customer_cards(search =''):
+def get_all_customer_cards(search='', percent=''):
+
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute( 'SELECT * '
-                    'FROM customer_cards '
-                    'WHERE cust_surname LIKE ? '
-                    'OR cust_name LIKE ? '
-                    'ORDER BY cust_surname',
-                    (
-                          f'%{search}%',
-                          f'%{search}%'
-                    )
-                )
+
+    if search and percent:
+        cursor.execute("""
+            SELECT *
+            FROM customer_cards
+            WHERE (
+                cust_surname LIKE ?
+                OR cust_name LIKE ?
+            )
+            AND percent = ?
+            ORDER BY cust_surname
+        """,
+        (
+            f"%{search}%",
+            f"%{search}%",
+            percent
+        ))
+
+    elif search:
+        cursor.execute("""
+            SELECT *
+            FROM customer_cards
+            WHERE cust_surname LIKE ?
+               OR cust_name LIKE ?
+            ORDER BY cust_surname
+        """,
+        (
+            f"%{search}%",
+            f"%{search}%"
+        ))
+
+    elif percent:
+        cursor.execute("""
+            SELECT *
+            FROM customer_cards
+            WHERE percent = ?
+            ORDER BY cust_surname
+        """,
+        (percent,))
+
+    else:
+        cursor.execute("""
+            SELECT *
+            FROM customer_cards
+            ORDER BY cust_surname
+        """)
+
     customer_cards = cursor.fetchall()
+
     conn.close()
     return customer_cards
 
@@ -96,3 +135,17 @@ def delete_customer_card(card_number):
                    'WHERE card_number = ?', (card_number,))
     conn.commit()
     conn.close()
+
+def get_all_percents():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT DISTINCT percent
+        FROM customer_cards
+        ORDER BY percent
+    """)
+
+    percents = cursor.fetchall()
+    conn.close()
+
+    return percents
