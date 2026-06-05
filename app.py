@@ -9,10 +9,12 @@ from application.routes.employee_routes import employee_routes
 from application.routes.category_routes import category_routes
 from application.routes.customer_card_routes import customer_card_routes
 from application.routes.product_routes import product_routes
+from application.routes.user_routes import user_routes
 from application.routes.auth import auth
 def create_app():
     app = Flask(__name__)
 
+    app.register_blueprint(user_routes)
     app.register_blueprint(auth)
     app.register_blueprint(product_routes)
     app.register_blueprint(employee_routes)

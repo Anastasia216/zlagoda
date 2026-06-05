@@ -1,6 +1,5 @@
 from flask import(Blueprint, render_template, request, redirect, url_for, jsonify)
-from application.queries.employee_queries import (get_all_employees, get_employee_by_id, create_employee,
-                                                  update_employee, delete_employee,get_all_roles)
+from application.queries.employee_queries import (get_all_employees, get_employee_by_id, create_employee, update_employee, delete_employee,get_all_roles)
 from application.validation.employee_validation import(validate_employee)
 from application.decorators import login_required, role_required
 employee_routes = Blueprint('employee_routes', __name__)
@@ -27,9 +26,10 @@ def employees_add_page():
 @role_required('manager')
 def add_employees():
     data = request.form
-    create_employee(data)
+    id_employee = create_employee(data)
     return jsonify({
-        "success": True
+        "success": True,
+        "id_employee": id_employee
     })
 
 @employee_routes.route('/employees/get/<id_employee>')

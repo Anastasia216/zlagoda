@@ -973,12 +973,11 @@
 
     <!-- TABLE -->
 
-    <div class="table-container">
+<div class="table-container">
 
-        <table>
+    <table>
 
-            <thead>
-
+        <thead>
             <tr>
                 <th>ID</th>
                 <th>Product Name</th>
@@ -987,77 +986,47 @@
                 <th>Characteristics</th>
                 <th>Actions</th>
             </tr>
+        </thead>
 
-            </thead>
+        <tbody>
 
-            <tbody>
+        {% for product in products %}
 
-            {% for product in products %}
+        <tr id="product-row-{{ product['id_product'] }}">
 
-            <tr id="product-row-{{ product['id_product'] }}">
+            <td>{{ product['id_product'] }}</td>
+            <td>{{ product['product_name'] }}</td>
+            <td>{{ product['category_name'] }}</td>
+            <td>{{ product['manufacturer'] }}</td>
+            <td>{{ product['characteristics'] }}</td>
 
-                <td>{{ receipt['check_number'] }}</td>
+            <td>
+                {% if session["role"] == "manager" %}
 
-                    <td>
-                        <button
-                            class="edit-btn"
-                            onclick="openDetailsModal('{{ receipt['check_number'] }}')">
-                            Details
-                        </button>
-                    </td>
+                <button
+                    class="edit-btn"
+                    onclick="openEditModal('{{ product['id_product'] }}')">
+                    Edit
+                </button>
 
-                    <td class="print-date">{{ receipt['print_date'] }}</td>
+                <button
+                    class="delete-btn"
+                    onclick="deleteProduct('{{ product['id_product'] }}')">
+                    Delete
+                </button>
 
-                    <td class="sum-total">{{ receipt['sum_total'] }}</td>
+                {% endif %}
+            </td>
 
-                    <td class="vat">{{ receipt['vat'] }}</td>
+        </tr>
 
-                    <td class="employee">
-                        {{ receipt['empl_surname'] }} {{ receipt['empl_name'] }}
-                    </td>
+        {% endfor %}
 
-                    <td class="customer-card">
-                        {% if receipt['card_number'] %}
-                            {{ receipt['cust_surname'] }} {{ receipt['cust_name'] }}
-                        {% else %}
-                            -
-                        {% endif %}
-                    </td>
+        </tbody>
 
-                    <div class="actions">
-                        {% if session["role"] == "manager" %}
-                        <button
-                                class="edit-btn"
-                                onclick="openEditModal('{{ product['id_product'] }}')">
-
-                            Edit
-
-                        </button>
-
-                        <button
-                                class="delete-btn"
-                                onclick="deleteProduct('{{ product['id_product'] }}')">
-
-                            Delete
-
-                        </button>
-                        {% endif %}
-                    </div>
-
-                </td>
-
-            </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
+    </table>
 
 </div>
-
 <!-- FLOATING BUTTONS -->
 
 <div class="floating-buttons">
