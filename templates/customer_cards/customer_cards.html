@@ -959,13 +959,13 @@
 <!-- FLOATING BUTTON -->
 
 <div class="floating-buttons">
-    {% if session["role"] == "manager" %}
     <button class="main-btn add-btn"
         onclick="openAddModal()">
 
         Add
 
     </button>
+    {% if session["role"] == "manager" %}
     <button class="main-btn report-btn"
             onclick="window.location.href='/customer_cards/report'">
         Report
