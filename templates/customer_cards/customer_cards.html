@@ -147,7 +147,31 @@
             width:100%;
             border-collapse:collapse;
         }
+        .table-container{
+            width:100%;
 
+            max-height:calc(100vh - 330px);
+
+            overflow-y:auto;
+            overflow-x:auto;
+
+            background:rgba(255,255,255,0.74);
+
+            backdrop-filter:blur(14px);
+
+            border-radius:34px;
+
+            box-shadow:
+                0 12px 40px rgba(15,23,42,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+        thead th{
+            position:sticky;
+            top:0;
+            z-index:10;
+
+            background:rgba(241,245,249,0.98);
+        }
         thead{
             background:rgba(241,245,249,0.85);
         }
