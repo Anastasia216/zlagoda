@@ -110,26 +110,37 @@
                     inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
-        .table-container{
-            width:100%;
 
-            background:rgba(255,255,255,0.74);
-            backdrop-filter:blur(14px);
-
-            border-radius:34px;
-
-            overflow:hidden;
-
-            box-shadow:
-                    0 12px 40px rgba(15,23,42,0.06),
-                    inset 0 1px 0 rgba(255,255,255,0.9);
-        }
 
         table{
             width:100%;
             border-collapse:collapse;
         }
+        .table-container{
+            width:100%;
 
+            max-height:calc(100vh - 330px);
+
+            overflow-y:auto;
+            overflow-x:auto;
+
+            background:rgba(255,255,255,0.74);
+
+            backdrop-filter:blur(14px);
+
+            border-radius:34px;
+
+            box-shadow:
+                0 12px 40px rgba(15,23,42,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+        thead th{
+            position:sticky;
+            top:0;
+            z-index:10;
+
+            background:rgba(241,245,249,0.98);
+        }
         thead{
             background:rgba(241,245,249,0.85);
         }
@@ -433,13 +444,16 @@
     }
 
     .modal-buttons{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:28px;
+}
 
-        display:flex;
-        justify-content:flex-end;
-        gap:12px;
-
-        margin-top:28px;
-    }
+.right-buttons{
+    display:flex;
+    gap:12px;
+}
 
         .save-btn{
              appearance:none;
@@ -494,7 +508,11 @@
                    box-shadow:
                            0 5px 25px rgba(15,23,42,0.16);
                 }
-
+.form-grid{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
         /* RESPONSIVE */
 
         @media(max-width:1300px){
@@ -523,117 +541,424 @@
             height:58px;
         }
     }
+        .sale-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    margin-bottom:12px;
+}
+        .selected-product{
+    display:grid;
+    grid-template-columns:
+        2fr 1fr 1fr auto;
 
+    gap:12px;
+
+    align-items:center;
+
+    padding:14px;
+
+    margin-bottom:10px;
+
+    border-radius:16px;
+
+    background:white;
+
+    box-shadow:
+        0 5px 15px rgba(15,23,42,0.06);
+}
+.totals-box{
+    margin:20px 0;
+
+    padding:18px 22px;
+
+    border-radius:18px;
+
+    background:white;
+
+    box-shadow:
+        0 5px 15px rgba(15,23,42,0.06);
+}
+
+.total-line{
+    display:flex;
+    justify-content:space-between;
+
+    font-size:18px;
+
+    margin:8px 0;
+}
+
+.total-line strong{
+    font-size:22px;
+}
+        .right-only{
+    justify-content:flex-end;
+    gap:12px;
+}
+        input[type="date"]{
+    background:rgba(255,255,255,0.9);
+    cursor:pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator{
+    cursor:pointer;
+
+    padding:6px;
+
+    border-radius:8px;
+
+    opacity:0.7;
+
+    transition:0.2s;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover{
+    opacity:1;
+    transform:scale(1.05);
+}
+        .products-table-wrapper{
+
+    max-height:250px;
+
+    overflow-y:auto;
+
+    margin-top:15px;
+
+    border-radius:16px;
+
+    background:white;
+
+    box-shadow:
+        0 5px 15px rgba(15,23,42,0.06);
+}
+        .products-table thead th{
+    position:sticky;
+    top:0;
+    background:white;
+    z-index:2;
+}
+        .details-btn{
+    border:none;
+    border-radius:14px;
+
+    padding:10px 16px;
+
+    font-size:13px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.2s;
+
+    background:#f0fdf4;
+    color:#15803d;
+}
+
+.details-btn:hover{
+    background:#dcfce7;
+}
+        .details-table-container{
+
+    max-height:350px;
+
+    overflow-y:auto;
+
+    border-radius:18px;
+
+    background:white;
+
+    box-shadow:
+        0 5px 15px rgba(15,23,42,0.06);
+
+    margin-bottom:20px;
+}
+        .details-buttons{
+
+    display:flex;
+
+    justify-content:right;
+
+    margin-top:40px;
+}
     </style>
 </head>
 
 <body>
+<div id="detailsModal" class="modal">
+
+    <div class="modal-content">
+
+        <button
+            class="close-btn"
+            onclick="closeDetailsModal()">
+
+            ✕
+
+        </button>
+
+        <h2>Receipt Details</h2>
+
+        <div class="details-table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>UPC</th>
+                        <th>Product Number</th>
+                        <th>Selling Price</th>
+                    </tr>
+                </thead>
+
+                <tbody id="salesTableBody">
+
+
+                </tbody>
+
+            </table>
+
+<!--            <div id="sales-container">-->
+<!--                <div class="sale-row">-->
+
+        </div>
+<div class="details-buttons">
+                            <button
+                                type="button"
+                                class="save-btn"
+                                id="edit-details-btn">
+
+                                Edit
+
+                            </button>
+<!--                        </div>-->
+<!--                </div>-->
+            </div>
+    </div>
+
+</div>
+<!-- ADD RECEIPT MODAL -->
+
 <div id="addModal" class="modal">
 
     <div class="modal-content">
 
         <button class="close-btn"
+                type="button"
                 onclick="closeAddModal()">
             ✕
         </button>
 
-        <h2>Add Check</h2>
+        <h2>Add Receipt</h2>
 
         <form id="addForm">
 
-            <div class="form-group">
+            <div class="form-grid">
 
-                <label>Print Date</label>
+                <div class="form-group">
+                    <label>Print Date</label>
 
-                <input type="text"
-                       id="new_print_date"
-                       name="print_date"
-                       required>
+                    <input type="date"
+                            id="add_print_date"
+                           name="print_date"
+                           required>
+                </div>
 
-            </div>
-            <div class="form-group">
+                <div class="form-group">
+                    <label>Cashier ID</label>
 
-                <label>Sum Total</label>
+                    <select name="id_employee" required>
 
-                <input type="text"
-                       id="new_sum_total"
-                       name="sum_total"
-                       required>
+                        {% for employee in employees %}
+                        <option value="{{ employee['id_employee'] }}">
+                            {{ employee['id_employee'] }}
+                        </option>
+                        {% endfor %}
 
-            </div>
-            <div class="form-group">
+                    </select>
+                </div>
 
-                <label>VAT</label>
+                <div class="form-group">
+                    <label>Customer Card</label>
 
-                <input type="text"
-                       id="new_vat"
-                       name="vat"
-                       required>
+                    <select name="card_number">
 
-            </div>
-            <div class="form-group">
+                        <option value="">
+                            No card
+                        </option>
 
-                <label>Employee</label>
+                        {% for customer_card in customer_cards %}
+                        <option value="{{ customer_card['card_number'] }}">
+                            {{ customer_card['card_number'] }}
+                        </option>
+                        {% endfor %}
 
-                <select id="new_id_employee"
-                        name="id_employee"
-                        required>
-
-                    {% for employee in employees %}
-
-                    <option value="{{ employee['id_employee'] }}">
-                        {{ employee['id_employee'] }}
-                    </option>
-
-                    {% endfor %}
-
-                </select>
+                    </select>
+                </div>
 
             </div>
             <div class="form-group">
+    <div class="totals-box">
 
-                <label>Card Number</label>
+    <div class="total-line">
+        <span>Total Sum:</span>
+        <strong id="add_sum_total">0.00 ₴</strong>
+    </div>
 
-                <select id="new_card_number"
-                        name="card_number"
-                        required>
+    <div class="total-line">
+    <span>VAT Rate:</span>
+    <strong>20%</strong>
+    </div>
 
-                    {% for customer_card in customer_cards %}
+</div>
 
-                    <option value="{{ customer_card['card_number'] }}">
-                        {{ customer_card['card_number'] }}
-                    </option>
 
-                    {% endfor %}
+            <h3 style="
+                margin-top:25px;
+                margin-bottom:15px;
+                font-size:20px;
+                font-weight:700;
+            ">
+                Products
+            </h3>
 
-                </select>
+            <div class="products-table-wrapper">
 
-            </div>
+    <table class="products-table">
+
+        <thead>
+            <tr>
+                <th>UPC</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="selected-products">
+
+            <tr id="empty-products-message">
+                <td colspan="4">
+                    No products added yet.
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
 
             <div class="modal-buttons">
 
-                <button type="button"
-                        class="reset-btn"
-                        onclick="document.getElementById('addForm').reset()">
+    <div class="left-buttons">
+        <button type="button"
+                class="save-btn"
+                onclick="openAddProductModal()">
+            Add Product
+        </button>
+    </div>
 
-                    Reset
+    <div class="right-buttons">
+        <button type="button"
+                class="reset-btn"
+                onclick="resetReceiptForm()">
+            Reset
+        </button>
 
-                </button>
+        <button type="submit"
+                class="save-btn">
+            Add Receipt
+        </button>
+    </div>
+   </div>
+ </div>
+</form>
 
-                <button type="submit"
-                        class="save-btn">
-
-                    Add
-
-                </button>
-
-            </div>
-
-        </form>
 
     </div>
 
 </div>
+
+
+<!-- ADD PRODUCT MODAL -->
+
+<div id="addProductModal" class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-btn"
+                type="button"
+                onclick="closeAddProductModal()">
+            ✕
+        </button>
+
+        <h2>Add Product</h2>
+
+        <div class="sale-row">
+            <div class="form-group">
+
+                <label>UPC</label>
+
+                <select id="product-upc">
+
+                    {% for product in products %}
+                    <option value="{{ product['UPC'] }}">
+                        {{ product['UPC'] }}
+                    </option>
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Quantity</label>
+
+                <input type="text"
+                       id="product-quantity"
+                       required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Selling Price</label>
+
+                <input type="text"
+                       id="product-price"
+                       required>
+
+            </div>
+
+</div>
+        <div class="modal-buttons right-only">
+
+            <button type="button"
+                    class="reset-btn"
+                    onclick="closeAddProductModal()">
+
+                Cancel
+
+            </button>
+
+            <button type="button"
+                    class="save-btn"
+                    onclick="addProductToReceipt()">
+
+                Add Product
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 <div id="editModal" class="modal">
 
     <div class="modal-content">
@@ -646,15 +971,27 @@
         <h2>Edit Receipt</h2>
 
         <form id="editForm" method="POST">
+            <input type="hidden"
+                   name="sum_total"
+                   id="sum_total_input">
 
             <input type="hidden"
-                   id="check_number">
+                   name="vat"
+                   id="vat_input">
+
+            <input type="hidden"
+                   name="check_number"
+                   id="check_number_input">
+
+            <input type="hidden"
+                   id="check_number"
+                   name="check_number">
 
             <div class="form-group">
 
                 <label>Print Date</label>
 
-                <input type="text"
+                <input type="date"
                        id="print_date"
                        name="print_date"
                        required>
@@ -711,15 +1048,15 @@
                     <option value="{{ customer_card['card_number'] }}">
                         {{ customer_card['card_number'] }}
                     </option>
-
+                    <option value="">
+                        No card
+                    </option>
                     {% endfor %}
 
                 </select>
 
             </div>
-
             <div class="modal-buttons">
-
                 <button type="button"
                         class="reset-btn"
                         onclick="resetForm()">
@@ -769,7 +1106,7 @@
             <input type="text"
                    name="search"
                    class="search-bar"
-                   placeholder="Search checks..."
+                   placeholder="Search receipt..."
                    value="{{ search if search else '' }}">
 
         </form>
@@ -800,17 +1137,37 @@
             <tr id="receipt-row-{{ receipt['check_number'] }}">
 
                 <td>{{ receipt['check_number'] }}</td>
+                <td>
 
-                <td class="id-employee">{{ receipt['id_employee'] }}</td>
+                    <button type="button"
+                        class="details-btn"
+                        onclick="openDetailsModal('{{ receipt['check_number'] }}')">
 
-                <td class="customer-card">{{ receipt['card_number'] or '-' }}</td>
+                        Details
 
-                <td class="print-date">{{ receipt['print_date'] }}</td>
+                    </button>
 
-                <td class="sum-total">{{ receipt['sum_total'] }}</td>
+                </td>
+                <td class="print-date">
+                    {{ receipt['print_date'] }}
+                </td>
 
-                <td class="vat">{{ receipt['vat'] }}</td>
+                <td class="sum-total">
+                    {{ receipt['sum_total'] }}
+                </td>
 
+                <td class="vat">
+                    {{ receipt['vat'] }}
+                </td>
+
+                <td class="id-employee">
+                    {{ receipt['empl_surname'] }}
+                    {{ receipt['empl_name'] }}
+                </td>
+
+                <td class="customer-card">
+                    {{ receipt['card_number'] or '-' }}
+                </td>
                 <td>
 
                     <div class="actions">
@@ -926,7 +1283,7 @@ function openEditModal(checkNumber){
         })
         .catch(error => {
             console.error(error);
-            alert("Failed to load product data.");
+            alert("Failed to load receipt data.");
         });
 }
 
@@ -979,7 +1336,10 @@ async function saveReceipt(event){
     const result = await response.json();
 
     if(result.success){
-
+const productName =
+    document.getElementById("product-upc")
+        .selectedOptions[0]
+        .text;
         const id =
             document.getElementById(
                 "check_number"
@@ -1010,7 +1370,7 @@ async function saveReceipt(event){
                 "id_employee"
             );
 
-        row.querySelector(".employee").textContent =
+        row.querySelector(".id-employee").textContent =
             employeeSelect.options[
                 employeeSelect.selectedIndex
             ].text;
@@ -1020,7 +1380,7 @@ async function saveReceipt(event){
                 "card_number"
             );
 
-        row.querySelector(".customer_card").textContent =
+        row.querySelector(".customer-card").textContent =
             cardSelect.options[
                 cardSelect.selectedIndex
             ].text;
@@ -1034,10 +1394,20 @@ async function saveReceipt(event){
 function openAddModal(){
 
     document.getElementById("addForm").reset();
+    const now = new Date();
+    document.getElementById("add_print_date").value =
+    now.toISOString().split("T")[0];
+    receiptProducts = [];
 
-    document.getElementById("addModal").style.display =
-        "flex";
+    renderProducts();
+
+    updateTotals();
+
+    document.getElementById(
+        "addModal"
+    ).style.display = "flex";
 }
+
 
 function closeAddModal(){
 
@@ -1048,6 +1418,8 @@ function closeAddModal(){
 document
     .getElementById("addForm")
     .addEventListener("submit", addReceipt);
+
+
 async function addReceipt(event){
 
     event.preventDefault();
@@ -1055,24 +1427,35 @@ async function addReceipt(event){
     const form =
         document.getElementById("addForm");
 
+    const formData =
+        new FormData(form);
+
+    formData.append(
+        "products",
+        JSON.stringify(receiptProducts)
+    );
+    if(receiptProducts.length === 0){
+
+        alert(
+            "Add at least one product."
+        );
+
+        return;
+    }
     const response = await fetch(
         "/receipts/add",
         {
             method:"POST",
-            body:new FormData(form)
+            body:formData
         }
     );
 
     const result = await response.json();
 
     if(result.success){
-
         location.reload();
-
     }else{
-
         alert("Failed to add receipt.");
-
     }
 }
 
@@ -1114,6 +1497,206 @@ window.addEventListener("load", () => {
     }
 });
 </script>
+<script>
+    function closeDetailsModal(){
 
+    document.getElementById(
+        "detailsModal"
+    ).style.display = "none";
+}
+let currentReceipt = null;
+
+async function openDetailsModal(checkNumber){
+currentReceipt = checkNumber;
+
+    const response =
+        await fetch(
+            `/receipts/${checkNumber}/sales`
+        );
+
+    const sales =
+        await response.json();
+
+    const tbody =
+        document.getElementById(
+            "salesTableBody"
+        );
+tbody.innerHTML = "";
+    sales.forEach(sale => {
+
+    tbody.innerHTML += `
+        <tr>
+            <td>${sale.UPC}</td>
+            <td>${sale.product_number}</td>
+            <td>${sale.selling_price}</td>
+        </tr>
+    `;
+});
+    document.getElementById("detailsModal").style.display = "flex";
+    document.getElementById("edit-details-btn").onclick = () => {
+        closeDetailsModal();
+        openEditModal(currentReceipt);
+    };
+}
+</script>
+<script>
+
+function addSaleRow(){
+
+    const container = document.getElementById("sales-container");
+    const row = document.querySelector(".sale-row").cloneNode(true);
+    row.querySelectorAll("input").forEach(i => i.value = "");
+    container.appendChild(row);
+}
+</script>
+<script>
+let receiptProducts = [];
+
+function openAddProductModal(){
+
+    document.getElementById("addProductModal").style.display = "flex";
+
+}
+
+function closeAddProductModal(){
+
+    document.getElementById(
+        "addProductModal"
+    ).style.display = "none";
+}
+
+function addProductToReceipt(){
+    const product_name = document.getElementById("product-upc").selectedOptions[0].text;
+    const upc = document.getElementById("product-upc").value;
+    const quantity = parseInt (document.getElementById("product-quantity").value);
+    const price = parseFloat (document.getElementById("product-price").value);
+if(isNaN(quantity) || isNaN(price)){
+    alert("Enter valid quantity and price");
+    return;
+}
+const existing = receiptProducts.find(
+    p => p.upc === upc
+);
+
+if(existing){
+    alert("This product is already in the receipt.");
+    return;
+}
+    receiptProducts.push({
+        product_name,
+        upc,
+        quantity,
+        price
+    });
+
+    renderProducts();
+    updateTotals();
+    document.getElementById("product-quantity").value = "";
+document.getElementById("product-price").value = "";
+    closeAddProductModal();
+}
+
+function renderProducts(){
+
+    const container =
+        document.getElementById(
+            "selected-products"
+        );
+
+    if(receiptProducts.length === 0){
+
+        container.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    No products added yet.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    receiptProducts.forEach((product,index)=>{
+
+        container.innerHTML += `
+            <tr>
+
+                <td>${product.upc}</td>
+
+                <td>${product.quantity}</td>
+
+                <td>${product.price}</td>
+
+                <td>
+
+                    <button
+                        type="button"
+                        class="delete-btn"
+                        onclick="removeProduct(${index})">
+
+                        Remove
+
+                    </button>
+
+                </td>
+
+            </tr>
+        `;
+    });
+}
+    function updateTotals(){
+        let total = 0;
+        receiptProducts.forEach(product => {
+            total += Number(product.quantity) * Number(product.price);
+        });
+        const vat = total * 0.20;
+        document.getElementById("add_sum_total").textContent = total.toFixed(2);
+
+
+    document.getElementById(
+        "vat_input"
+    ).value =
+        vat.toFixed(2);
+    }
+    function removeProduct(index){
+        receiptProducts.splice(index,1);
+        renderProducts();
+        updateTotals();
+    }
+    function resetReceiptForm(){
+        document.getElementById("addForm").reset();
+        receiptProducts = [];
+        renderProducts();
+        updateTotals();
+    }
+</script>
+    <script>
+    const productSelect =
+    document.getElementById("product-upc");
+
+if(productSelect){
+
+    productSelect.addEventListener(
+        "change",
+        async function(){
+
+            const response =
+                await fetch(
+                    `/products/get-price/${this.value}`
+                );
+
+            const data =
+                await response.json();
+
+            document.getElementById(
+                "product-price"
+            ).value =
+                data.selling_price;
+        }
+    );
+}
+</script>
 </body>
 </html>

@@ -205,7 +205,31 @@
             width:100%;
             border-collapse:collapse;
         }
+        .table-container{
+            width:100%;
 
+            max-height:calc(100vh - 330px);
+
+            overflow-y:auto;
+            overflow-x:auto;
+
+            background:rgba(255,255,255,0.74);
+
+            backdrop-filter:blur(14px);
+
+            border-radius:34px;
+
+            box-shadow:
+                0 12px 40px rgba(15,23,42,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+        thead th{
+            position:sticky;
+            top:0;
+            z-index:10;
+
+            background:rgba(241,245,249,0.98);
+        }
         thead{
             background:rgba(241,245,249,0.85);
         }
@@ -712,7 +736,7 @@
 
                 <input type="text"
                        id="new_characteristics"
-                       name="product_name"
+                       name="characteristics"
                        required>
 
             </div>
@@ -972,19 +996,33 @@
 
             <tr id="product-row-{{ product['id_product'] }}">
 
-                <td>
-                    {{ product['id_product'] }}</td>
+                <td>{{ receipt['check_number'] }}</td>
 
-                <td class="product-name">
-                    {{ product['product_name'] }}</td>
+                    <td>
+                        <button
+                            class="edit-btn"
+                            onclick="openDetailsModal('{{ receipt['check_number'] }}')">
+                            Details
+                        </button>
+                    </td>
 
-                <td class="category">{{ product['category_name'] }}</td>
+                    <td class="print-date">{{ receipt['print_date'] }}</td>
 
-                <td class="manufacturer">{{ product['manufacturer'] }}</td>
+                    <td class="sum-total">{{ receipt['sum_total'] }}</td>
 
-                <td class="characteristics">{{ product['characteristics'] }}</td>
+                    <td class="vat">{{ receipt['vat'] }}</td>
 
-                <td>
+                    <td class="employee">
+                        {{ receipt['empl_surname'] }} {{ receipt['empl_name'] }}
+                    </td>
+
+                    <td class="customer-card">
+                        {% if receipt['card_number'] %}
+                            {{ receipt['cust_surname'] }} {{ receipt['cust_name'] }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
 
                     <div class="actions">
                         {% if session["role"] == "manager" %}
@@ -1192,9 +1230,9 @@ function closeAddModal(){
 
 document
     .getElementById("addForm")
-    .addEventListener("submit", addCategory);
+    .addEventListener("submit", addProduct);
 
-async function addCategory(event){
+async function addProduct(event){
 
     event.preventDefault();
 
@@ -1202,7 +1240,7 @@ async function addCategory(event){
         document.getElementById("addForm");
 
     const response = await fetch(
-        "/categories/add",
+        "/products/add",
         {
             method:"POST",
             body:new FormData(form)
@@ -1217,7 +1255,7 @@ async function addCategory(event){
 
     }else{
 
-        alert("Failed to add category.");
+        alert("Failed to add product.");
 
     }
 }

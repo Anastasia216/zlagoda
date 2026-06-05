@@ -134,9 +134,9 @@ def add_product():
         conn.commit()
         conn.close()
 
-        return redirect(url_for("product_routes.products"))
-    conn.close()
-    return render_template("products/add.html", categories=categories)
+        return jsonify({
+            "success": True
+        })
 
 @product_routes.route("/products/get/<int:id_product>")
 @login_required
