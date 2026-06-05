@@ -14,13 +14,13 @@ def customer_cards():
 
 @customer_card_routes.route('/customer_cards/add')
 @login_required
-@role_required("manager")
+@role_required("manager","cashier")
 def add_customer_card_page():
     return render_template("customer_cards/add.html")
 
 @customer_card_routes.route('/customer_cards/add', methods=['POST'])
 @login_required
-@role_required("manager")
+@role_required("manager", "cashier")
 def add_customer_card():
     create_customer_card(request.form)
     return jsonify({

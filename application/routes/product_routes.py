@@ -8,13 +8,16 @@ product_routes = Blueprint("product_routes", __name__)
 @role_required("manager","cashier")
 def products():
     search = request.args.get("search", "").strip()
+    category_number = request.args.get("category_number", "").strip()
+
     conn = get_db_connection()
     categories = conn.execute("""
            SELECT *
            FROM categories
            ORDER BY category_name
        """).fetchall()
-    if search:
+
+    if search and category_number:
         products = conn.execute("""
             SELECT p.id_product,
                    p.product_name,
@@ -24,17 +27,53 @@ def products():
             FROM products p
             JOIN categories c
                  ON p.category_number = c.category_number
-            WHERE p.product_name LIKE ?
-               OR p.manufacturer LIKE ?
-               OR c.category_name LIKE ?
+            WHERE (p.product_name LIKE ?
+                OR p.manufacturer LIKE ?
+                OR c.category_name LIKE ?
+                ) AND p.category_number LIKE ?   
             ORDER BY p.product_name
         """, (
             f"%{search}%",
             f"%{search}%",
-            f"%{search}%"
+            f"%{search}%",
+            category_number
         )).fetchall()
-    else:
 
+    elif search:
+        products = conn.execute("""
+                                SELECT p.id_product,
+                                       p.product_name,
+                                       c.category_name,
+                                       p.manufacturer,
+                                       p.characteristics
+                                FROM products p
+                                         JOIN categories c
+                                              ON p.category_number = c.category_number
+                                WHERE  p.product_name LIKE ?
+                                        OR p.manufacturer LIKE ?
+                                        OR c.category_name LIKE ?
+                                ORDER BY p.product_name
+                                """,
+                                (f"%{search}%",
+                                f"%{search}%",
+                                f"%{search}%"
+                                )).fetchall()
+
+    elif category_number:
+        products = conn.execute(""" 
+                                SELECT p.id_product,
+                                       p.product_name,
+                                       c.category_name,
+                                       p.manufacturer,
+                                       p.characteristics
+                                FROM products p
+                                         JOIN categories c
+                                              ON p.category_number = c.category_number
+                                WHERE p.category_number = ?
+                                ORDER BY p.product_name
+        """,(category_number,)).fetchall()
+
+    else:
         products = conn.execute("""
                     SELECT p.id_product,
                            p.product_name,
@@ -47,7 +86,7 @@ def products():
                     ORDER BY p.product_name
                 """).fetchall()
     conn.close()
-    return render_template("products/products.html", products=products, categories=categories, search=search)
+    return render_template("products/products.html", products=products, categories=categories, search=search, category_number=category_number)
 
 
 @product_routes.route("/products/add", methods=["GET", "POST"])
