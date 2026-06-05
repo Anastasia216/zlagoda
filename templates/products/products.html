@@ -89,42 +89,100 @@
             -webkit-text-fill-color:transparent;
         }
 
-        /* SEARCH */
-
+    /* SEARCH WRAPPER */
         .search-wrapper{
-            width:100%;
             margin-bottom:28px;
         }
 
-        .search-bar{
+        .search-form{
             width:100%;
+        }
+
+        /* FLEX GROUP */
+            .search-group{
+                display:flex;
+                gap:16px;
+                width:100%;
+            }
+
+        /* SEARCH INPUT */
+            .search-bar{
+                flex:1;
+                height:68px;
+
+                border:none;
+                outline:none;
+
+                padding:0 28px;
+
+                border-radius:24px;
+
+                font-size:17px;
+                font-weight:500;
+
+                background:rgba(255,255,255,0.78);
+                backdrop-filter:blur(14px);
+
+                box-shadow:
+                    0 10px 35px rgba(15,23,42,0.06),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+
+                transition:0.25s;
+            }
+
+        /* CATEGORY WRAPPER */
+            .category-filter{
+                position:relative;
+                width:220px;
+            }
+
+    /* DROPDOWN BUTTON */
+        .dropdown-btn{
             height:68px;
+            width:100%;
+
+            padding:0 20px;
 
             border:none;
-            outline:none;
-
-            padding:0 28px;
-
             border-radius:24px;
 
-            font-size:17px;
-            font-weight:500;
+            font-size:15px;
+            font-weight:600;
+
+            cursor:pointer;
 
             background:rgba(255,255,255,0.78);
             backdrop-filter:blur(14px);
 
             box-shadow:
-                    0 10px 35px rgba(15,23,42,0.06),
-                    inset 0 1px 0 rgba(255,255,255,0.9);
+                0 10px 35px rgba(15,23,42,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
 
-            transition:0.25s;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
         }
 
-        .search-bar:focus{
-            box-shadow:
-                    0 16px 40px rgba(59,130,246,0.12),
-                    inset 0 1px 0 rgba(255,255,255,1);
-        }
+        /* DROPDOWN MENU */
+            .dropdown-menu{
+                position:absolute;
+                top:75px;
+                left:0;
+
+                width:100%;
+
+                background:rgba(255,255,255,0.95);
+                backdrop-filter:blur(14px);
+
+                border-radius:20px;
+
+                box-shadow:0 20px 60px rgba(15,23,42,0.12);
+
+                display:none;
+
+                z-index:1000;
+            }
+
 
         /* TABLE */
 
@@ -548,7 +606,74 @@
                 transform:translateY(-3px);
                 box-shadow:
                         0 5px 25px rgba(15,23,42,0.16);
-            }
+    }
+
+
+    .dropdown{
+        position:relative;
+    }
+
+    .dropdown-btn{
+        height:68px;
+        min-width:180px;
+
+        padding:0 20px;
+
+        border:none;
+        border-radius:24px;
+
+        font-size:15px;
+        font-weight:600;
+
+        cursor:pointer;
+
+        background:rgba(255,255,255,0.78);
+        backdrop-filter:blur(14px);
+
+        box-shadow:
+             0 10px 35px rgba(15,23,42,0.06),
+             inset 0 1px 0 rgba(255,255,255,0.9);
+
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+    }
+
+    .dropdown-btn::after{
+        content:"⌄";
+        margin-left:10px;
+        color:#64748b;
+    }
+
+    .dropdown-menu{
+        position:absolute;
+        top:75px;
+        left:0;
+
+        width:100%;
+
+         background:rgba(255,255,255,0.95);
+        backdrop-filter:blur(14px);
+
+        border-radius:20px;
+
+        box-shadow:0 20px 60px rgba(15,23,42,0.12);
+
+        display:none;
+
+        z-index:1000;
+    }
+
+    .dropdown-item{
+         padding:14px 16px;
+        cursor:pointer;
+        transition:0.2s;
+    }
+
+    .dropdown-item:hover{
+        background:#eff6ff;
+        color:#2563eb;
+    }
 
         /* RESPONSIVE */
 
@@ -783,21 +908,68 @@
 
     <!-- SEARCH -->
 
-        <div class="search-wrapper">
+<div class="search-wrapper">
 
-        <form id="searchForm"
-              method="GET"
-              action="/products">
+    <form id="searchForm"
+      class="search-form"
+      method="GET"
+      action="/products">
 
-            <input type="text"
-                   name="search"
-                   class="search-bar"
-                   placeholder="Search products..."
-                   value="{{ search if search else '' }}">
+    <div class="search-group">
 
-        </form>
+        <input type="text"
+               name="search"
+               class="search-bar"
+               placeholder="Search products..."
+               value="{{ search if search else '' }}">
+
+        <!-- CATEGORY DROPDOWN -->
+        <div class="category-filter">
+
+            <div class="dropdown">
+
+                <button type="button"
+                        class="dropdown-btn"
+                        onclick="toggleCategoryDropdown()">
+
+                    {{ selected_category if selected_category else 'All categories' }}
+
+                </button>
+
+                <div class="dropdown-menu" id="categoryDropdown">
+
+                    <div class="dropdown-item"
+                         onclick="selectCategory('')">
+                        All categories
+                    </div>
+
+                    {% for category in categories %}
+
+                    <div class="dropdown-item"
+                         onclick="selectCategory('{{ category['category_number'] }}')">
+
+                        {{ category['category_name'] }}
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <input type="hidden"
+               name="category_number"
+               id="categoryInput"
+               value="{{ category_number if category_number else '' }}">
 
     </div>
+
+</form>
+
+</div>
 
     <!-- TABLE -->
 
@@ -853,7 +1025,7 @@
                     </td>
 
                     <div class="actions">
-
+                        {% if session["role"] == "manager" %}
                         <button
                                 class="edit-btn"
                                 onclick="openEditModal('{{ product['id_product'] }}')">
@@ -869,7 +1041,7 @@
                             Delete
 
                         </button>
-
+                        {% endif %}
                     </div>
 
                 </td>
@@ -889,7 +1061,7 @@
 <!-- FLOATING BUTTONS -->
 
 <div class="floating-buttons">
-
+    {% if session["role"] == "manager" %}
     <button class="main-btn add-btn"
         onclick="openAddModal()">
 
@@ -900,7 +1072,7 @@
             onclick="window.location.href='/products/report'">
         Report
     </button>
-
+    {% endif %}
 </div>
 
 <script>
@@ -1125,6 +1297,37 @@ window.addEventListener("load", () => {
         );
     }
 });
+</script>
+<script>
+
+function toggleCategoryDropdown(){
+
+    const menu =
+        document.getElementById("categoryDropdown");
+
+    menu.style.display =
+        menu.style.display === "block"
+            ? "none"
+            : "block";
+}
+
+function selectCategory(category){
+
+    document.getElementById("categoryInput").value = category;
+
+    document.getElementById("searchForm").submit();
+}
+
+document.addEventListener("click", function(event){
+
+    const dropdown =
+        document.querySelector(".dropdown");
+
+    if(!dropdown.contains(event.target)){
+        document.getElementById("categoryDropdown").style.display = "none";
+    }
+});
+
 </script>
 </body>
 </html>

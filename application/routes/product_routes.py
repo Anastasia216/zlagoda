@@ -1,18 +1,23 @@
 from flask import Blueprint, Flask, render_template, request, redirect, url_for, jsonify
 from sqlite_db import get_db_connection
-
+from application.decorators import login_required, role_required
 product_routes = Blueprint("product_routes", __name__)
 
 @product_routes.route("/products")
+@login_required
+@role_required("manager","cashier")
 def products():
     search = request.args.get("search", "").strip()
+    category_number = request.args.get("category_number", "").strip()
+
     conn = get_db_connection()
     categories = conn.execute("""
            SELECT *
            FROM categories
            ORDER BY category_name
        """).fetchall()
-    if search:
+
+    if search and category_number:
         products = conn.execute("""
             SELECT p.id_product,
                    p.product_name,
@@ -22,17 +27,53 @@ def products():
             FROM products p
             JOIN categories c
                  ON p.category_number = c.category_number
-            WHERE p.product_name LIKE ?
-               OR p.manufacturer LIKE ?
-               OR c.category_name LIKE ?
+            WHERE (p.product_name LIKE ?
+                OR p.manufacturer LIKE ?
+                OR c.category_name LIKE ?
+                ) AND p.category_number LIKE ?   
             ORDER BY p.product_name
         """, (
             f"%{search}%",
             f"%{search}%",
-            f"%{search}%"
+            f"%{search}%",
+            category_number
         )).fetchall()
-    else:
 
+    elif search:
+        products = conn.execute("""
+                                SELECT p.id_product,
+                                       p.product_name,
+                                       c.category_name,
+                                       p.manufacturer,
+                                       p.characteristics
+                                FROM products p
+                                         JOIN categories c
+                                              ON p.category_number = c.category_number
+                                WHERE  p.product_name LIKE ?
+                                        OR p.manufacturer LIKE ?
+                                        OR c.category_name LIKE ?
+                                ORDER BY p.product_name
+                                """,
+                                (f"%{search}%",
+                                f"%{search}%",
+                                f"%{search}%"
+                                )).fetchall()
+
+    elif category_number:
+        products = conn.execute(""" 
+                                SELECT p.id_product,
+                                       p.product_name,
+                                       c.category_name,
+                                       p.manufacturer,
+                                       p.characteristics
+                                FROM products p
+                                         JOIN categories c
+                                              ON p.category_number = c.category_number
+                                WHERE p.category_number = ?
+                                ORDER BY p.product_name
+        """,(category_number,)).fetchall()
+
+    else:
         products = conn.execute("""
                     SELECT p.id_product,
                            p.product_name,
@@ -45,10 +86,12 @@ def products():
                     ORDER BY p.product_name
                 """).fetchall()
     conn.close()
-    return render_template("products/products.html", products=products, categories=categories, search=search)
+    return render_template("products/products.html", products=products, categories=categories, search=search, category_number=category_number)
 
 
 @product_routes.route("/products/add", methods=["GET", "POST"])
+@login_required
+@role_required("manager")
 def add_product():
     conn = get_db_connection()
     categories = conn.execute("""SELECT *
@@ -96,6 +139,8 @@ def add_product():
         })
 
 @product_routes.route("/products/get/<int:id_product>")
+@login_required
+@role_required("manager","cashier")
 def get_product(id_product):
 
     conn = get_db_connection()
@@ -110,6 +155,8 @@ def get_product(id_product):
 
     return jsonify(dict(product))
 @product_routes.route("/products/edit/<int:id_product>", methods=["GET", "POST"])
+@login_required
+@role_required("manager")
 def edit_product(id_product):
     conn = get_db_connection()
     product = conn.execute("""SELECT *
@@ -142,6 +189,8 @@ def edit_product(id_product):
 
 
 @product_routes.route("/products/delete/<int:id_product>")
+@login_required
+@role_required("manager")
 def delete_product(id_product):
     conn = get_db_connection()
     conn.execute("""DELETE

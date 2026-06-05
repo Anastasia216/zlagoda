@@ -1,20 +1,30 @@
 from flask import(Blueprint, render_template, request, redirect, url_for, jsonify)
 from application.queries.employee_queries import (get_all_employees, get_employee_by_id, create_employee,
-                                                  update_employee, delete_employee)
+                                                  update_employee, delete_employee,get_all_roles)
 from application.validation.employee_validation import(validate_employee)
+from application.decorators import login_required, role_required
 employee_routes = Blueprint('employee_routes', __name__)
 
 @employee_routes.route('/employees')
+@login_required
+@role_required('manager')
 def employees():
-    search = request.args.get('search','')
-    employees = get_all_employees(search)
-    return render_template('employees/employees.html', employees=employees, search=search)
+    search = request.args.get('search', '').strip()
+    role = request.args.get('role', '').strip()
+    employees = get_all_employees(search, role)
+    roles = get_all_roles()
 
+    return render_template(
+        'employees/employees.html', employees=employees, search=search, role=role, roles=roles)
 @employee_routes.route('/employees/add')
+@login_required
+@role_required('manager')
 def employees_add_page():
     return render_template('employees/add.html')
 
 @employee_routes.route('/employees/add', methods=['POST'])
+@login_required
+@role_required('manager')
 def add_employees():
     data = request.form
     create_employee(data)
@@ -23,16 +33,22 @@ def add_employees():
     })
 
 @employee_routes.route('/employees/get/<id_employee>')
+@login_required
+@role_required('manager')
 def get_employee(id_employee):
     id_employee = get_employee_by_id(id_employee)
     return jsonify(dict(id_employee))
 
 @employee_routes.route('/employees/<id_employee>/edit')
+@login_required
+@role_required('manager')
 def employees_edit_page(id_employee):
     employee = get_employee_by_id(id_employee)
     return render_template('employees/edit.html', employee=employee)
 
 @employee_routes.route('/employees/<id_employee>/edit', methods=['POST'])
+@login_required
+@role_required('manager')
 def employee_edit(id_employee):
     data = request.form
     # errors = validate_employee(data)
@@ -45,6 +61,8 @@ def employee_edit(id_employee):
     })
 
 @employee_routes.route('/employees/<id_employee>/delete')
+@login_required
+@role_required('manager')
 def employee_delete_route(id_employee):
     delete_employee(id_employee)
     return jsonify({
@@ -52,6 +70,8 @@ def employee_delete_route(id_employee):
     })
 
 @employee_routes.route('/employees/reports')
+@login_required
+@role_required('manager')
 def employees_reports_page():
     return render_template('employees/reports.html')
 

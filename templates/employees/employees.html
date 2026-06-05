@@ -567,6 +567,87 @@
             grid-column:1 / -1;
         }
 
+        /* DROPDOWN */
+
+        .dropdown{
+            position:relative;
+        }
+
+        .dropdown-btn{
+            height:68px;
+            min-width:180px;
+
+            padding:0 20px;
+
+            border:none;
+            border-radius:24px;
+
+            font-size:15px;
+            font-weight:600;
+
+            cursor:pointer;
+
+            background:rgba(255,255,255,0.78);
+            backdrop-filter:blur(14px);
+
+            box-shadow:
+                0 10px 35px rgba(15,23,42,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+
+            color:#0f172a;
+
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+        }
+
+        /* ARROW */
+        .dropdown-btn::after{
+            content:"⌄";
+            margin-left:10px;
+            color:#64748b;
+        }
+
+    /* MENU */
+        .dropdown-menu{
+            position:absolute;
+            top:75px;
+            left:0;
+
+            width:100%;
+
+            background:rgba(255,255,255,0.95);
+            backdrop-filter:blur(14px);
+
+            border-radius:20px;
+
+            box-shadow:
+                0 20px 60px rgba(15,23,42,0.12);
+
+            overflow:hidden;
+
+            display:none;
+
+            z-index:1000;
+        }
+
+        /* ITEM */
+        .dropdown-item{
+            padding:14px 16px;
+
+            font-size:14px;
+            font-weight:500;
+
+            cursor:pointer;
+
+            transition:0.2s;
+    }
+
+        .dropdown-item:hover{
+            background:#eff6ff;
+            color:#2563eb;
+        }
+
         /* RESPONSIVE */
 
         @media(max-width:1000px){
@@ -954,23 +1035,63 @@
 
     </div>
 
-    <!-- SEARCH -->
 
+    <!-- SEARCH + FILTER -->
     <div class="search-wrapper">
+
         <form id="searchForm"
-              class="search-form"
-              method="GET"
-              action="/employees">
+            class="search-form"
+            method="GET"
+            action="/employees"
+            style="display:flex; gap:16px;">
 
             <input type="text"
-                   name="search"
-                   class="search-bar"
-                   placeholder="Search employees..."
-                   value="{{ search if search else '' }}">
+               name="search"
+               class="search-bar"
+               placeholder="Search employees..."
+               value="{{ search if search else '' }}">
 
-        </form>
+            <!-- CUSTOM DROPDOWN WRAPPER -->
+            <div class="dropdown">
 
-    </div>
+                <button type="button"
+                    class="dropdown-btn"
+                    onclick="toggleDropdown()">
+
+                    {{ role if role else 'All roles' }}
+
+                </button>
+
+                <div class="dropdown-menu" id="roleDropdown">
+
+                    <div class="dropdown-item"
+                        onclick="selectRole('')">
+                        All roles
+                    </div>
+
+                    {% for r in roles %}
+
+                    <div class="dropdown-item"
+                        onclick="selectRole('{{ r['empl_role'] }}')">
+
+                     {{ r['empl_role'] }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <input type="hidden"
+               name="role"
+               id="roleInput"
+               value="{{ role if role else '' }}">
+
+    </form>
+
+</div>
 
     <!-- TABLE -->
 
@@ -1372,6 +1493,39 @@ window.addEventListener("load", () => {
         );
     }
 });
+</script>
+
+<script>
+
+function toggleDropdown(){
+
+    const menu =
+        document.getElementById("roleDropdown");
+
+    menu.style.display =
+        menu.style.display === "block"
+            ? "none"
+            : "block";
+}
+
+function selectRole(role){
+
+    document.getElementById("roleInput").value = role;
+
+    document.getElementById("searchForm").submit();
+}
+
+/* close dropdown when clicking outside */
+document.addEventListener("click", function(event){
+
+    const dropdown =
+        document.querySelector(".dropdown");
+
+    if(!dropdown.contains(event.target)){
+        document.getElementById("roleDropdown").style.display = "none";
+    }
+});
+
 </script>
 </body>
 </html>
