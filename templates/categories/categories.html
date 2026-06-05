@@ -66,10 +66,11 @@
             padding:30px 48px 40px;
         }
 
-        .topbar{
+         .topbar{
             display:flex;
-            align-items:center;
-            margin-bottom:34px;
+            justify-content:space-between;
+            align-items:flex-start;
+            margin-bottom:42px;
         }
 
         .logo h1{
@@ -314,6 +315,212 @@
         .report-btn{
             background:linear-gradient(135deg, #7c3aed, #a855f7);
         }
+        /* USER */
+
+.user-wrapper{
+    position:relative;
+}
+
+.user-btn{
+    width:62px;
+    height:62px;
+
+    border:none;
+    border-radius:22px;
+
+    background:rgba(255,255,255,0.80);
+    backdrop-filter:blur(14px);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    box-shadow:
+            0 12px 30px rgba(15,23,42,0.08),
+            inset 0 1px 0 rgba(255,255,255,0.9);
+
+    transition:0.25s;
+}
+
+.user-btn:hover{
+    transform:translateY(-3px);
+}
+
+.user-btn svg{
+    width:30px;
+    height:30px;
+    fill:#334155;
+}
+
+/* POPUP */
+
+.user-popup{
+    position:absolute;
+
+    top:78px;
+    right:0;
+
+    width:300px;
+
+    background:rgba(255,255,255,0.90);
+    backdrop-filter:blur(18px);
+
+    border-radius:30px;
+
+    padding:24px;
+
+    box-shadow:
+            0 25px 70px rgba(15,23,42,0.12);
+
+    display:none;
+
+    z-index:999;
+}
+
+.user-popup::before{
+    content:'';
+
+    position:absolute;
+
+    top:-10px;
+    right:28px;
+
+    width:22px;
+    height:22px;
+
+    background:rgba(255,255,255,0.90);
+
+    transform:rotate(45deg);
+
+    border-radius:4px;
+}
+
+.user-popup.active{
+    display:block;
+    animation:popup 0.22s ease;
+}
+
+@keyframes popup{
+
+    from{
+        opacity:0;
+        transform:translateY(-10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    margin-bottom:22px;
+}
+
+.profile-avatar{
+    width:60px;
+    height:60px;
+
+    border-radius:20px;
+
+    background:linear-gradient(135deg, #dbeafe, #ede9fe);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.profile-avatar svg{
+    width:30px;
+    fill:#2563eb;
+}
+
+.profile h3{
+    font-size:18px;
+    margin-bottom:4px;
+}
+
+.profile p{
+    color:#64748b;
+    font-size:13px;
+}
+
+.popup-buttons{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.profile-btn,
+.logout-btn{
+
+    border:none;
+    border-radius:18px;
+
+    padding:15px;
+
+    font-size:15px;
+    font-weight:600;
+
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.profile-btn{
+    background:#eef2ff;
+    color:#4f46e5;
+}
+
+.profile-btn:hover{
+    background:#e0e7ff;
+}
+
+.logout-btn{
+    background:#fff1f2;
+    color:#e11d48;
+}
+
+.logout-btn:hover{
+    background:#ffe4e6;
+}
+
+/* PROFILE MODAL */
+
+.close-modal-btn{
+
+    margin-top:20px;
+
+    border:none;
+    border-radius:18px;
+
+    padding:14px 22px;
+
+    background:#eef2ff;
+    color:#4f46e5;
+
+    font-size:15px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.close-modal-btn:hover{
+    background:#e0e7ff;
+}
+    .topbar{
+    display:flex;
+    align-items:center;
+    margin-bottom:30px;
+}
+
 
         @media(max-width:760px){
 
@@ -335,7 +542,6 @@
                 height:58px;
             }
         }
-
 /* MODAL */
 
         .modal{
@@ -694,7 +900,7 @@
 <div class="container">
 
     <div class="topbar">
-
+        <div style="display:flex; align-items:center;">
         <button class="back-btn"
                 onclick="window.location.href='/'">
             ←
@@ -703,6 +909,51 @@
         <div class="logo">
             <h1>Categories</h1>
         </div>
+        </div>
+        <div class="user-wrapper">
+
+    <button class="user-btn" onclick="togglePopup()">
+
+        <svg viewBox="0 0 24 24">
+            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
+        </svg>
+
+    </button>
+
+    <div class="user-popup" id="popup">
+
+        <div class="profile">
+
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
+                </svg>
+            </div>
+
+            <div>
+                <h3>{{ session["username"] }}</h3>
+                <p>{{ session["role"] }}</p>
+            </div>
+
+        </div>
+
+        <div class="popup-buttons">
+
+            <button class="profile-btn"
+                    onclick="showProfile()">
+                User Information
+            </button>
+
+            <button class="logout-btn"
+                    onclick="window.location.href='/logout'">
+                Log out
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
     </div>
 
@@ -793,6 +1044,42 @@
             onclick="window.location.href='/categories/report'">
         Report
     </button>
+</div>
+
+<div id="profileModal"
+     onclick="outsideClick(event)"
+     style="
+     display:none;
+     position:fixed;
+     top:0;
+     left:0;
+     width:100%;
+     height:100%;
+     background:rgba(0,0,0,0.4);
+     z-index:9999;
+     ">
+
+    <div id="profileWindow"
+         style="
+        background:white;
+        width:500px;
+        margin:100px auto;
+        padding:30px;
+        border-radius:20px;
+        position:relative;
+    ">
+
+        <h2>User Information</h2>
+
+        <div id="profileContent"></div>
+
+        <button class="close-modal-btn"
+                onclick="closeProfileModal()">
+            Close
+        </button>
+
+    </div>
+
 </div>
 
 <script>
@@ -980,6 +1267,57 @@ window.addEventListener("load", () => {
         );
     }
 });
+</script>
+<script>
+
+const popup = document.getElementById('popup');
+
+function togglePopup(){
+    popup.classList.toggle('active');
+}
+
+window.addEventListener('click', function(e){
+
+    if(!e.target.closest('.user-wrapper')){
+        popup.classList.remove('active');
+    }
+
+});
+
+function showProfile(){
+
+    fetch("/profile")
+        .then(response => response.json())
+        .then(data => {
+
+            document.getElementById("profileContent").innerHTML = `
+                <p><b>Name:</b> ${data.empl_name}</p>
+                <p><b>Surname:</b> ${data.empl_surname}</p>
+                <p><b>Role:</b> ${data.empl_role}</p>
+                <p><b>Phone:</b> ${data.phone_number}</p>
+                <p><b>City:</b> ${data.city}</p>
+                <p><b>Street:</b> ${data.street}</p>
+                <p><b>Start date:</b> ${data.date_of_start}</p>
+            `;
+
+            document.getElementById("profileModal").style.display = "block";
+        });
+}
+
+function closeProfileModal(){
+    document.getElementById("profileModal").style.display = "none";
+}
+
+function outsideClick(event){
+
+    const windowBox =
+        document.getElementById("profileWindow");
+
+    if(!windowBox.contains(event.target)){
+        closeProfileModal();
+    }
+}
+
 </script>
 </body>
 </html>
