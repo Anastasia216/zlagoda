@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from application.decorators import login_required
 
 from application.routes.receipt_routes import receipt_routes
+from application.routes.store_product_routes import store_product_routes
 from extensions import db, migrate
 import database.models
 from application.routes.employee_routes import employee_routes
@@ -11,6 +12,7 @@ from application.routes.customer_card_routes import customer_card_routes
 from application.routes.product_routes import product_routes
 from application.routes.user_routes import user_routes
 from application.routes.auth import auth
+
 def create_app():
     app = Flask(__name__)
 
@@ -21,6 +23,8 @@ def create_app():
     app.register_blueprint(category_routes)
     app.register_blueprint(customer_card_routes)
     app.register_blueprint(receipt_routes)
+
+    app.register_blueprint(store_product_routes)
     @app.route("/")
     @login_required
     def home():
