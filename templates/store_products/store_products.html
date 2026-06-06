@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Products | Zlagoda</title>
+    <title>Products In Store | Zlagoda</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-
         *{
             margin:0;
             padding:0;
@@ -40,7 +39,6 @@
         }
 
         /* BACKGROUND */
-
         .blur{
             position:fixed;
             border-radius:50%;
@@ -65,20 +63,18 @@
         }
 
         /* MAIN */
-
         .container{
             padding:30px 48px 40px;
         }
 
         /* HEADER */
-        /*THIS*/
-         .topbar{
+        .topbar{
             display:flex;
             justify-content:space-between;
-            align-items:flex-start;
+            align-items:center;
             margin-bottom:42px;
         }
-        /*THIS*/
+
         .logo h1{
             font-size:42px;
             font-weight:800;
@@ -90,7 +86,7 @@
             -webkit-text-fill-color:transparent;
         }
 
-    /* SEARCH WRAPPER */
+        /* SEARCH WRAPPER */
         .search-wrapper{
             margin-bottom:28px;
         }
@@ -99,138 +95,111 @@
             width:100%;
         }
 
-        /* FLEX GROUP */
-            .search-group{
-                display:flex;
-                gap:16px;
-                width:100%;
-            }
-
-        /* SEARCH INPUT */
-            .search-bar{
-                flex:1;
-                height:68px;
-
-                border:none;
-                outline:none;
-
-                padding:0 28px;
-
-                border-radius:24px;
-
-                font-size:17px;
-                font-weight:500;
-
-                background:rgba(255,255,255,0.78);
-                backdrop-filter:blur(14px);
-
-                box-shadow:
-                    0 10px 35px rgba(15,23,42,0.06),
-                    inset 0 1px 0 rgba(255,255,255,0.9);
-
-                transition:0.25s;
-            }
-
-        /* CATEGORY WRAPPER */
-            .category-filter{
-                position:relative;
-                width:220px;
-            }
-
-    /* DROPDOWN BUTTON */
-        .dropdown-btn{
-            height:68px;
+        .search-group{
+            display:flex;
+            gap:16px;
             width:100%;
+        }
 
-            padding:0 20px;
-
+        .search-bar{
+            flex:1;
+            height:68px;
             border:none;
+            outline:none;
+            padding:0 28px;
             border-radius:24px;
-
-            font-size:15px;
-            font-weight:600;
-
-            cursor:pointer;
-
+            font-size:17px;
+            font-weight:500;
             background:rgba(255,255,255,0.78);
             backdrop-filter:blur(14px);
-
             box-shadow:
                 0 10px 35px rgba(15,23,42,0.06),
                 inset 0 1px 0 rgba(255,255,255,0.9);
+            transition:0.25s;
+        }
 
+        .category-filter{
+            position:relative;
+            width:220px;
+        }
+
+        /* DROPDOWN BUTTON */
+        .dropdown-btn{
+            height:68px;
+            width:100%;
+            padding:0 20px;
+            border:none;
+            border-radius:24px;
+            font-size:15px;
+            font-weight:600;
+            cursor:pointer;
+            background:rgba(255,255,255,0.78);
+            backdrop-filter:blur(14px);
+            box-shadow:
+                0 10px 35px rgba(15,23,42,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
             display:flex;
             align-items:center;
             justify-content:space-between;
         }
 
-        /* DROPDOWN MENU */
-            .dropdown-menu{
-                position:absolute;
-                top:75px;
-                left:0;
+        .dropdown-btn::after{
+            content:"⌄";
+            margin-left:10px;
+            color:#64748b;
+            font-size:18px;
+        }
 
-                width:100%;
+        .dropdown-menu{
+            position:absolute;
+            top:75px;
+            left:0;
+            width:100%;
+            background:rgba(255,255,255,0.95);
+            backdrop-filter:blur(14px);
+            border-radius:20px;
+            box-shadow:0 20px 60px rgba(15,23,42,0.12);
+            display:none;
+            z-index:1000;
+        }
 
-                background:rgba(255,255,255,0.95);
-                backdrop-filter:blur(14px);
+        .dropdown-item{
+            padding:14px 16px;
+            cursor:pointer;
+            transition:0.2s;
+        }
 
-                border-radius:20px;
-
-                box-shadow:0 20px 60px rgba(15,23,42,0.12);
-
-                display:none;
-
-                z-index:1000;
-            }
-
+        .dropdown-item:hover{
+            background:#eff6ff;
+            color:#2563eb;
+        }
 
         /* TABLE */
-
         .table-container{
             width:100%;
-
+            max-height:calc(100vh - 330px);
+            overflow-y:auto;
+            overflow-x:auto;
             background:rgba(255,255,255,0.74);
             backdrop-filter:blur(14px);
-
             border-radius:34px;
-
-            overflow:hidden;
-
             box-shadow:
-                    0 12px 40px rgba(15,23,42,0.06),
-                    inset 0 1px 0 rgba(255,255,255,0.9);
+                0 12px 40px rgba(15,23,42,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
         table{
             width:100%;
             border-collapse:collapse;
         }
-        .table-container{
-            width:100%;
 
-            max-height:calc(100vh - 330px);
-
-            overflow-y:auto;
-            overflow-x:auto;
-
-            background:rgba(255,255,255,0.74);
-
-            backdrop-filter:blur(14px);
-
-            border-radius:34px;
-
-            box-shadow:
-                0 12px 40px rgba(15,23,42,0.06),
-                inset 0 1px 0 rgba(255,255,255,0.9);
-        }
         thead th{
             position:sticky;
             top:0;
             z-index:10;
-
             background:rgba(241,245,249,0.98);
         }
+
         thead{
             background:rgba(241,245,249,0.85);
         }
@@ -238,20 +207,16 @@
         th{
             text-align:left;
             padding:24px 28px;
-
             font-size:14px;
             font-weight:700;
             color:#475569;
-
             letter-spacing:0.5px;
         }
 
         td{
             padding:24px 28px;
-
             font-size:15px;
             font-weight:500;
-
             border-top:1px solid rgba(226,232,240,0.8);
         }
 
@@ -264,51 +229,37 @@
         }
 
         /* BACK BUTTON */
-
         .back-btn{
             width:58px;
             height:58px;
-
             flex-shrink:0;
-
             border:none;
             border-radius:20px;
-
             cursor:pointer;
-
             font-size:28px;
             font-weight:700;
-
             color:#2563eb;
-
             background:rgba(255,255,255,0.82);
             backdrop-filter:blur(14px);
-
             box-shadow:
                     0 10px 30px rgba(15,23,42,0.08),
                     inset 0 1px 0 rgba(255,255,255,0.9);
-
             transition:0.25s;
-
             display:flex;
             align-items:center;
             justify-content:center;
-
             margin-right:18px;
         }
 
         .back-btn:hover{
             transform:translateY(-3px);
-
             background:#eff6ff;
-
             box-shadow:
                     0 14px 35px rgba(37,99,235,0.14),
                     inset 0 1px 0 rgba(255,255,255,1);
         }
 
         /* ACTION BUTTONS */
-
         .actions{
             display:flex;
             gap:12px;
@@ -318,14 +269,10 @@
         .delete-btn{
             border:none;
             border-radius:14px;
-
             padding:11px 18px;
-
             font-size:14px;
             font-weight:600;
-
             cursor:pointer;
-
             transition:0.2s;
         }
 
@@ -348,39 +295,32 @@
         }
 
         /* FLOATING BUTTON */
-
         .floating-buttons{
             position:fixed;
-
             right:40px;
             bottom:34px;
+            display:flex;
+            gap:12px;
         }
 
         .main-btn{
             min-width:150px;
             height:62px;
-
             border:none;
             border-radius:22px;
-
             font-size:16px;
             font-weight:700;
-
             cursor:pointer;
-
             color:white;
-
             background:linear-gradient(135deg, #2563eb, #4f46e5);
-
-            box-shadow:
-                    0 14px 35px rgba(15,23,42,0.16);
-
+            box-shadow:0 14px 35px rgba(15,23,42,0.16);
             transition:0.25s;
         }
 
         .main-btn:hover{
             transform:translateY(-4px);
         }
+
         .add-btn{
             background:linear-gradient(135deg, #2563eb, #4f46e5);
         }
@@ -389,530 +329,369 @@
             background:linear-gradient(135deg, #7c3aed, #a855f7);
         }
 
-/* MODAL */
+        /* MODAL */
+        .modal{
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(15,23,42,0.35);
+            backdrop-filter:blur(6px);
+            align-items:center;
+            justify-content:center;
+            z-index:1000;
+        }
 
-    .modal{
-        display:none;
+        .modal-content{
+            width:700px;
+            max-width:92%;
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(168,85,247,0.10), transparent 24%),
+                linear-gradient(135deg, #f8fbff 0%, #f4f7ff 55%, #f7f5ff 100%);
+            backdrop-filter:blur(10px);
+            border-radius:30px;
+            padding:34px;
+            position:relative;
+            box-shadow:
+                    0 25px 60px rgba(15,23,42,0.15),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+        }
 
-        position:fixed;
-        inset:0;
+        .modal-content h2{
+            font-size:34px;
+            font-weight:800;
+            margin-left:48px;
+            margin-bottom:28px;
+        }
 
-        background:rgba(15,23,42,0.35);
+        .close-btn{
+            position:absolute;
+            top:32px;
+            left:20px;
+            width:42px;
+            height:42px;
+            border:none;
+            border-radius:12px;
+            cursor:pointer;
+            background:#f8fafc;
+            font-size:20px;
+            box-shadow:0 5px 25px rgba(15,23,42,0.16);
+        }
 
-        backdrop-filter:blur(6px);
+        .close-btn:hover{
+            transform:translateY(-3px);
+        }
 
-        align-items:center;
-        justify-content:center;
+        .form-group{
+            margin-bottom:18px;
+            position:relative;
+        }
 
-        z-index:1000;
-    }
+        .form-group label{
+            display:block;
+            margin-bottom:8px;
+            font-size:16px;
+            font-weight:600;
+        }
 
-    .modal-content{
-
-        width:700px;
-        max-width:92%;
-
-       background:
-                    radial-gradient(circle at top left,
-                    rgba(59,130,246,0.12),
-                    transparent 28%),
-
-                    radial-gradient(circle at bottom right,
-                    rgba(168,85,247,0.10),
-                    transparent 24%),
-
-                    linear-gradient(
-                            135deg,
-                            #f8fbff 0%,
-                            #f4f7ff 55%,
-                            #f7f5ff 100%
-                    );
-
-        backdrop-filter:blur(10px);
-
-        border-radius:30px;
-
-        padding:34px;
-
-        position:relative;
-
-        box-shadow:
-                0 25px 60px rgba(15,23,42,0.15),
+        .form-group input{
+            width:100%;
+            border:none;
+            outline:none;
+            border-radius:18px;
+            padding:15px 18px;
+            font-size:15px;
+            background:rgba(255,255,255,0.9);
+            box-shadow:
+                0 10px 35px rgba(15,23,42,0.06),
                 inset 0 1px 0 rgba(255,255,255,0.9);
-    }
+            color:#0f172a;
+        }
 
+        .modal-buttons{
+            display:flex;
+            justify-content:flex-end;
+            gap:12px;
+            margin-top:28px;
+        }
 
-    .modal-content h2{
+        .save-btn{
+            border:none;
+            padding:13px 24px;
+            border-radius:14px;
+            font-weight:700;
+            cursor:pointer;
+            color:white;
+            background:linear-gradient(135deg, #2563eb, #4f46e5);
+            box-shadow:0 5px 25px rgba(15,23,42,0.16);
+        }
 
-        font-size:34px;
-        font-weight:800;
-        margin-left:48px;
-        margin-bottom:28px;
-    }
+        .save-btn:hover{
+            transform:translateY(-3px);
+        }
 
-    .close-btn{
+        .reset-btn{
+            border:none;
+            padding:13px 24px;
+            border-radius:14px;
+            font-weight:700;
+            cursor:pointer;
+            background:#f1f5f9;
+            color:#334155;
+            box-shadow:0 5px 25px rgba(15,23,42,0.16);
+        }
 
-        position:absolute;
+        .reset-btn:hover{
+            transform:translateY(-3px);
+        }
 
-        top:32px;
-        left:20px;
+        /* CUSTOM MODAL DROPDOWNS STYLE */
+        .modal-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
 
-        width:42px;
-        height:42px;
+        .modal-select-btn {
+            width: 100%;
+            height: 54px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 18px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.2s;
+        }
 
-        border:none;
-        border-radius:12px;
+        .modal-select-btn:hover {
+            background: #ffffff;
+        }
 
-        cursor:pointer;
+        .modal-select-btn::after {
+            content: "⌄";
+            font-size: 18px;
+            color: #64748b;
+        }
 
-        background:#f8fafc;
+        .modal-select-menu {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(15,23,42,0.15);
+            display: none;
+            z-index: 2000;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 6px 0;
+        }
 
-        font-size:20px;
-        box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-    }
+        .dropdown-search-input {
+            width: calc(100% - 20px);
+            margin: 4px 10px 8px 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            outline: none;
+            background: #ffffff;
+        }
 
-    .close-btn:hover{
-                transform:translateY(-3px);
-                box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
+        .modal-select-item {
+            padding: 12px 18px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s;
+            color: #334155;
+        }
+
+        .modal-select-item:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        /* USER */
+        .user-wrapper{
+            position:relative;
+        }
+
+        .user-btn{
+            width:62px;
+            height:62px;
+            border:none;
+            border-radius:22px;
+            background:rgba(255,255,255,0.80);
+            backdrop-filter:blur(14px);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor:pointer;
+            box-shadow:
+                    0 12px 30px rgba(15,23,42,0.08),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
+            transition:0.25s;
+        }
+
+        .user-btn:hover{
+            transform:translateY(-3px);
+        }
+
+        .user-btn svg{
+            width:30px;
+            height:30px;
+            fill:#334155;
+        }
+
+        /* POPUP */
+        .user-popup{
+            position:absolute;
+            top:78px;
+            right:0;
+            width:300px;
+            background:rgba(255,255,255,0.90);
+            backdrop-filter:blur(18px);
+            border-radius:30px;
+            padding:24px;
+            box-shadow:0 25px 70px rgba(15,23,42,0.12);
+            display:none;
+            z-index:999;
+        }
+
+        .user-popup::before{
+            content:'';
+            position:absolute;
+            top:-10px;
+            right:28px;
+            width:22px;
+            height:22px;
+            background:rgba(255,255,255,0.90);
+            transform:rotate(45deg);
+            border-radius:4px;
+        }
+
+        .user-popup.active{
+            display:block;
+            animation:popup 0.22s ease;
+        }
+
+        @keyframes popup{
+            from{
+                opacity:0;
+                transform:translateY(-10px);
             }
-
-    .form-group{
-        margin-bottom:18px;
-    }
-
-    .form-group label{
-
-        display:block;
-
-        margin-bottom:8px;
-
-        font-size:16px;
-        font-weight:600;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select{
-    width:100%;
-
-        border:none;
-        outline:none;
-
-        border-radius:18px;
-
-        padding:15px 18px;
-
-        font-size:15px;
-
-        background:rgba(255,255,255,0.9);
-
-        box-shadow:
-            0 10px 35px rgba(15,23,42,0.06),
-            inset 0 1px 0 rgba(255,255,255,0.9);
-
-        color:#0f172a;
-
-        appearance:none;
-        -webkit-appearance:none;
-        -moz-appearance:none;
-
-        cursor:pointer;
-
-        accent-color: #2563eb;
-    }
-    .form-group{
-        position:relative;
-    }
-
-    .form-group:has(select)::after{
-
-        content:"⌄";
-
-        position:absolute;
-
-        right:18px;
-        top:35px;
-
-        font-size:18px;
-
-        color:#64748b;
-
-        pointer-events:none;
-    }
-
-    .form-group textarea{
-        min-height:120px;
-        resize:vertical;
-    }
-
-    .modal-buttons{
-
-        display:flex;
-        justify-content:flex-end;
-        gap:12px;
-
-        margin-top:28px;
-    }
-
-    .save-btn{
-         appearance:none;
-         -webkit-appearance:none;
-
-        border:none;
-
-        padding:13px 24px;
-
-        border-radius:14px;
-
-        font-weight:700;
-
-        cursor:pointer;
-
-        color:white;
-
-        background:linear-gradient(
-                135deg,
-                #2563eb,
-                #4f46e5
-        );
-        box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-    }
-    .save-btn:hover{
-                transform:translateY(-3px);
-                box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
+            to{
+                opacity:1;
+                transform:translateY(0);
             }
-
-    .reset-btn{
-
-        border:none;
-
-        padding:13px 24px;
-
-        border-radius:14px;
-
-        font-weight:700;
-
-        cursor:pointer;
-
-        background:#f1f5f9;
-
-        color:#334155;
-        box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-    }
-
-    .reset-btn:hover{
-                transform:translateY(-3px);
-                box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-    }
-
-
-    .dropdown{
-        position:relative;
-    }
-
-    .dropdown-btn{
-        height:68px;
-        min-width:180px;
-
-        padding:0 20px;
-
-        border:none;
-        border-radius:24px;
-
-        font-size:15px;
-        font-weight:600;
-
-        cursor:pointer;
-
-        background:rgba(255,255,255,0.78);
-        backdrop-filter:blur(14px);
-
-        box-shadow:
-             0 10px 35px rgba(15,23,42,0.06),
-             inset 0 1px 0 rgba(255,255,255,0.9);
-
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-    }
-
-    .dropdown-btn::after{
-        content:"⌄";
-        margin-left:10px;
-        color:#64748b;
-    }
-
-    .dropdown-menu{
-        position:absolute;
-        top:75px;
-        left:0;
-
-        width:100%;
-
-         background:rgba(255,255,255,0.95);
-        backdrop-filter:blur(14px);
-
-        border-radius:20px;
-
-        box-shadow:0 20px 60px rgba(15,23,42,0.12);
-
-        display:none;
-
-        z-index:1000;
-    }
-
-    .dropdown-item{
-         padding:14px 16px;
-        cursor:pointer;
-        transition:0.2s;
-    }
-
-    .dropdown-item:hover{
-        background:#eff6ff;
-        color:#2563eb;
-    }
-    /*THIS*/
-            /* USER */
-
-.user-wrapper{
-    position:relative;
-}
-
-.user-btn{
-    width:62px;
-    height:62px;
-
-    border:none;
-    border-radius:22px;
-
-    background:rgba(255,255,255,0.80);
-    backdrop-filter:blur(14px);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-
-    box-shadow:
-            0 12px 30px rgba(15,23,42,0.08),
-            inset 0 1px 0 rgba(255,255,255,0.9);
-
-    transition:0.25s;
-}
-
-.user-btn:hover{
-    transform:translateY(-3px);
-}
-
-.user-btn svg{
-    width:30px;
-    height:30px;
-    fill:#334155;
-}
-
-/* POPUP */
-
-.user-popup{
-    position:absolute;
-
-    top:78px;
-    right:0;
-
-    width:300px;
-
-    background:rgba(255,255,255,0.90);
-    backdrop-filter:blur(18px);
-
-    border-radius:30px;
-
-    padding:24px;
-
-    box-shadow:
-            0 25px 70px rgba(15,23,42,0.12);
-
-    display:none;
-
-    z-index:999;
-}
-
-.user-popup::before{
-    content:'';
-
-    position:absolute;
-
-    top:-10px;
-    right:28px;
-
-    width:22px;
-    height:22px;
-
-    background:rgba(255,255,255,0.90);
-
-    transform:rotate(45deg);
-
-    border-radius:4px;
-}
-
-.user-popup.active{
-    display:block;
-    animation:popup 0.22s ease;
-}
-
-@keyframes popup{
-
-    from{
-        opacity:0;
-        transform:translateY(-10px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.profile{
-    display:flex;
-    align-items:center;
-    gap:14px;
-
-    margin-bottom:22px;
-}
-
-.profile-avatar{
-    width:60px;
-    height:60px;
-
-    border-radius:20px;
-
-    background:linear-gradient(135deg, #dbeafe, #ede9fe);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.profile-avatar svg{
-    width:30px;
-    fill:#2563eb;
-}
-
-.profile h3{
-    font-size:18px;
-    margin-bottom:4px;
-}
-
-.profile p{
-    color:#64748b;
-    font-size:13px;
-}
-
-.popup-buttons{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
-
-.profile-btn,
-.logout-btn{
-
-    border:none;
-    border-radius:18px;
-
-    padding:15px;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.profile-btn{
-    background:#eef2ff;
-    color:#4f46e5;
-}
-
-.profile-btn:hover{
-    background:#e0e7ff;
-}
-
-.logout-btn{
-    background:#fff1f2;
-    color:#e11d48;
-}
-
-.logout-btn:hover{
-    background:#ffe4e6;
-}
-
-/* PROFILE MODAL */
-
-.close-modal-btn{
-
-    margin-top:20px;
-
-    border:none;
-    border-radius:18px;
-
-    padding:14px 22px;
-
-    background:#eef2ff;
-    color:#4f46e5;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:0.2s;
-}
-
-.close-modal-btn:hover{
-    background:#e0e7ff;
-}
-    .topbar{
-    display:flex;
-    align-items:center;
-    margin-bottom:30px;
-}
-/*THIS*/
+        }
+
+        .profile{
+            display:flex;
+            align-items:center;
+            gap:14px;
+            margin-bottom:22px;
+        }
+
+        .profile-avatar{
+            width:60px;
+            height:60px;
+            border-radius:20px;
+            background:linear-gradient(135deg, #dbeafe, #ede9fe);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .profile-avatar svg{
+            width:30px;
+            fill:#2563eb;
+        }
+
+        .profile h3{
+            font-size:18px;
+            margin-bottom:4px;
+        }
+
+        .profile p{
+            color:#64748b;
+            font-size:13px;
+        }
+
+        .popup-buttons{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+        }
+
+        .profile-btn,
+        .logout-btn{
+            border:none;
+            border-radius:18px;
+            padding:15px;
+            font-size:15px;
+            font-weight:600;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        .profile-btn{
+            background:#eef2ff;
+            color:#4f46e5;
+        }
+
+        .profile-btn:hover{
+            background:#e0e7ff;
+        }
+
+        .logout-btn{
+            background:#fff1f2;
+            color:#e11d48;
+        }
+
+        .logout-btn:hover{
+            background:#ffe4e6;
+        }
+
+        /* PROFILE MODAL */
+        .close-modal-btn{
+            margin-top:20px;
+            border:none;
+            border-radius:18px;
+            padding:14px 22px;
+            background:#eef2ff;
+            color:#4f46e5;
+            font-size:15px;
+            font-weight:600;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        .close-modal-btn:hover{
+            background:#e0e7ff;
+        }
 
         /* RESPONSIVE */
+        @media(max-width:1000px){
+            .table-container{ overflow-x:auto; }
+            table{ min-width:1000px; }
+        }
 
-    @media(max-width:1000px){
-    .table-container{
-            overflow-x:auto;
+        @media(max-width:760px){
+            .container{ padding:24px; }
+            .logo h1{ font-size:34px; }
+            .floating-buttons{ right:20px; bottom:20px; }
+            .main-btn{ min-width:130px; height:58px; }
         }
-        table{
-            min-width:1000px;
-        }
-    }
-
-    @media(max-width:760px){
-        .container{
-            padding:24px;
-        }
-        .logo h1{
-            font-size:34px;
-        }
-        .floating-buttons{
-            right:20px;
-            bottom:20px;
-        }
-        .main-btn{
-            min-width:130px;
-            height:58px;
-        }
-    }
-
     </style>
 </head>
 
@@ -921,10 +700,9 @@
 <div class="blur blur2"></div>
 
 <div class="container">
-
     <div class="topbar">
         <div style="display:flex; align-items:center;">
-            <button class="back-btn" onclick="window.location.href='/'">←</button>
+            <button class="back-btn" onclick="window.location.href='/products'">←</button>
             <div class="logo">
                 <h1>Products In Store</h1>
             </div>
@@ -959,11 +737,7 @@
     <div class="search-wrapper">
         <form id="searchForm" class="search-form" method="GET" action="/store_products">
             <div class="search-group">
-                <input type="text"
-                       name="search"
-                       class="search-bar"
-                       placeholder="Search store products by UPC or name..."
-                       value="{{ search if search else '' }}">
+                <input type="text" name="search" class="search-bar" placeholder="Search store products by UPC or name..." value="{{ search if search else '' }}">
 
                 <div class="category-filter">
                     <div class="dropdown">
@@ -992,67 +766,80 @@
         </form>
     </div>
 
-<div id="addModal" class="modal">
-    <div class="modal-content">
-        <button class="close-btn" onclick="closeAddModal()">✕</button>
-        <h2>Add New Store Product</h2>
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeAddModal()">✕</button>
+            <h2>Add New Store Product</h2>
 
-     <form id="addForm">
-    <div class="form-group" style="display: flex; gap: 12px; align-items: center; background: rgba(37, 99, 235, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px;">
-        <input type="checkbox" name="promotional_product" id="add_promo_check" style="width: 22px; height: 22px; appearance: auto; margin: 0; cursor: pointer;">
-        <label for="add_promo_check" style="margin: 0; font-weight: 700; color: #2563eb; cursor: pointer;"> Mark as Promotional Product</label>
-    </div>
+            <form id="addForm">
+                <div class="form-group" style="display: flex; gap: 12px; align-items: center; background: rgba(37, 99, 235, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px;">
+                    <input type="checkbox" name="promotional_product" id="add_promo_check" style="width: 22px; height: 22px; appearance: auto; margin: 0; cursor: pointer;">
+                    <label for="add_promo_check" style="margin: 0; font-weight: 700; color: #2563eb; cursor: pointer;"> Mark as Promotional Product</label>
+                </div>
 
-    <div class="form-group">
-        <label>UPC (Generated Automatically)</label>
-        <input name="UPC" id="add_upc" pattern="[0-9]{12}" readonly required title="12-digit code">
-    </div>
+                <div class="form-group">
+                    <label>UPC (Generated Automatically)</label>
+                    <input name="UPC" id="add_upc" pattern="[0-9]{12}" readonly required title="12-digit code">
+                </div>
 
-    <div id="regular_fields_group">
-        <div class="form-group">
-            <label>Product Catalog Entry</label>
-            <select name="id_product" id="add_id_product">
-                {% for product in products %}
-                <option value="{{ product['id_product'] }}">{{ product['product_name'] }}</option>
-                {% endfor %}
-            </select>
+                <div id="regular_fields_group">
+                    <div class="form-group">
+                        <label>Product Catalog Entry</label>
+                        <div class="modal-select-wrapper">
+                            <button type="button" class="modal-select-btn" id="addProductCatalogBtn" onclick="toggleModalDropdown('addProductCatalogMenu')">Select product</button>
+                            <div class="modal-select-menu" id="addProductCatalogMenu">
+                                <input type="text" class="dropdown-search-input" id="addCatalogSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addCatalogSearch', 'addProductCatalogMenu')">
+                                {% for product in products %}
+                                <div class="modal-select-item" onclick="selectStoreProduct('add_catalog', '{{ product['id_product'] }}', '{{ product['product_name'] | escape }}')">
+                                    {{ product['product_name'] }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <input type="hidden" name="id_product" id="add_id_product">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Base Price (₴)</label>
+                        <input type="number" name="selling_price" id="add_price" step="0.01" min="0.01">
+                    </div>
+                </div>
+
+                <div id="promo_fields_group" style="display: none;">
+                    <div class="form-group">
+                        <label style="color: #2563eb; font-weight: 600;">Select Original Store Product *</label>
+                        <div class="modal-select-wrapper">
+                            <button type="button" class="modal-select-btn" id="addPromoPartnerBtn" onclick="toggleModalDropdown('addPromoPartnerMenu')" style="border: 1px solid rgba(37, 99, 235, 0.2);">-- Select product currently in store --</button>
+                            <div class="modal-select-menu" id="addPromoPartnerMenu">
+                                <input type="text" class="dropdown-search-input" id="addPromoSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addPromoSearch', 'addPromoPartnerMenu')">
+                                <div class="modal-select-item" onclick="selectStoreProduct('add_promo', '', '-- Select product currently in store --', '')">-- Clear selection --</div>
+                                {% for item in all_existing_upcs %}
+                                    {% if item['promotional_product'] == 0 %}
+                                    <div class="modal-select-item" onclick="selectStoreProduct('add_promo', '{{ item['UPC'] }}', '{{ item['product_name'] | escape }} (UPC: {{ item['UPC'] }})', '{{ item['id_product'] }}')">
+                                        {{ item['product_name'] }} (In Store UPC: {{ item['UPC'] }})
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <input type="hidden" name="UPC_prom" id="add_upc_prom">
+                            <input type="hidden" name="id_product_promo" id="add_id_product_promo" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Quantity in Store</label>
+                    <input type="number" name="products_number" min="0" required>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="reset-btn" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="save-btn">Add Product</button>
+                </div>
+            </form>
         </div>
-
-        <div class="form-group">
-            <label>Base Price (₴)</label>
-            <input type="number" name="selling_price" id="add_price" step="0.01" min="0.01" required>
-        </div>
     </div>
 
-    <div id="promo_fields_group" style="display: none;">
-        <div class="form-group">
-            <label style="color: #2563eb; font-weight: 600;">Select Original Store Product *</label>
-            <select name="UPC_prom" id="add_upc_prom">
-                <option value="">-- Select product currently in store --</option>
-                {% for item in all_existing_upcs %}
-                    {% if item['promotional_product'] == 0 %}
-                        <option value="{{ item['UPC'] }}" data-product-id="{{ item['id_product'] }}">
-                            {{ item['product_name'] }} (In Store UPC: {{ item['UPC'] }})
-                        </option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-        <input type="hidden" name="id_product_promo" id="add_id_product_promo" disabled>
-    </div>
-
-    <div class="form-group">
-        <label>Quantity in Store</label>
-        <input type="number" name="products_number" min="0" required>
-    </div>
-
-    <div class="modal-buttons">
-        <button type="button" class="reset-btn" onclick="closeAddModal()">Cancel</button>
-        <button type="submit" class="save-btn">Add Product</button>
-    </div>
-</form>
-        </div>
-</div>
     <div class="table-container">
         <table>
             <thead>
@@ -1084,15 +871,8 @@
                 <td>
                     {% if session["role"] == "manager" %}
                     <div class="actions">
-                       <button class="edit-btn"
-                            onclick="openEditModal('{{ product['UPC'] }}')">
-                           Edit
-                        </button>
-                        <button
-                             class="delete-btn"
-                                onclick="deleteStoreProduct('{{ product['UPC'] }}', '{{ product['product_name'] | escape }}')">
-                            Delete
-                        </button>
+                       <button class="edit-btn" onclick="openEditModal('{{ product['UPC'] }}')">Edit</button>
+                       <button class="delete-btn" onclick="deleteStoreProduct('{{ product['UPC'] }}', '{{ product['product_name'] | escape }}')">Delete</button>
                     </div>
                     {% endif %}
                 </td>
@@ -1110,6 +890,75 @@
     {% endif %}
 </div>
 
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeEditModal()">✕</button>
+        <h2>Edit Store Product</h2>
+
+        <form id="editForm">
+            <input type="hidden" name="UPC" id="edit_upc">
+
+            <div class="form-group">
+                <label>Link to Promotional Partner (Optional)</label>
+                <div class="modal-select-wrapper">
+                    <button type="button" class="modal-select-btn" id="editPromoPartnerBtn" onclick="toggleModalDropdown('editPromoPartnerMenu')">-- No Promotional Variant --</button>
+                    <div class="modal-select-menu" id="editPromoPartnerMenu">
+                        <input type="text" class="dropdown-search-input" id="editPromoSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('editPromoSearch', 'editPromoPartnerMenu')">
+                        <div class="modal-select-item" onclick="selectStoreProduct('edit_promo', '', '-- No Promotional Variant --')">-- No Promotional Variant --</div>
+                        {% for item in all_existing_upcs %}
+                            {% if item['promotional_product'] == 1 %}
+                            <div class="modal-select-item" onclick="selectStoreProduct('edit_promo', '{{ item['UPC'] }}', '{{ item['product_name'] | escape }} (Promo: {{ item['UPC'] }})')">
+                                {{ item['product_name'] }} (Promo: {{ item['UPC'] }})
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="UPC_prom" id="edit_upc_prom">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Product Catalog Entry</label>
+                <div class="modal-select-wrapper">
+                    <button type="button" class="modal-select-btn" id="editProductCatalogBtn" onclick="toggleModalDropdown('editProductCatalogMenu')">Select product</button>
+                    <div class="modal-select-menu" id="editProductCatalogMenu">
+                        <input type="text" class="dropdown-search-input" id="editCatalogSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('editCatalogSearch', 'editProductCatalogMenu')">
+                        {% for product in products %}
+                        <div class="modal-select-item" onclick="selectStoreProduct('edit_catalog', '{{ product['id_product'] }}', '{{ product['product_name'] | escape }}')">
+                            {{ product['product_name'] }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="id_product" id="edit_id_product">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Base Price (₴)</label>
+                <input type="number" name="selling_price" id="edit_price" step="0.01" min="0.01" required>
+                <small id="edit_price_hint" style="color: #64748b; display:none; font-size:12px; margin-top:4px;">
+                    This is a promotional item. Saving will automatically reduce this price by 20%.
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label>Quantity in Store</label>
+                <input type="number" name="products_number" id="edit_quantity" min="0" required>
+            </div>
+
+            <div class="form-group" style="display: flex; gap: 12px; align-items: center;">
+                <label for="edit_promo" style="margin: 0;">Mark as Promotional Product</label>
+                <input type="checkbox" name="promotional_product" id="edit_promo" style="width: 20px; height: 20px; appearance: auto; margin: 0;">
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div id="profileModal" onclick="outsideClick(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:9999;">
     <div id="profileWindow" style="background:white; width:500px; margin:100px auto; padding:30px; border-radius:20px; position:relative;">
         <h2>User Information</h2>
@@ -1117,61 +966,6 @@
         <button class="close-modal-btn" onclick="closeProfileModal()">Close</button>
     </div>
 </div>
-
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeEditModal()">✕</button>
-            <h2>Edit Store Product</h2>
-
-            <form id="editForm">
-    <input type="hidden" name="UPC" id="edit_upc">
-
-    <div class="form-group">
-        <label>Link to Promotional Partner (Optional)</label>
-        <select name="UPC_prom" id="edit_upc_prom">
-            <option value="">-- No Promotional Variant --</option>
-            {% for item in all_existing_upcs %}
-                {% if item['promotional_product'] == 1 %}
-                    <option value="{{ item['UPC'] }}">{{ item['product_name'] }} (Promo: {{ item['UPC'] }})</option>
-                {% endif %}
-            {% endfor %}
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>Product Catalog Entry</label>
-        <select name="id_product" id="edit_id_product">
-            {% for product in products %}
-            <option value="{{ product['id_product'] }}">{{ product['product_name'] }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>Base Price (₴)</label>
-        <input type="number" name="selling_price" id="edit_price" step="0.01" min="0.01" required>
-        <small id="edit_price_hint" style="color: #64748b; display:none; font-size:12px; margin-top:4px;">
-            This is a promotional item. Saving will automatically reduce this price by 20%.
-        </small>
-    </div>
-
-    <div class="form-group">
-        <label>Quantity in Store</label>
-        <input type="number" name="products_number" id="edit_quantity" min="0" required>
-    </div>
-
-    <div class="form-group" style="display: flex; gap: 12px; align-items: center;">
-        <label for="edit_promo" style="margin: 0;">Mark as Promotional Product</label>
-        <input type="checkbox" name="promotional_product" id="edit_promo" style="width: 20px; height: 20px; appearance: auto; margin: 0;">
-    </div>
-
-    <div class="modal-buttons">
-        <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>
-        <button type="submit" class="save-btn">Save Changes</button>
-    </div>
-</form>
-        </div>
-    </div>
 
 <div id="customConfirmModal" class="modal" style="display: none; z-index: 10000;">
     <div class="modal-content" style="max-width: 450px; text-align: center; padding: 35px; box-sizing: border-box;">
@@ -1185,7 +979,6 @@
 </div>
 
 <script>
-
 const searchInput = document.querySelector(".search-bar");
 if (searchInput) {
     searchInput.addEventListener("input", () => {
@@ -1220,9 +1013,6 @@ function applyFilter(type, value) {
 function clearFilters() {
     document.getElementById("sortInput").value = "";
     document.getElementById("promoInput").value = "";
-    if (document.getElementById("searchForm")) {
-        document.getElementById("searchForm").value = "";
-    }
     window.location.href = "/store_products";
 }
 
@@ -1273,7 +1063,6 @@ function outsideClick(event) {
     }
 }
 
-//add
 function generateRandomUPC() {
     let upc = "";
     for (let i = 0; i < 12; i++) {
@@ -1288,10 +1077,12 @@ function openAddModal() {
 
     document.getElementById("add_upc").value = generateRandomUPC();
 
+    document.getElementById("addProductCatalogBtn").innerText = "Select product";
+    document.getElementById("addPromoPartnerBtn").innerText = "-- Select product currently in store --";
+
     document.getElementById("regular_fields_group").style.display = "block";
     document.getElementById("add_price").setAttribute("required", "required");
     document.getElementById("add_id_product").setAttribute("required", "required");
-
     document.getElementById("promo_fields_group").style.display = "none";
     document.getElementById("add_upc_prom").removeAttribute("required");
 
@@ -1301,7 +1092,6 @@ function openAddModal() {
 function closeAddModal() {
     document.getElementById("addModal").style.display = "none";
 }
-
 
 const addPromoCheck = document.getElementById("add_promo_check");
 if (addPromoCheck) {
@@ -1313,19 +1103,15 @@ if (addPromoCheck) {
         const upcPromSelect = document.getElementById("add_upc_prom");
 
         if (this.checked) {
-            // Якщо акційний
             regularGroup.style.display = "none";
             priceInput.removeAttribute("required");
             idProductSelect.removeAttribute("required");
-
             promoGroup.style.display = "block";
             upcPromSelect.setAttribute("required", "required");
         } else {
-            // Якщо звичайний
             regularGroup.style.display = "block";
             priceInput.setAttribute("required", "required");
             idProductSelect.setAttribute("required", "required");
-
             promoGroup.style.display = "none";
             upcPromSelect.removeAttribute("required");
         }
@@ -1367,7 +1153,6 @@ if (addForm) {
     });
 }
 
-//edit/
 function openEditModal(upc) {
     fetch(`/store_products/get/${upc}`)
         .then(response => response.json())
@@ -1377,6 +1162,19 @@ function openEditModal(upc) {
             document.getElementById("edit_id_product").value = product.id_product;
             document.getElementById("edit_price").value = product.selling_price;
             document.getElementById("edit_quantity").value = product.products_number;
+
+            const catalogItems = document.querySelectorAll("#editProductCatalogMenu .modal-select-item");
+            catalogItems.forEach(item => {
+                if(item.innerHTML.includes(product.product_name)) {
+                    document.getElementById("editProductCatalogBtn").innerText = item.innerText.trim();
+                }
+            });
+
+            if(product.UPC_prom) {
+                document.getElementById("editPromoPartnerBtn").innerText = `Product Variant (UPC: ${product.UPC_prom})`;
+            } else {
+                document.getElementById("editPromoPartnerBtn").innerText = "-- No Promotional Variant --";
+            }
 
             const isPromo = product.promotional_product == 1;
             document.getElementById("edit_promo").checked = isPromo;
@@ -1446,7 +1244,6 @@ function showCustomConfirm(title, message, buttonText = "Delete") {
         msgEl.innerHTML = message.replace(/\n/g, "<br>");
         actionBtn.innerText = buttonText;
 
-
         if (buttonText === "OK") {
             cancelBtn.style.display = "none";
             actionBtn.style.background = "#2563eb";
@@ -1472,9 +1269,7 @@ function showCustomConfirm(title, message, buttonText = "Delete") {
     });
 }
 
-
 async function deleteStoreProduct(upc, productName) {
-    // Підставляємо назву продукту та його UPC у віконце
     const confirmDelete = await showCustomConfirm(
         "Delete Store Product?",
         `Are you sure you want to remove <b>${productName}</b> (UPC: ${upc}) from the store shelves?`
@@ -1500,6 +1295,68 @@ async function deleteStoreProduct(upc, productName) {
         alert("Network error: Could not connect to the server.");
     }
 }
+
+// CUSTOM DROPDOWNS LOGIC WITH LIVE SEARCH FILTER
+function toggleModalDropdown(menuId) {
+    const menu = document.getElementById(menuId);
+    const isVisible = menu.style.display === "block";
+
+    document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");
+
+    if(!isVisible && menu) {
+        menu.style.display = "block";
+        const searchInput = menu.querySelector(".dropdown-search-input");
+        if(searchInput) {
+            searchInput.value = "";
+            filterModalDropdown(searchInput.id, menuId);
+            searchInput.focus();
+        }
+    } else if(menu) {
+        menu.style.display = "none";
+    }
+}
+
+function filterModalDropdown(searchId, menuId) {
+    const filter = document.getElementById(searchId).value.toUpperCase();
+    const menu = document.getElementById(menuId);
+    const items = menu.querySelectorAll(".modal-select-item");
+
+    items.forEach(item => {
+        const text = item.textContent || item.innerText;
+        if (text.toUpperCase().indexOf(filter) > -1) {
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+function selectStoreProduct(type, value, label, extraValue = '') {
+    if (type === 'add_catalog') {
+        document.getElementById("add_id_product").value = value;
+        document.getElementById("addProductCatalogBtn").innerText = label;
+        document.getElementById("addProductCatalogMenu").style.display = "none";
+    } else if (type === 'add_promo') {
+        document.getElementById("add_upc_prom").value = value;
+        document.getElementById("addPromoPartnerBtn").innerText = label;
+        document.getElementById("add_id_product_promo").value = extraValue;
+        document.getElementById("addPromoPartnerMenu").style.display = "none";
+    } else if (type === 'edit_promo') {
+        document.getElementById("edit_upc_prom").value = value;
+        document.getElementById("editPromoPartnerBtn").innerText = label;
+        document.getElementById("editPromoPartnerMenu").style.display = "none";
+    } else if (type === 'edit_catalog') {
+        document.getElementById("edit_id_product").value = value;
+        document.getElementById("editProductCatalogBtn").innerText = label;
+        document.getElementById("editProductCatalogMenu").style.display = "none";
+    }
+}
+
+document.addEventListener("click", function(event) {
+    if (!event.target.closest('.modal-select-wrapper')) {
+        document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");
+    }
+});
 </script>
 </body>
 </html>

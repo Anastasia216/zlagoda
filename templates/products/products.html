@@ -450,6 +450,64 @@
         margin-bottom:28px;
     }
 
+    /* Кастомний селект у модалках */
+.modal-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+.modal-select-btn {
+    width: 100%;
+    height: 54px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 18px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.2s;
+}
+.modal-select-btn:hover {
+    background: #ffffff;
+}
+.modal-select-btn::after {
+    content: "⌄";
+    font-size: 18px;
+    color: #64748b;
+}
+.modal-select-menu {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(14px);
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(15,23,42,0.15);
+    display: none;
+    z-index: 2000;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 6px 0;
+}
+.modal-select-item {
+    padding: 12px 18px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: 0.2s;
+    color: #334155;
+}
+.modal-select-item:hover {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
     .close-btn{
 
         position:absolute;
@@ -883,6 +941,17 @@
 }
 /*THIS*/
 
+        .dropdown-search-input {
+    width: calc(100% - 20px);
+    margin: 4px 10px 8px 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-size: 14px;
+    outline: none;
+    background: #ffffff;
+}
+
         /* RESPONSIVE */
 
     @media(max-width:1000px){
@@ -996,13 +1065,20 @@
                     <input type="text" id="new_manufacturer" name="manufacturer" maxlength="50" required>
                 </div>
                 <div class="form-group">
-                    <label>Category</label>
-                    <select id="new_category_number" name="category_number" required>
-                        {% for category in categories %}
-                        <option value="{{ category['category_number'] }}">{{ category['category_name'] }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+    <label>Category</label>
+    <div class="modal-select-wrapper">
+        <button type="button" class="modal-select-btn" id="addCategoryBtn" onclick="toggleModalDropdown('addCategoryMenu')">Select category</button>
+       <div class="modal-select-menu" id="addCategoryMenu">
+    <input type="text" class="dropdown-search-input" id="addCategorySearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addCategorySearch', 'addCategoryMenu')">
+    {% for category in categories %}
+            <div class="modal-select-item" onclick="selectModalCategory('add', '{{ category['category_number'] }}', '{{ category['category_name'] | escape }}')">
+                {{ category['category_name'] }}
+            </div>
+            {% endfor %}
+        </div>
+        <input type="hidden" id="new_category_number" name="category_number" required>
+    </div>
+</div>
                 <div class="modal-buttons">
                     <button type="button" class="reset-btn" onclick="document.getElementById('addForm').reset()">Reset</button>
                     <button type="submit" class="save-btn">Add</button>
@@ -1029,14 +1105,21 @@
                     <label>Characteristics</label>
                     <input type="text" id="characteristics" name="characteristics" maxlength="100" required>
                 </div>
-                <div class="form-group">
-                    <label>Category</label>
-                    <select id="category_number" name="category_number" required>
-                        {% for category in categories %}
-                        <option value="{{ category['category_number'] }}">{{ category['category_name'] }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+<div class="form-group">
+    <label>Category</label>
+    <div class="modal-select-wrapper">
+        <button type="button" class="modal-select-btn" id="editCategoryBtn" onclick="toggleModalDropdown('editCategoryMenu')">Select category</button>
+<div class="modal-select-menu" id="editCategoryMenu">
+    <input type="text" class="dropdown-search-input" id="editCategorySearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('editCategorySearch', 'editCategoryMenu')">
+    {% for category in categories %}
+            <div class="modal-select-item" onclick="selectModalCategory('edit', '{{ category['category_number'] }}', '{{ category['category_name'] | escape }}')">
+                {{ category['category_name'] }}
+            </div>
+            {% endfor %}
+        </div>
+        <input type="hidden" id="category_number" name="category_number" required>
+    </div>
+</div>
                 <div class="modal-buttons">
                     <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>
                     <button type="submit" class="save-btn">Save</button>
@@ -1210,8 +1293,10 @@ function openEditModal(idProduct){
             document.getElementById("product_name").value = product.product_name;
             document.getElementById("manufacturer").value = product.manufacturer;
             document.getElementById("characteristics").value = product.characteristics;
-            document.getElementById("category_number").value = product.category_number;
-
+            const row = document.getElementById(`product-row-${idProduct}`);
+if (row) {
+    document.getElementById("editCategoryBtn").innerText = row.querySelector(".category").textContent;
+}
             document.getElementById("editForm").action = `/products/edit/${product.id_product}`;
             document.getElementById("editModal").style.display = "flex";
         })
@@ -1309,6 +1394,60 @@ async function deleteProduct(idProduct) {
     } catch (error) {
         alert("Network error: Could not connect to the server.");
     }
+}
+
+function toggleModalDropdown(menuId) {
+    const menu = document.getElementById(menuId);
+    const isVisible = menu.style.display === "block";
+
+    document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");
+
+    if (!isVisible && menu) {
+        menu.style.display = "block";
+        // Очищаємо інпут пошуку всередині цього меню при відкритті
+        const searchInput = menu.querySelector(".dropdown-search-input");
+        if (searchInput) {
+            searchInput.value = "";
+            filterModalDropdown(searchInput.id, menuId);
+            searchInput.focus(); // Автоматично ставимо фокус на пошук
+        }
+    } else if (menu) {
+        menu.style.display = "none";
+    }
+}
+// Вибір елемента зі списку
+function selectModalCategory(mode, id, name) {
+    if (mode === 'add') {
+        document.getElementById("new_category_number").value = id;
+        document.getElementById("addCategoryBtn").innerText = name;
+        document.getElementById("addCategoryMenu").style.display = "none";
+    } else {
+        document.getElementById("category_number").value = id;
+        document.getElementById("editCategoryBtn").innerText = name;
+        document.getElementById("editCategoryMenu").style.display = "none";
+    }
+}
+
+// Глобальне закриття списків при кліку повз них
+document.addEventListener("click", function(event) {
+    if (!event.target.closest('.modal-select-wrapper')) {
+        document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");
+    }
+});
+
+function filterModalDropdown(isearchId, menuId) {
+    const filter = document.getElementById(isearchId).value.toUpperCase();
+    const menu = document.getElementById(menuId);
+    const items = menu.querySelectorAll(".modal-select-item");
+
+    items.forEach(item => {
+        const text = item.textContent || item.innerText;
+        if (text.toUpperCase().indexOf(filter) > -1) {
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
+        }
+    });
 }
 </script>
 </body>
