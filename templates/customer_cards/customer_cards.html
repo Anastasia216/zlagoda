@@ -239,7 +239,7 @@
 <div class="floating-buttons">
     <button class="main-btn add-btn" onclick="openAddModal()">Add Card</button>
     {% if session["role"] == "manager" %}
-    <button class="main-btn report-btn" onclick="window.location.href='/customer_cards/report'">Report</button>
+    <button class="main-btn report-btn" onclick="window.open('/customer_cards/report', '_blank')">Report</button>
     {% endif %}
 </div>
 
