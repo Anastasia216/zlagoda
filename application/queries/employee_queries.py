@@ -110,6 +110,7 @@ def create_employee(data):
     ))
     conn.commit()
     conn.close()
+    return data['id_employee']
 
 def update_employee(id_employee, data):
     conn = get_db_connection()
@@ -140,10 +141,10 @@ def update_employee(id_employee, data):
         data['city'],
         data['street'],
         data['zip_code'],
-        id_employee,
     ))
     conn.commit()
     conn.close()
+    return data['id_employee']
 
 def delete_employee(id_employee):
     conn = get_db_connection()
