@@ -9,1760 +9,530 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-        }
-
+        *{ margin:0; padding:0; box-sizing:border-box; }
         body{
-            font-family:'Inter', sans-serif;
-            min-height:100vh;
-            overflow-x:hidden;
-            color:#0f172a;
-
-            background:
-                    radial-gradient(circle at top left,
-                    rgba(59,130,246,0.12),
-                    transparent 28%),
-
-                    radial-gradient(circle at bottom right,
-                    rgba(168,85,247,0.10),
-                    transparent 24%),
-
-                    linear-gradient(
-                            135deg,
-                            #f8fbff 0%,
-                            #f4f7ff 55%,
-                            #f7f5ff 100%
-                    );
+            font-family:'Inter', sans-serif; min-height:100vh; overflow-x:hidden; color:#0f172a;
+            background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 28%),
+                        radial-gradient(circle at bottom right, rgba(168,85,247,0.10), transparent 24%),
+                        linear-gradient(135deg, #f8fbff 0%, #f4f7ff 55%, #f7f5ff 100%);
         }
-
-        /* BACKGROUND */
-
-        .blur{
-            position:fixed;
-            border-radius:50%;
-            filter:blur(90px);
-            z-index:-1;
-        }
-
-        .blur1{
-            width:320px;
-            height:320px;
-            background:rgba(59,130,246,0.08);
-            top:-120px;
-            left:-80px;
-        }
-
-        .blur2{
-            width:280px;
-            height:280px;
-            background:rgba(236,72,153,0.08);
-            bottom:-80px;
-            right:-60px;
-        }
-
-        /* MAIN */
-
-        .container{
-            padding:30px 48px 40px;
-        }
-
-        /* HEADER */
-
-        .topbar{
-            display:flex;
-            justify-content:space-between;
-            align-items:flex-start;
-            margin-bottom:42px;
-        }
-
+        .blur{ position:fixed; border-radius:50%; filter:blur(90px); z-index:-1; }
+        .blur1{ width:320px; height:320px; background:rgba(59,130,246,0.08); top:-120px; left:-80px; }
+        .blur2{ width:280px; height:280px; background:rgba(236,72,153,0.08); bottom:-80px; right:-60px; }
+        .container{ padding:30px 48px 40px; }
+        .topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:42px; }
         .logo h1{
-            font-size:42px;
-            font-weight:800;
-            letter-spacing:-2px;
-            line-height:1.15;
-            padding-right:4px;
-            background:linear-gradient(to right, #2563eb, #7c3aed);
-            -webkit-background-clip:text;
-            -webkit-text-fill-color:transparent;
+            font-size:42px; font-weight:800; letter-spacing:-2px; line-height:1.15; padding-right:4px;
+            background:linear-gradient(to right, #2563eb, #7c3aed); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
         }
-
-        /* SEARCH */
-
-        .search-wrapper{
-            width:100%;
-            margin-bottom:28px;
-        }
-
+        .search-wrapper{ width:100%; margin-bottom:28px; }
         .search-bar{
-            width:100%;
-            height:68px;
-
-            border:none;
-            outline:none;
-
-            padding:0 28px;
-
-            border-radius:24px;
-
-            font-size:17px;
-            font-weight:500;
-
-            background:rgba(255,255,255,0.78);
-            backdrop-filter:blur(14px);
-
-            box-shadow:
-                    0 10px 35px rgba(15,23,42,0.06),
-                    inset 0 1px 0 rgba(255,255,255,0.9);
-
-            transition:0.25s;
+            flex:1; height:68px; border:none; outline:none; padding:0 28px; border-radius:24px; font-size:17px; font-weight:500;
+            background:rgba(255,255,255,0.78); backdrop-filter:blur(14px);
+            box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9); transition:0.25s;
         }
-
-        .search-bar:focus{
-            box-shadow:
-                    0 16px 40px rgba(59,130,246,0.12),
-                    inset 0 1px 0 rgba(255,255,255,1);
-        }
-
-        /* TABLE */
-
+        .search-bar:focus{ box-shadow: 0 16px 40px rgba(59,130,246,0.12), inset 0 1px 0 rgba(255,255,255,1); }
         .table-container{
-            width:100%;
-
-            background:rgba(255,255,255,0.74);
-            backdrop-filter:blur(14px);
-
-            border-radius:34px;
-
-            overflow:hidden;
-
-            box-shadow:
-                    0 12px 40px rgba(15,23,42,0.06),
-                    inset 0 1px 0 rgba(255,255,255,0.9);
+            width:100%; max-height:calc(100vh - 330px); overflow-y:auto; overflow-x:auto;
+            background:rgba(255,255,255,0.74); backdrop-filter:blur(14px); border-radius:34px;
+            box-shadow: 0 12px 40px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
         }
-
-        table{
-            width:100%;
-            border-collapse:collapse;
-        }
-        .table-container{
-            width:100%;
-
-            max-height:calc(100vh - 330px);
-
-            overflow-y:auto;
-            overflow-x:auto;
-
-            background:rgba(255,255,255,0.74);
-
-            backdrop-filter:blur(14px);
-
-            border-radius:34px;
-
-            box-shadow:
-                0 12px 40px rgba(15,23,42,0.06),
-                inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-        thead th{
-            position:sticky;
-            top:0;
-            z-index:10;
-
-            background:rgba(241,245,249,0.98);
-        }
-        thead{
-            background:rgba(241,245,249,0.85);
-        }
-
-        th{
-            text-align:left;
-            padding:24px 28px;
-
-            font-size:14px;
-            font-weight:700;
-            color:#475569;
-
-            letter-spacing:0.5px;
-        }
-
-        td{
-            padding:24px 28px;
-
-            font-size:15px;
-            font-weight:500;
-
-            border-top:1px solid rgba(226,232,240,0.8);
-        }
-
-        tr{
-            transition:0.2s;
-        }
-
-        tbody tr:hover{
-            background:rgba(248,250,252,0.85);
-        }
-
-        /* BACK BUTTON */
-
+        table{ width:100%; border-collapse:collapse; }
+        thead th{ position:sticky; top:0; z-index:10; background:rgba(241,245,249,0.98); }
+        thead{ background:rgba(241,245,249,0.85); }
+        th{ text-align:left; padding:24px 28px; font-size:14px; font-weight:700; color:#475569; letter-spacing:0.5px; }
+        td{ padding:24px 28px; font-size:15px; font-weight:500; border-top:1px solid rgba(226,232,240,0.8); }
+        tr{ transition:0.2s; }
+        tbody tr:hover{ background:rgba(248,250,252,0.85); }
         .back-btn{
-            width:58px;
-            height:58px;
-
-            flex-shrink:0;
-
-            border:none;
-            border-radius:20px;
-
-            cursor:pointer;
-
-            font-size:28px;
-            font-weight:700;
-
-            color:#2563eb;
-
-            background:rgba(255,255,255,0.82);
-            backdrop-filter:blur(14px);
-
-            box-shadow:
-                    0 10px 30px rgba(15,23,42,0.08),
-                    inset 0 1px 0 rgba(255,255,255,0.9);
-
-            transition:0.25s;
-
-            display:flex;
-            align-items:center;
-            justify-content:center;
-
-            margin-right:18px;
+            width:58px; height:58px; flex-shrink:0; border:none; border-radius:20px; cursor:pointer; font-size:28px; font-weight:700;
+            color:#2563eb; background:rgba(255,255,255,0.82); backdrop-filter:blur(14px);
+            box-shadow: 0 10px 30px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9); transition:0.25s;
+            display:flex; align-items:center; justify-content:center; margin-right:18px;
         }
-
-        .back-btn:hover{
-            transform:translateY(-3px);
-
-            background:#eff6ff;
-
-            box-shadow:
-                    0 14px 35px rgba(37,99,235,0.14),
-                    inset 0 1px 0 rgba(255,255,255,1);
-        }
-
-        /* ACTION BUTTONS */
-
-        .actions{
-            display:flex;
-            gap:12px;
-        }
-
-        .edit-btn,
-        .delete-btn{
-            border:none;
-            border-radius:14px;
-
-            padding:11px 18px;
-
-            font-size:14px;
-            font-weight:600;
-
-            cursor:pointer;
-
-            transition:0.2s;
-        }
-
-        .edit-btn{
-            background:#eff6ff;
-            color:#2563eb;
-        }
-
-        .edit-btn:hover{
-            background:#dbeafe;
-        }
-
-        .delete-btn{
-            background:#fff1f2;
-            color:#e11d48;
-        }
-
-        .delete-btn:hover{
-            background:#ffe4e6;
-        }
-
-        /* FLOATING BUTTON */
-
-        .floating-buttons{
-            position:fixed;
-
-            right:40px;
-            bottom:34px;
-        }
-
+        .back-btn:hover{ transform:translateY(-3px); background:#eff6ff; box-shadow: 0 14px 35px rgba(37,99,235,0.14), inset 0 1px 0 rgba(255,255,255,1); }
+        .actions{ display:flex; gap:12px; }
+        .edit-btn, .delete-btn{ border:none; border-radius:14px; padding:11px 18px; font-size:14px; font-weight:600; cursor:pointer; transition:0.2s; }
+        .edit-btn{ background:#eff6ff; color:#2563eb; }
+        .edit-btn:hover{ background:#dbeafe; }
+        .delete-btn{ background:#fff1f2; color:#e11d48; }
+        .delete-btn:hover{ background:#ffe4e6; }
+        .floating-buttons{ position:fixed; right:40px; bottom:34px; display:flex; gap:12px; }
         .main-btn{
-            min-width:150px;
-            height:62px;
-
-            border:none;
-            border-radius:22px;
-
-            font-size:16px;
-            font-weight:700;
-
-            cursor:pointer;
-
-            color:white;
-
-            background:linear-gradient(135deg, #2563eb, #4f46e5);
-
-            box-shadow:
-                    0 14px 35px rgba(15,23,42,0.16);
-
-            transition:0.25s;
+            min-width:150px; height:62px; border:none; border-radius:22px; font-size:16px; font-weight:700; cursor:pointer; color:white;
+            background:linear-gradient(135deg, #2563eb, #4f46e5); box-shadow: 0 14px 35px rgba(15,23,42,0.16); transition:0.25s;
         }
-
-        .main-btn:hover{
-            transform:translateY(-4px);
-        }
-        .add-btn{
-            background:linear-gradient(135deg, #2563eb, #4f46e5);
-        }
-
-        .report-btn{
-            background:linear-gradient(135deg, #7c3aed, #a855f7);
-        }
-
-/* MODAL */
-
-    .modal{
-        display:none;
-
-        position:fixed;
-        inset:0;
-
-        background:rgba(15,23,42,0.35);
-
-        backdrop-filter:blur(6px);
-
-        align-items:center;
-        justify-content:center;
-
-        z-index:1000;
-    }
-
-    .modal-content{
-
-        width:900px;
-        max-width:95%;
-
-       background:
-                    radial-gradient(circle at top left,
-                    rgba(59,130,246,0.12),
-                    transparent 28%),
-
-                    radial-gradient(circle at bottom right,
-                    rgba(168,85,247,0.10),
-                    transparent 24%),
-
-                    linear-gradient(
-                            135deg,
-                            #f8fbff 0%,
-                            #f4f7ff 55%,
-                            #f7f5ff 100%
-                    );
-
-        backdrop-filter:blur(10px);
-
-        border-radius:30px;
-
-        padding:34px;
-
-        position:relative;
-
-        box-shadow:
-                0 25px 60px rgba(15,23,42,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.9);
-    }
-
-
-    .modal-content h2{
-
-        font-size:34px;
-        font-weight:800;
-        margin-left:48px;
-        margin-bottom:28px;
-    }
-
-    .close-btn{
-
-        position:absolute;
-
-        top:32px;
-        left:20px;
-
-        width:42px;
-        height:42px;
-
-        border:none;
-        border-radius:12px;
-
-        cursor:pointer;
-
-        background:#f8fafc;
-
-        font-size:20px;
-        box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-    }
-
-    .close-btn:hover{
-                transform:translateY(-3px);
-                box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-            }
-
-    .form-group{
-        margin-bottom:18px;
-    }
-
-    .form-group label{
-
-        display:block;
-
-        margin-bottom:8px;
-
-        font-size:16px;
-        font-weight:600;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select{
-    width:100%;
-
-        border:none;
-        outline:none;
-
-        border-radius:18px;
-
-        padding:15px 18px;
-
-        font-size:15px;
-
-        background:rgba(255,255,255,0.9);
-
-        box-shadow:
-            0 10px 35px rgba(15,23,42,0.06),
-            inset 0 1px 0 rgba(255,255,255,0.9);
-
-        color:#0f172a;
-
-        appearance:none;
-        -webkit-appearance:none;
-        -moz-appearance:none;
-
-        cursor:pointer;
-    }
-    .form-group{
-        position:relative;
-        margin-bottom: 4px
-    }
-
-    .form-group:has(select)::after{
-
-        content:"⌄";
-
-        position:absolute;
-
-        right:18px;
-        top:35px;
-
-        font-size:18px;
-
-        color:#64748b;
-
-        pointer-events:none;
-    }
-    input::-webkit-contacts-auto-fill-button,
-    input::-webkit-credentials-auto-fill-button {
-        visibility: hidden;
-        display: none !important;
-        pointer-events: none;
-    }
-    .form-group textarea{
-        min-height:120px;
-        resize:vertical;
-    }
-
-    .modal-buttons{
-
-        display:flex;
-        justify-content:flex-end;
-        gap:12px;
-
-        margin-top:28px;
-    }
-
-    .save-btn{
-         appearance:none;
-         -webkit-appearance:none;
-
-        border:none;
-
-        padding:13px 24px;
-
-        border-radius:14px;
-
-        font-weight:700;
-
-        cursor:pointer;
-
-        color:white;
-
-        background:linear-gradient(
-                135deg,
-                #2563eb,
-                #4f46e5
-        );
-        box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-    }
-    .save-btn:hover{
-                transform:translateY(-3px);
-                box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-            }
-
-    .reset-btn{
-
-        border:none;
-
-        padding:13px 24px;
-
-        border-radius:14px;
-
-        font-weight:700;
-
-        cursor:pointer;
-
-        background:#f1f5f9;
-
-        color:#334155;
-        box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-    }
-
-    .reset-btn:hover{
-                transform:translateY(-3px);
-                box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-            }
-    .form-grid{
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:18px;
-    }
-
-    .form-group.full-width{
-        grid-column:1 / -1;
-    }
-
-    .category-filter{
-        position:relative;
-    }
-
-    .category-filter::after{
-
-        content:"▼";
-
-        position:absolute;
-
-        right:18px;
-        top:50%;
-
-        transform:translateY(-50%);
-
-        font-size:12px;
-
-        color:#64748b;
-
-        pointer-events:none;
-    }
-
-    .filter-select{
-
-        width:200px;
-        height:68px;
-
-        border:none;
-        outline:none;
-
-        border-radius:24px;
-
-        padding:0 45px 0 20px;
-
-        font-size:15px;
-        font-weight:600;
-
-        color:#334155;
-
-        background:rgba(255,255,255,0.82);
-
-        backdrop-filter:blur(14px);
-
-        box-shadow:
-            0 10px 35px rgba(15,23,42,0.06),
-            inset 0 1px 0 rgba(255,255,255,0.9);
-
-        appearance:none;
-
-        cursor:pointer;
-    }
-
-    .dropdown{
-    position:relative;
-}
-
-.dropdown-btn{
-    height:68px;
-    min-width:180px;
-
-    padding:0 20px;
-
-    border:none;
-    border-radius:24px;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    background:rgba(255,255,255,0.78);
-    backdrop-filter:blur(14px);
-
-    box-shadow:
-        0 10px 35px rgba(15,23,42,0.06),
-        inset 0 1px 0 rgba(255,255,255,0.9);
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.dropdown-btn::after{
-    content:"⌄";
-    margin-left:10px;
-    color:#64748b;
-}
-
-.dropdown-menu{
-    position:absolute;
-    top:75px;
-    left:0;
-
-    width:100%;
-
-    background:rgba(255,255,255,0.95);
-    backdrop-filter:blur(14px);
-
-    border-radius:20px;
-
-    box-shadow:0 20px 60px rgba(15,23,42,0.12);
-
-    display:none;
-
-    z-index:1000;
-}
-
-.dropdown-item{
-    padding:14px 16px;
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.dropdown-item:hover{
-    background:#eff6ff;
-    color:#2563eb;
-}
-
-           /* USER */
-
-.user-wrapper{
-    position:relative;
-}
-
-.user-btn{
-    width:62px;
-    height:62px;
-
-    border:none;
-    border-radius:22px;
-
-    background:rgba(255,255,255,0.80);
-    backdrop-filter:blur(14px);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-
-    box-shadow:
-            0 12px 30px rgba(15,23,42,0.08),
-            inset 0 1px 0 rgba(255,255,255,0.9);
-
-    transition:0.25s;
-}
-
-.user-btn:hover{
-    transform:translateY(-3px);
-}
-
-.user-btn svg{
-    width:30px;
-    height:30px;
-    fill:#334155;
-}
-
-/* POPUP */
-
-.user-popup{
-    position:absolute;
-
-    top:78px;
-    right:0;
-
-    width:300px;
-
-    background:rgba(255,255,255,0.90);
-    backdrop-filter:blur(18px);
-
-    border-radius:30px;
-
-    padding:24px;
-
-    box-shadow:
-            0 25px 70px rgba(15,23,42,0.12);
-
-    display:none;
-
-    z-index:999;
-}
-
-.user-popup::before{
-    content:'';
-
-    position:absolute;
-
-    top:-10px;
-    right:28px;
-
-    width:22px;
-    height:22px;
-
-    background:rgba(255,255,255,0.90);
-
-    transform:rotate(45deg);
-
-    border-radius:4px;
-}
-
-.user-popup.active{
-    display:block;
-    animation:popup 0.22s ease;
-}
-
-@keyframes popup{
-
-    from{
-        opacity:0;
-        transform:translateY(-10px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.profile{
-    display:flex;
-    align-items:center;
-    gap:14px;
-
-    margin-bottom:22px;
-}
-
-.profile-avatar{
-    width:60px;
-    height:60px;
-
-    border-radius:20px;
-
-    background:linear-gradient(135deg, #dbeafe, #ede9fe);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.profile-avatar svg{
-    width:30px;
-    fill:#2563eb;
-}
-
-.profile h3{
-    font-size:18px;
-    margin-bottom:4px;
-}
-
-.profile p{
-    color:#64748b;
-    font-size:13px;
-}
-
-.popup-buttons{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
-
-.profile-btn,
-.logout-btn{
-
-    border:none;
-    border-radius:18px;
-
-    padding:15px;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.profile-btn{
-    background:#eef2ff;
-    color:#4f46e5;
-}
-
-.profile-btn:hover{
-    background:#e0e7ff;
-}
-
-.logout-btn{
-    background:#fff1f2;
-    color:#e11d48;
-}
-
-.logout-btn:hover{
-    background:#ffe4e6;
-}
-
-/* PROFILE MODAL */
-
-.close-modal-btn{
-
-    margin-top:20px;
-
-    border:none;
-    border-radius:18px;
-
-    padding:14px 22px;
-
-    background:#eef2ff;
-    color:#4f46e5;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:0.2s;
-}
-
-.close-modal-btn:hover{
-    background:#e0e7ff;
-}
-    .topbar{
-    display:flex;
-    align-items:center;
-    margin-bottom:30px;
-}
-
-        /* RESPONSIVE */
-
-    @media(max-width:1000px){
-    .table-container{
-            overflow-x:auto;
-        }
-        table{
-            min-width:1000px;
-        }
-    }
-
-    @media(max-width:760px){
-        .container{
-            padding:24px;
-        }
-        .logo h1{
-            font-size:34px;
-        }
-        .floating-buttons{
-            right:20px;
-            bottom:20px;
-        }
-        .main-btn{
-            min-width:130px;
-            height:58px;
-        }
-    }
-    @media(max-width:760px){
-
-        .form-grid{
-            grid-template-columns:1fr;
-        }
-
+        .main-btn:hover{ transform:translateY(-4px); }
+        .add-btn{ background:linear-gradient(135deg, #2563eb, #4f46e5); }
+        .report-btn{ background:linear-gradient(135deg, #7c3aed, #a855f7); }
+        .modal{ display:none; position:fixed; inset:0; background:rgba(15,23,42,0.35); backdrop-filter:blur(6px); align-items:center; justify-content:center; z-index:1000; }
         .modal-content{
-            width:95%;
+            width:800px; max-width:95%; padding:34px; position:relative; border-radius:30px;
+            background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 28%),
+                        radial-gradient(circle at bottom right, rgba(168,85,247,0.10), transparent 24%),
+                        linear-gradient(135deg, #f8fbff 0%, #f4f7ff 55%, #f7f5ff 100%);
+            box-shadow: 0 25px 60px rgba(15,23,42,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
         }
-    }
-
-
-</style>
+        .modal-content h2{ font-size:34px; font-weight:800; margin-left:48px; margin-bottom:28px; }
+        .close-btn{ position:absolute; top:32px; left:20px; width:42px; height:42px; border:none; border-radius:12px; cursor:pointer; background:#f8fafc; font-size:20px; box-shadow: 0 5px 25px rgba(15,23,42,0.16); }
+        .close-btn:hover{ transform:translateY(-3px); }
+        .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+        .form-group{ margin-bottom:4px; position:relative; }
+        .form-group label{ display:block; margin-bottom:8px; font-size:16px; font-weight:600; }
+        .form-group input, .form-group select{
+            width:100%; border:none; outline:none; border-radius:18px; padding:15px 18px; font-size:15px; background:rgba(255,255,255,0.9);
+            box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9); color:#0f172a; cursor:pointer;
+        }
+        .modal-buttons{ display:flex; justify-content:flex-end; gap:12px; margin-top:28px; }
+        .save-btn{ border:none; padding:13px 24px; border-radius:14px; font-weight:700; cursor:pointer; color:white; background:linear-gradient(135deg, #2563eb, #4f46e5); box-shadow: 0 5px 25px rgba(15,23,42,0.16); }
+        .save-btn:hover{ transform:translateY(-3px); }
+        .reset-btn{ border:none; padding:13px 24px; border-radius:14px; font-weight:700; cursor:pointer; background:#f1f5f9; color:#334155; box-shadow: 0 5px 25px rgba(15,23,42,0.16); }
+        .reset-btn:hover{ transform:translateY(-3px); }
+        .dropdown { position:relative; }
+        .dropdown-btn {
+            height:68px; min-width:200px; padding:0 20px; border:none; border-radius:24px; font-size:15px; font-weight:600; cursor:pointer;
+            background:rgba(255,255,255,0.78); backdrop-filter:blur(14px);
+            box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:space-between;
+        }
+        .dropdown-btn::after{ content:"⌄"; margin-left:10px; color:#64748b; font-size: 18px; }
+        .dropdown-menu{
+            position:absolute; top:75px; left:0; width:100%; background:rgba(255,255,255,0.95); backdrop-filter:blur(14px);
+            border-radius:20px; box-shadow:0 20px 60px rgba(15,23,42,0.12); display:none; z-index:1000; padding: 10px 0; max-height: 280px; overflow-y: auto;
+        }
+        .dropdown-search-input {
+            width: calc(100% - 20px); margin: 0 10px 8px 10px; padding: 10px 14px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px; outline: none;
+        }
+        .dropdown-item{ padding:12px 16px; cursor:pointer; transition:0.2s; font-weight: 500; }
+        .dropdown-item:hover{ background:#eff6ff; color:#2563eb; }
+        .user-wrapper{ position:relative; }
+        .user-btn{ width:62px; height:62px; border:none; border-radius:22px; background:rgba(255,255,255,0.80); backdrop-filter:blur(14px); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 12px 30px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9); transition:0.25s; }
+        .user-btn:hover{ transform:translateY(-3px); }
+        .user-btn svg{ width:30px; height:30px; fill:#334155; }
+        .user-popup{ position:absolute; top:78px; right:0; width:300px; background:rgba(255,255,255,0.90); backdrop-filter:blur(18px); border-radius:30px; padding:24px; box-shadow: 0 25px 70px rgba(15,23,42,0.12); display:none; z-index:999; }
+        .user-popup::before{ content:''; position:absolute; top:-10px; right:28px; width:22px; height:22px; background:rgba(255,255,255,0.90); transform:rotate(45deg); border-radius:4px; }
+        .user-popup.active{ display:block; animation:popup 0.22s ease; }
+        @keyframes popup{ from{ opacity:0; transform:translateY(-10px); } to{ opacity:1; transform:translateY(0); } }
+        .profile{ display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+        .profile-avatar{ width:60px; height:60px; border-radius:20px; background:linear-gradient(135deg, #dbeafe, #ede9fe); display:flex; align-items:center; justify-content:center; }
+        .profile-avatar svg{ width:30px; fill:#2563eb; }
+        .profile h3{ font-size:18px; margin-bottom:4px; }
+        .profile p{ color:#64748b; font-size:13px; }
+        .popup-buttons{ display:flex; flex-direction:column; gap:12px; }
+        .profile-btn, .logout-btn{ border:none; border-radius:18px; padding:15px; font-size:15px; font-weight:600; cursor:pointer; transition:0.2s; }
+        .profile-btn{ background:#eef2ff; color:#4f46e5; }
+        .profile-btn:hover{ background:#e0e7ff; }
+        .logout-btn{ background:#fff1f2; color:#e11d48; }
+        .logout-btn:hover{ background:#ffe4e6; }
+        .close-modal-btn{ margin-top:20px; border:none; border-radius:18px; padding:14px 22px; background:#eef2ff; color:#4f46e5; font-size:15px; font-weight:600; cursor:pointer; transition:0.2s; }
+        .close-modal-btn:hover{ background:#e0e7ff; }
+        @media(max-width:1000px){ .table-container{ overflow-x:auto; } table{ min-width:1000px; } }
+        @media(max-width:760px){ .container{ padding:24px; } .logo h1{ font-size:34px; } .floating-buttons{ right:20px; bottom:20px; } .main-btn{ min-width:130px; height:58px; } .form-grid{ grid-template-columns:1fr; } }
+    </style>
 </head>
 
 <body>
-<div id="addModal" class="modal">
-
-        <div class="modal-content">
-
-            <button class="close-btn"
-                    onclick="closeAddModal()">
-                ✕
-            </button>
-
-            <h2>Add Customer Card</h2>
-
-            <form id="addForm">
-                <div class="form-grid">
-                    <div class="form-group">
-
-                        <label>Card Number</label>
-
-                        <input type="text"
-                            id="new_card_number"
-                            name="card_number"
-                            required>
-
-                    </div>
-                    <div class="form-group">
-
-                        <label>Customer Surname</label>
-
-                        <input type="text"
-                               id="new_cust_surname"
-                               name="cust_surname"
-                               required>
-
-                    </div>
-                    <div class="form-group">
-
-                        <label>Customer Name</label>
-
-                        <input type="text"
-                               id="new_cust_name"
-                               name="cust_name"
-                               required>
-
-                    </div>
-                    <div class="form-group">
-
-                        <label>Customer Patronymic</label>
-
-                        <input type="text"
-                               id="new_cust_patronymic"
-                               name="cust_patronymic">
-
-                    </div>
-                    <div class="form-group">
-
-                        <label>Phone Number</label>
-
-                        <input type="text"
-                               id="new_phone_number"
-                               name="phone_number"
-                               required>
-
-                    </div>
-                    <div class="form-group">
-
-                        <label>City</label>
-
-                        <input type="text"
-                               id="new_city"
-                               name="city">
-
-                    </div>
-                    <div class="form-group">
-
-                        <label>Street</label>
-
-                        <input type="text"
-                               id="new_street"
-                               name="street">
-
-                    </div>
-                    <div class="form-group">
-
-                        <label>Zip Code</label>
-
-                        <input type="text"
-                               id="new_zip_code"
-                               name="zip_code">
-
-                    </div>
-                    <div class="form-group">
-
-                        <label>Percent</label>
-
-                        <input type="text"
-                               id="new_percent"
-                               name="percent"
-                               required>
-
-                    </div>
-                </div>
-        <div class="modal-buttons">
-
-                    <button type="button"
-                            class="reset-btn"
-                            onclick="document.getElementById('addForm').reset()">
-
-                        Reset
-
-                    </button>
-
-                    <button type="submit"
-                            class="save-btn">
-
-                        Add
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-</div>
-<div id="editModal" class="modal">
-
-    <div class="modal-content">
-
-        <button class="close-btn"
-                onclick="closeEditModal()">
-            ✕
-        </button>
-
-        <h2>Edit Customer Card</h2>
-
-        <form id="editForm" method="POST">
-            <input type="hidden"
-                    id="card_number"
-                    name="card_number">
-            <div class="form-grid">
-
-                <div class="form-group">
-
-                    <label>Customer Surname</label>
-
-                    <input type="text"
-                           id="cust_surname"
-                           name="cust_surname"
-                           required>
-
-                </div>
-                <div class="form-group">
-
-                    <label>Customer Name</label>
-
-                    <input type="text"
-                           id="cust_name"
-                           name="cust_name"
-                           required>
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>Customer Patronymic</label>
-
-                    <input type="text"
-                           id="cust_patronymic"
-                           name="cust_patronymic">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>Phone Number</label>
-
-                    <input type="text"
-                           id="phone_number"
-                           name="phone_number"
-                           required>
-
-                </div>
-                <div class="form-group">
-
-                    <label>City</label>
-
-                    <input type="text"
-                           id="city"
-                           name="city">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>Street</label>
-
-                    <input type="text"
-                           id="street"
-                           name="street">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>Zip Code</label>
-
-                    <input type="text"
-                           id="zip_code"
-                           name="zip_code">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>Percent</label>
-
-                    <input type="text"
-                           id="percent"
-                           name="percent"
-                           required>
-
-                </div>
-            </div>
-
-            <div class="modal-buttons">
-
-                <button type="button"
-                        class="reset-btn"
-                        onclick="resetForm()">
-
-                    Reset
-
-                </button>
-
-                <button type="submit"
-                        class="save-btn">
-
-                    Save
-
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
-
-</div>
 <div class="blur blur1"></div>
 <div class="blur blur2"></div>
 
 <div class="container">
-
-    <!-- HEADER -->
-
     <div class="topbar">
-    <div style="display:flex; align-items:center;">
-        <button class="back-btn"
-                onclick="window.location.href='/'">
-            ←
-        </button>
-
-        <div class="logo">
-            <h1>Customer Cards</h1>
+        <div style="display:flex; align-items:center;">
+            <button class="back-btn" onclick="window.location.href='/'">←</button>
+            <div class="logo">
+                <h1>Customer Cards</h1>
+            </div>
         </div>
 
-              </div>
         <div class="user-wrapper">
-
-    <button class="user-btn" onclick="togglePopup()">
-
-        <svg viewBox="0 0 24 24">
-            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
-        </svg>
-
-    </button>
-
-    <div class="user-popup" id="popup">
-
-        <div class="profile">
-
-            <div class="profile-avatar">
+            <button class="user-btn" onclick="togglePopup()">
                 <svg viewBox="0 0 24 24">
                     <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
                 </svg>
-            </div>
-
-            <div>
-                <h3>{{ session["username"] }}</h3>
-                <p>{{ session["role"] }}</p>
-            </div>
-
-        </div>
-
-        <div class="popup-buttons">
-
-            <button class="profile-btn"
-                    onclick="showProfile()">
-                User Information
             </button>
-
-            <button class="logout-btn"
-                    onclick="window.location.href='/logout'">
-                Log out
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-    </div>
-
-    <!-- SEARCH -->
-
-<div class="search-wrapper">
-
-    <form id="searchForm"
-          class="search-form"
-          method="GET"
-          action="/customer_cards"
-          style="display:flex; gap:16px;">
-
-        <input type="text"
-               name="search"
-               class="search-bar"
-               placeholder="Search customers..."
-               value="{{ search if search else '' }}">
-
-        <!-- PERCENT DROPDOWN -->
-        <div class="dropdown">
-
-            <button type="button"
-                    class="dropdown-btn"
-                    onclick="togglePercentDropdown()">
-
-                {{ percent if percent else 'All discounts' }}
-
-            </button>
-
-            <div class="dropdown-menu" id="percentDropdown">
-
-                <div class="dropdown-item"
-                     onclick="selectPercent('')">
-                    All discounts
+            <div class="user-popup" id="popup">
+                <div class="profile">
+                    <div class="profile-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>{{ session["username"] }}</h3>
+                        <p>{{ session["role"] }}</p>
+                    </div>
                 </div>
+                <div class="popup-buttons">
+                    <button class="profile-btn" onclick="showProfile()">User Information</button>
+                    <button class="logout-btn" onclick="window.location.href='/logout'">Log out</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="dropdown-item"
-                     onclick="selectPercent('5')">5%</div>
+    <div class="search-wrapper">
+        <form id="searchForm" method="GET" action="/customer_cards" style="display:flex; gap:16px;">
+            <input type="text" name="search" class="search-bar" placeholder="Search customers by surname or ID..." value="{{ search if search else '' }}">
 
-                <div class="dropdown-item"
-                     onclick="selectPercent('10')">10%</div>
+            <div class="dropdown">
+                <button type="button" class="dropdown-btn" onclick="togglePercentDropdown()">
+                    {{ percent + '%' if percent else 'All discounts' }}
+                </button>
 
-                <div class="dropdown-item"
-                     onclick="selectPercent('15')">15%</div>
+                <div class="dropdown-menu" id="percentDropdown">
+                    <input type="text" class="dropdown-search-input" id="pctSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterDropdownList()">
 
-                <div class="dropdown-item"
-                     onclick="selectPercent('20')">20%</div>
-
+                    <div class="dropdown-item pct-item" onclick="selectPercent('')">All discounts</div>
+                    {% for p in percents %}
+                    <div class="dropdown-item pct-item" onclick="selectPercent('{{ p }}')">{{ p }}%</div>
+                    {% endfor %}
+                </div>
             </div>
 
-        </div>
-
-        <input type="hidden"
-               name="percent"
-               id="percentInput"
-               value="{{ percent if percent else '' }}">
-
-    </form>
-
-</div>
-
-    <!-- TABLE -->
+            <input type="hidden" name="percent" id="percentInput" value="{{ percent if percent else '' }}">
+        </form>
+    </div>
 
     <div class="table-container">
-
         <table>
-
             <thead>
-
-            <tr>
-                <th>ID</th>
-                <th>Customer Surname</th>
-                <th>Customer Name</th>
-                <th>Customer Patronymic</th>
-                <th>Phone Number</th>
-                <th>City</th>
-                <th>Street</th>
-                <th>Zip Code</th>
-                <th>Percent</th>
-                <th>Actions</th>
-            </tr>
-
+                <tr>
+                    <th>Card ID</th>
+                    <th>Customer Full Name</th>
+                    <th>Phone Number</th>
+                    <th>Full Address</th>
+                    <th>Discount Percent</th>
+                    <th>Actions</th>
+                </tr>
             </thead>
-
             <tbody>
-
             {% for customer_card in customer_cards %}
-
             <tr id="customer_card-row-{{ customer_card['card_number'] }}">
-
+                <td><b>{{ customer_card['card_number'] }}</b></td>
                 <td>
-                    {{ customer_card['card_number'] }}</td>
-
-                <td class="cust_surname">
-                    {{ customer_card['cust_surname'] }}</td>
-
-                <td class="cust_name">
-                    {{ customer_card['cust_name'] }}</td>
-
-                <td class="cust_patronymic">
-                    {{ customer_card['cust_patronymic'] }}</td>
-
-                <td class="phone_number">
-                    {{ customer_card['phone_number'] }}</td>
-
-                <td class="city">{{ customer_card['city'] }}</td>
-
-                <td class="street">{{ customer_card['street'] }}</td>
-
-                <td class="zip_code">{{ customer_card['zip_code'] }}</td>
-
-                <td class="percent">{{ customer_card['percent'] }}</td>
+                    {{ customer_card['cust_surname'] }} {{ customer_card['cust_name'] }}
+                    {% if customer_card['cust_patronymic'] %} {{ customer_card['cust_patronymic'] }}{% endif %}
+                </td>
+                <td>{{ customer_card['phone_number'] }}</td>
                 <td>
-
+                    {% set addr = [] %}
+                    {% if customer_card['zip_code'] %}{% set _ = addr.append(customer_card['zip_code']) %}{% endif %}
+                    {% if customer_card['city'] %}{% set _ = addr.append(customer_card['city']) %}{% endif %}
+                    {% if customer_card['street'] %}{% set _ = addr.append(customer_card['street'] ~ ' st.') %}{% endif %}
+                    {{ addr | join(', ') if addr else '-' }}
+                </td>
+                <td><span style="font-weight: 700; color: #2563eb;">{{ customer_card['percent'] }}%</span></td>
+                <td>
                     <div class="actions">
-
-                        <button
-                                class="edit-btn"
-                                onclick="openEditModal('{{ customer_card['card_number'] }}')">
-
-                            Edit
-
-                        </button>
+                        <button class="edit-btn" onclick="openEditModal('{{ customer_card['card_number'] }}')">Edit</button>
                         {% if session["role"] == "manager" %}
-                        <button
-                                class="delete-btn"
-                                onclick="deleteCustomerCard('{{ customer_card['card_number'] }}')">
-
-                            Delete
-
-                        </button>
+                        <button class="delete-btn" onclick="deleteCustomerCard('{{ customer_card['card_number'] }}', '{{ customer_card['cust_surname'] | escape }}')">Delete</button>
                         {% endif %}
                     </div>
-
                 </td>
-
             </tr>
-
             {% endfor %}
-
             </tbody>
-
         </table>
-
     </div>
-
 </div>
 
-<!-- FLOATING BUTTON -->
-
 <div class="floating-buttons">
-    <button class="main-btn add-btn"
-        onclick="openAddModal()">
-
-        Add
-
-    </button>
+    <button class="main-btn add-btn" onclick="openAddModal()">Add Card</button>
     {% if session["role"] == "manager" %}
-    <button class="main-btn report-btn"
-            onclick="window.location.href='/customer_cards/report'">
-        Report
-    </button>
+    <button class="main-btn report-btn" onclick="window.location.href='/customer_cards/report'">Report</button>
     {% endif %}
 </div>
 
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeAddModal()">✕</button>
+        <h2>Add Customer Card</h2>
 
-<div id="profileModal"
-     onclick="outsideClick(event)"
-     style="
-     display:none;
-     position:fixed;
-     top:0;
-     left:0;
-     width:100%;
-     height:100%;
-     background:rgba(0,0,0,0.4);
-     z-index:9999;
-     ">
-
-    <div id="profileWindow"
-         style="
-        background:white;
-        width:500px;
-        margin:100px auto;
-        padding:30px;
-        border-radius:20px;
-        position:relative;
-    ">
-
-        <h2>User Information</h2>
-
-        <div id="profileContent"></div>
-
-        <button class="close-modal-btn"
-                onclick="closeProfileModal()">
-            Close
-        </button>
-
+        <form id="addForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Card Number (Generated Automatically)</label>
+                    <input type="text" name="card_number" id="add_card_number" readonly required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Surname</label>
+                    <input type="text" name="cust_surname" id="add_surname" maxlength="50" pattern="^[A-Za-zА-Яа-яЄєІіЇїҐґ'\s\-]+$" title="Only letters allowed" required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" name="cust_name" id="add_name" maxlength="50" pattern="^[A-Za-z4-Яа-яЄєІіЇїҐґ'\s\-]+$" title="Only letters allowed" required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Patronymic (Optional)</label>
+                    <input type="text" name="cust_patronymic" id="add_patronymic" pattern="^[A-Za-zА-Яа-яЄєІіЇїҐґ'\s\-]+$" title="Only letters allowed" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone_number" placeholder="+380XXXXXXXXX" maxlength="13" pattern="\+?[0-9]{10,12}" required title="Format: +380XXXXXXXXX (Max 13 characters)">
+                </div>
+                <div class="form-group">
+                    <label>City (Optional)</label>
+                    <input type="text" name="city" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label>Street (Optional)</label>
+                    <input type="text" name="street" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label>Zip Code (Optional)</label>
+                    <input type="text" name="zip_code" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label>Discount Percent</label>
+                    <input type="number" name="percent" min="0" max="100" required>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="reset-btn" onclick="resetAddForm()">Reset</button>
+                <button type="submit" class="save-btn">Add</button>
+            </div>
+        </form>
     </div>
+</div>
 
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeEditModal()">✕</button>
+        <h2>Edit Customer Card</h2>
+
+        <form id="editForm">
+            <input type="hidden" id="card_number" name="card_number">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Customer Surname</label>
+                    <input type="text" id="cust_surname" name="cust_surname" maxlength="50" pattern="^[A-Za-zА-Яа-яЄєІіЇїҐґ'\s\-]+$" title="Only letters allowed" required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="cust_name" name="cust_name" maxlength="50" pattern="^[A-Za-zА-Яа-яЄєІіЇїҐґ'\s\-]+$" title="Only letters allowed" required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Patronymic (Optional)</label>
+                    <input type="text" id="cust_patronymic" name="cust_patronymic" pattern="^[A-Za-zА-Яа-яЄєІіЇїҐґ'\s\-]+$" title="Only letters allowed" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" maxlength="13" pattern="\+?[0-9]{10,12}" required>
+                </div>
+                <div class="form-group">
+                    <label>City (Optional)</label>
+                    <input type="text" id="city" name="city" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label>Street (Optional)</label>
+                    <input type="text" id="street" name="street" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label>Zip Code (Optional)</label>
+                    <input type="text" id="zip_code" name="zip_code" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label>Discount Percent</label>
+                    <input type="number" id="percent" name="percent" min="0" max="100" required>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="customConfirmModal" class="modal" style="display: none; z-index: 10000;">
+    <div class="modal-content" style="max-width: 460px; text-align: center; padding: 35px;">
+        <h2 id="confirmTitle" style="margin-bottom: 15px; font-size: 24px; font-weight: 800;">Are you sure?</h2>
+        <p id="confirmMessage" style="color: #64748b; font-size: 15px; line-height: 1.6; margin-bottom: 30px;"></p>
+        <div style="display: flex; justify-content: center; gap: 16px;">
+            <button type="button" class="reset-btn" id="confirmCancelBtn" style="min-width: 130px; flex: 1;">Cancel</button>
+            <button type="button" class="save-btn" id="confirmActionBtn" style="background: #ef4444; min-width: 130px; flex: 1;">Delete</button>
+        </div>
+    </div>
+</div>
+
+<div id="profileModal" onclick="outsideClick(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:9999;">
+    <div id="profileWindow" style="background:white; width:500px; margin:100px auto; padding:30px; border-radius:20px; position:relative;">
+        <h2>User Information</h2>
+        <div id="profileContent" style="margin-top:20px; line-height:2.2; font-size:16px;"></div>
+        <button class="close-modal-btn" onclick="closeProfileModal()">Close</button>
+    </div>
 </div>
 
 <script>
-
-    function deleteCustomerCard(cardNumber){
-
-        const confirmDelete = confirm(
-            "Are you sure you want to delete this customer card?"
-        );
-
-        if(confirmDelete){
-
-            window.location.href = `/customer_cards/${cardNumber}/delete`;
-
-        }
-    }
-
-</script>
-<script>
-
-let originalData = {};
-
-function openEditModal(cardNumber){
-
-    fetch(`/customer_cards/get/${cardNumber}`)
-        .then(response => response.json())
-        .then(customer_card => {
-
-            originalData = {...customer_card};
-
-            document.getElementById("cust_surname").value =
-    customer_card.cust_surname;
-
-document.getElementById("cust_name").value =
-    customer_card.cust_name;
-
-document.getElementById("cust_patronymic").value =
-    customer_card.cust_patronymic;
-
-document.getElementById("phone_number").value =
-    customer_card.phone_number;
-
-document.getElementById("city").value =
-    customer_card.city;
-
-            document.getElementById("street").value =
-                customer_card.street;
-
-            document.getElementById("zip_code").value =
-                customer_card.zip_code;
-
-            document.getElementById("percent").value =
-                customer_card.percent;
-
-            document.getElementById("card_number").value =
-                customer_card.card_number;
-
-            document.getElementById("editForm").action =
-                `/customer_cards/${customer_card.card_number}/edit`;
-
-            document.getElementById("editModal").style.display =
-                "flex";
-        })
-        .catch(error => {
-            console.error(error);
-            alert("Failed to load customer card data.");
-        });
+const searchInput = document.querySelector(".search-bar");
+if(searchInput) {
+    searchInput.addEventListener("input", () => {
+        clearTimeout(window.searchTimer);
+        window.searchTimer = setTimeout(() => { document.getElementById("searchForm").submit(); }, 300);
+    });
 }
-
-function closeEditModal(){
-
-    document.getElementById("editModal").style.display =
-        "none";
-}
-
-function resetForm(){
-
-    document.getElementById("cust_surname").value =
-        originalData.cust_surname;
-
-    document.getElementById("cust_name").value =
-        originalData.cust_name;
-
-    document.getElementById("cust_patronymic").value =
-        originalData.cust_patronymic || "";
-
-    document.getElementById("phone_number").value =
-        originalData.phone_number;
-
-    document.getElementById("city").value =
-       originalData.city || "";
-
-    document.getElementById("street").value =
-        originalData.street || "";
-
-    document.getElementById("zip_code").value =
-        originalData.zip_code || "";
-
-    document.getElementById("percent").value =
-        originalData.percent;
-
-    document.getElementById("card_number").value =
-        originalData.card_number;
-}
-document
-    .getElementById("editForm")
-    .addEventListener("submit", saveCustomerCard);
-
-async function saveCustomerCard(event){
-
-    event.preventDefault();
-
-    const form =
-        document.getElementById("editForm");
-
-    const response = await fetch(
-        form.action,
-        {
-            method: "POST",
-            body: new FormData(form)
-        }
-    );
-
-    const result = await response.json();
-
-    if(result.success){
-
-        const id =
-            document.getElementById(
-                "card_number"
-            ).value;
-
-        const row =
-            document.getElementById(
-                `customer_card-row-${id}`
-            );
-        row.querySelector(".cust_surname").textContent =
-            document.getElementById(
-                "cust_surname"
-            ).value;
-
-        row.querySelector(".cust_name").textContent =
-            document.getElementById(
-                "cust_name"
-            ).value;
-
-        row.querySelector(".cust_patronymic").textContent =
-            document.getElementById(
-                "cust_patronymic"
-            ).value;
-
-        row.querySelector(".phone_number").textContent =
-            document.getElementById(
-                "phone_number"
-            ).value;
-
-            row.querySelector(".city").textContent =
-            document.getElementById(
-                "city"
-            ).value;
-
-        row.querySelector(".street").textContent =
-            document.getElementById(
-                "street"
-            ).value;
-
-        row.querySelector(".zip_code").textContent =
-            document.getElementById(
-                "zip_code"
-            ).value;
-
-        row.querySelector(".percent").textContent =
-            document.getElementById(
-                "percent"
-            ).value;
-
-        closeEditModal();
-    }
-}
-</script>
-<script>
-
-function openAddModal(){
-
-    document.getElementById("addForm").reset();
-
-    document.getElementById("addModal").style.display =
-        "flex";
-}
-
-function closeAddModal(){
-
-    document.getElementById("addModal").style.display =
-        "none";
-}
-
-document
-    .getElementById("addForm")
-    .addEventListener("submit", addCustomerCard);
-
-async function addCustomerCard(event){
-
-    event.preventDefault();
-
-    const form =
-        document.getElementById("addForm");
-
-    const response = await fetch(
-        "/customer_cards/add",
-        {
-            method:"POST",
-            body:new FormData(form)
-        }
-    );
-
-    const result = await response.json();
-
-    if(result.success){
-
-        location.reload();
-
-    }else{
-
-        alert("Failed to add customer card.");
-
-    }
-}
-
-</script>
-<script>
-
-const searchInput =
-    document.querySelector(".search-bar");
-
-searchInput.addEventListener("input", () => {
-
-    clearTimeout(window.searchTimer);
-
-    window.searchTimer = setTimeout(() => {
-
-        document
-            .getElementById("searchForm")
-            .submit();
-
-    }, 300);
-
-});
-
-</script>
-<script>
 window.addEventListener("load", () => {
-
-    const search =
-        document.querySelector(".search-bar");
-
-    if(search.value.length > 0){
-
-        search.focus();
-
-        search.setSelectionRange(
-            search.value.length,
-            search.value.length
-        );
+    if(searchInput && searchInput.value.length > 0){
+        searchInput.focus();
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
     }
 });
-</script>
-<script>
 
 function togglePercentDropdown(){
-
-    const menu =
-        document.getElementById("percentDropdown");
-
-    menu.style.display =
-        menu.style.display === "block"
-            ? "none"
-            : "block";
+    const menu = document.getElementById("percentDropdown");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+    if(menu.style.display === "block") {
+        const sInput = document.getElementById("pctSearch");
+        sInput.value = "";
+        filterDropdownList();
+        sInput.focus();
+    }
 }
-
 function selectPercent(percent){
-
     document.getElementById("percentInput").value = percent;
-
     document.getElementById("searchForm").submit();
 }
 
+function filterDropdownList() {
+    const filter = document.getElementById("pctSearch").value.toUpperCase();
+    const items = document.querySelectorAll(".pct-item");
+    items.forEach(item => {
+        const text = item.textContent || item.innerText;
+        item.style.display = (text.toUpperCase().indexOf(filter) > -1) ? "" : "none";
+    });
+}
+
 document.addEventListener("click", function(event){
-
-    const dropdown =
-        document.querySelector(".dropdown");
-
-    if(!dropdown.contains(event.target)){
+    const dropdown = document.querySelector(".dropdown");
+    if(dropdown && !dropdown.contains(event.target)){
         document.getElementById("percentDropdown").style.display = "none";
     }
 });
 
-</script>
-<script>
+function showCustomDialog(title, message, isAlertOnly = false, actionButtonText = "Delete") {
+    return new Promise((resolve) => {
+        const modal = document.getElementById("customConfirmModal");
+        const titleEl = document.getElementById("confirmTitle");
+        const msgEl = document.getElementById("confirmMessage");
+        const cancelBtn = document.getElementById("confirmCancelBtn");
+        const actionBtn = document.getElementById("confirmActionBtn");
 
-const popup = document.getElementById('popup');
+        titleEl.innerText = title;
+        msgEl.innerHTML = message;
+        actionBtn.innerText = actionButtonText;
 
-function togglePopup(){
-    popup.classList.toggle('active');
+        if (isAlertOnly) {
+            cancelBtn.style.display = "none";
+            actionBtn.style.background = "linear-gradient(135deg, #2563eb, #4f46e5)";
+        } else {
+            cancelBtn.style.display = "block";
+            actionBtn.style.background = "#e11d48";
+        }
+
+        modal.style.display = "flex";
+
+        function handleClose(confirmed) {
+            modal.style.display = "none";
+            cancelBtn.removeEventListener("click", onCancel);
+            actionBtn.removeEventListener("click", onConfirm);
+            resolve(confirmed);
+        }
+        function onCancel() { handleClose(false); }
+        function onConfirm() { handleClose(true); }
+
+        cancelBtn.addEventListener("click", onCancel);
+        actionBtn.addEventListener("click", onConfirm);
+    });
 }
 
-window.addEventListener('click', function(e){
+async function deleteCustomerCard(cardNumber, surname){
+    const confirmed = await showCustomDialog(
+        "Delete Card?",
+        `Are you sure you want to remove customer card for <b>${surname}</b> (ID: ${cardNumber})?`
+    );
+    if (!confirmed) return;
 
-    if(!e.target.closest('.user-wrapper')){
-        popup.classList.remove('active');
+    try {
+        const res = await fetch(`/customer_cards/${cardNumber}/delete`, { method: "POST" });
+        const result = await res.json();
+        if(result.success) {
+            location.reload();
+        } else {
+            await showCustomDialog("Action Blocked", result.message || "Failed to delete this card.", true, "OK");
+        }
+    } catch(err) {
+        await showCustomDialog("Network Error", "Could not complete operation.", true, "OK");
     }
+}
 
+function generateRandomCardNumber() {
+    let cardNumber = "";
+    for (let i = 0; i < 12; i++) {
+        cardNumber += (i === 0) ? Math.floor(Math.random() * 9) + 1 : Math.floor(Math.random() * 10);
+    }
+    return cardNumber;
+}
+
+function openAddModal(){
+    document.getElementById("addForm").reset();
+    document.getElementById("add_card_number").value = generateRandomCardNumber();
+    document.getElementById("addModal").style.display = "flex";
+}
+function closeAddModal(){ document.getElementById("addModal").style.display = "none"; }
+
+function resetAddForm() {
+    document.getElementById("addForm").reset();
+    document.getElementById("add_card_number").value = generateRandomCardNumber();
+}
+
+function openEditModal(cardNumber){
+    fetch(`/customer_cards/get/${cardNumber}`)
+        .then(response => response.json())
+        .then(customer_card => {
+            originalData = {...customer_card};
+            document.getElementById("cust_surname").value = customer_card.cust_surname;
+            document.getElementById("cust_name").value = customer_card.cust_name;
+            document.getElementById("cust_patronymic").value = customer_card.cust_patronymic || "";
+            document.getElementById("phone_number").value = customer_card.phone_number;
+            document.getElementById("city").value = customer_card.city || "";
+            document.getElementById("street").value = customer_card.street || "";
+            document.getElementById("zip_code").value = customer_card.zip_code || "";
+            document.getElementById("percent").value = customer_card.percent;
+            document.getElementById("card_number").value = customer_card.card_number;
+
+            document.getElementById("editModal").style.display = "flex";
+        })
+        .catch(() => showCustomDialog("Error", "Failed to fetch card details.", true, "OK"));
+}
+function closeEditModal(){ document.getElementById("editModal").style.display = "none"; }
+
+document.getElementById("addForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const res = await fetch("/customer_cards/add", { method: "POST", body: new FormData(this) });
+    const result = await res.json();
+    if(result.success) location.reload();
+    else await showCustomDialog("Validation Error", result.message, true, "OK");
+});
+
+document.getElementById("editForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const cardNumber = document.getElementById("card_number").value;
+    const res = await fetch(`/customer_cards/${cardNumber}/edit`, { method: "POST", body: new FormData(this) });
+    const result = await res.json();
+    if(result.success) location.reload();
+    else await showCustomDialog("Validation Error", result.message, true, "OK");
+});
+
+const popup = document.getElementById('popup');
+function togglePopup(){ if (popup) popup.classList.toggle('active'); }
+window.addEventListener('click', function(e){
+    if(popup && !e.target.closest('.user-wrapper')) popup.classList.remove('active');
 });
 
 function showProfile(){
-
     fetch("/profile")
         .then(response => response.json())
         .then(data => {
-
             document.getElementById("profileContent").innerHTML = `
                 <p><b>Name:</b> ${data.empl_name}</p>
                 <p><b>Surname:</b> ${data.empl_surname}</p>
@@ -1772,25 +542,14 @@ function showProfile(){
                 <p><b>Street:</b> ${data.street}</p>
                 <p><b>Start date:</b> ${data.date_of_start}</p>
             `;
-
             document.getElementById("profileModal").style.display = "block";
         });
 }
-
-function closeProfileModal(){
-    document.getElementById("profileModal").style.display = "none";
-}
-
+function closeProfileModal(){ document.getElementById("profileModal").style.display = "none"; }
 function outsideClick(event){
-
-    const windowBox =
-        document.getElementById("profileWindow");
-
-    if(!windowBox.contains(event.target)){
-        closeProfileModal();
-    }
+    const windowBox = document.getElementById("profileWindow");
+    if(windowBox && !windowBox.contains(event.target)) closeProfileModal();
 }
-
 </script>
 </body>
 </html>
