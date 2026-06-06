@@ -88,14 +88,29 @@ def edit_category(category_number):
     conn.close()
     return render_template("categories/add.html")
 
-@category_routes.route("/categories/delete/<int:category_number>")
+
+@category_routes.route("/categories/delete/<int:category_number>", methods=["POST"])
 @login_required
 @role_required("manager")
 def delete_category(category_number):
     conn = get_db_connection()
-    conn.execute("""DELETE FROM categories 
-                    WHERE category_number = ?""", (category_number,))
-    conn.commit()
-    conn.close()
+    try:
+        linked_products = conn.execute(
+            "SELECT 1 FROM products WHERE category_number = ? LIMIT 1",
+            (category_number,)
+        ).fetchone()
 
-    return redirect(url_for("category_routes.categories"))
+        if linked_products:
+            return jsonify({
+                "success": False,
+                "message": "Cannot delete this category because there are active products registered under it in the catalog."
+            }), 400
+
+        conn.execute("DELETE FROM categories WHERE category_number = ?", (category_number,))
+        conn.commit()
+        return jsonify({"success": True})
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+    finally:
+        conn.close()
