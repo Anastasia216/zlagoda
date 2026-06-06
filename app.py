@@ -12,7 +12,7 @@ from application.routes.customer_card_routes import customer_card_routes
 from application.routes.product_routes import product_routes
 from application.routes.user_routes import user_routes
 from application.routes.auth import auth
-
+from application.routes.report_routes import report_routes
 def create_app():
     app = Flask(__name__)
 
@@ -23,8 +23,8 @@ def create_app():
     app.register_blueprint(category_routes)
     app.register_blueprint(customer_card_routes)
     app.register_blueprint(receipt_routes)
-
     app.register_blueprint(store_product_routes)
+    app.register_blueprint(report_routes)
     @app.route("/")
     @login_required
     def home():
