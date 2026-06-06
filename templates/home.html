@@ -572,40 +572,12 @@
         </div>
 
     </div>
-<div id="profileModal"
-     onclick="outsideClick(event)"
-     style="
-     display:none;
-     position:fixed;
-     top:0;
-     left:0;
-     width:100%;
-     height:100%;
-     background:rgba(0,0,0,0.4);
-     z-index:9999;
-     ">
-
-    <div id="profileWindow"
-         style="
-        background:white;
-        width:500px;
-        margin:100px auto;
-        padding:30px;
-        border-radius:20px;
-        position:relative;
-    ">
-
+<div id="profileModal" onclick="outsideClick(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:9999;">
+    <div id="profileWindow" style="background:white; width:500px; margin:100px auto; padding:30px; border-radius:20px; position:relative;">
         <h2>User Information</h2>
-
-        <div id="profileContent"></div>
-
-        <button class="close-modal-btn"
-                onclick="closeProfileModal()">
-            Close
-        </button>
-
+        <div id="profileContent" style="margin-top:20px; line-height:2.2; font-size:16px;"></div>
+        <button class="close-modal-btn" onclick="closeProfileModal()">Close</button>
     </div>
-
 </div>
     <!-- DASHBOARD -->
 
