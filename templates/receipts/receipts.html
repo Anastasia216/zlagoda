@@ -889,6 +889,66 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 
     margin-top:40px;
 }
+.addProductbtn{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:20px;
+}
+        .details-list{
+
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+
+    margin-top:20px;
+}
+
+.detail-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    box-shadow:
+        0 5px 15px rgba(15,23,42,0.06);
+}
+
+.detail-card p{
+    margin:6px 0;
+}
+        .validation-message{
+    position:fixed;
+
+    top:30px;
+    right:30px;
+
+    padding:16px 22px;
+
+    border-radius:18px;
+
+    background:#fff1f2;
+    color:#e11d48;
+
+    font-weight:600;
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,0.12);
+
+    z-index:99999;
+
+    opacity:0;
+
+    transform:translateY(-10px);
+
+    transition:0.25s;
+}
+
+.validation-message.show{
+    opacity:1;
+    transform:translateY(0);
+}
 </style>
 </head>
 
@@ -907,41 +967,11 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 
         <h2>Receipt Details</h2>
 
-        <div class="details-table-container">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>UPC</th>
-                        <th>Product Number</th>
-                        <th>Selling Price</th>
-                    </tr>
-                </thead>
-
-                <tbody id="salesTableBody">
-
-
-                </tbody>
-
-            </table>
-
-<!--            <div id="sales-container">-->
-<!--                <div class="sale-row">-->
-
+        <div
+            id="detailsContent"
+            class="details-list">
         </div>
-<div class="details-buttons">
-                            <button
-                                type="button"
-                                class="save-btn"
-                                id="edit-details-btn">
 
-                                Edit
-
-                            </button>
-<!--                        </div>-->
-<!--                </div>-->
-            </div>
     </div>
 
 </div>
@@ -962,6 +992,13 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
         <form id="addForm">
 
             <div class="form-grid">
+                <input type="hidden"
+                       name="sum_total"
+                       id="add_sum_total_input">
+
+                <input type="hidden"
+                       name="vat"
+                       id="add_vat_input">
 
                 <div class="form-group">
                     <label>Print Date</label>
@@ -970,20 +1007,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
                             id="add_print_date"
                            name="print_date"
                            required>
-                </div>
-
-                <div class="form-group">
-                    <label>Cashier ID</label>
-
-                    <select name="id_employee" required>
-
-                        {% for employee in employees %}
-                        <option value="{{ employee['id_employee'] }}">
-                            {{ employee['id_employee'] }}
-                        </option>
-                        {% endfor %}
-
-                    </select>
                 </div>
 
                 <div class="form-group">
@@ -1143,16 +1166,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
             </div>
 
 </div>
-        <div class="modal-buttons right-only">
-
-            <button type="button"
-                    class="reset-btn"
-                    onclick="closeAddProductModal()">
-
-                Cancel
-
-            </button>
-
+            <div class="addProductbtn">
             <button type="button"
                     class="save-btn"
                     onclick="addProductToReceipt()">
@@ -1160,133 +1174,14 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
                 Add Product
 
             </button>
-
+            </div>
         </div>
 
     </div>
 
 </div>
 
-<div id="editModal" class="modal">
 
-    <div class="modal-content">
-
-        <button class="close-btn"
-                onclick="closeEditModal()">
-            ✕
-        </button>
-
-        <h2>Edit Receipt</h2>
-
-        <form id="editForm" method="POST">
-            <input type="hidden"
-                   name="sum_total"
-                   id="sum_total_input">
-
-            <input type="hidden"
-                   name="vat"
-                   id="vat_input">
-
-            <input type="hidden"
-                   name="check_number"
-                   id="check_number_input">
-
-            <input type="hidden"
-                   id="check_number"
-                   name="check_number">
-
-            <div class="form-group">
-
-                <label>Print Date</label>
-
-                <input type="date"
-                       id="print_date"
-                       name="print_date"
-                       required>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Total Sum</label>
-
-                <input type="text"
-                       id="sum_total"
-                       name="sum_total"
-                       required>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>VAT</label>
-
-                <input id="vat"
-                          name="vat"
-                          required>
-
-            </div>
-            <div class="form-group">
-
-                <label>Employee</label>
-
-                <select id="id_employee"
-                        name="id_employee">
-
-                    {% for employee in employees %}
-
-                    <option value="{{ employee['id_employee'] }}">
-                        {{ employee['id_employee'] }}
-                    </option>
-
-                    {% endfor %}
-
-                </select>
-
-            </div>
-            <div class="form-group">
-
-                <label>Customer Card</label>
-
-                <select id="card_number"
-                        name="card_number">
-
-                    {% for customer_card in customer_cards %}
-
-                    <option value="{{ customer_card['card_number'] }}">
-                        {{ customer_card['card_number'] }}
-                    </option>
-                    <option value="">
-                        No card
-                    </option>
-                    {% endfor %}
-
-                </select>
-
-            </div>
-            <div class="modal-buttons">
-                <button type="button"
-                        class="reset-btn"
-                        onclick="resetForm()">
-
-                    Reset
-
-                </button>
-
-                <button type="submit"
-                        class="save-btn">
-
-                    Save
-
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
-
-</div>
 <div class="blur blur1"></div>
 <div class="blur blur2"></div>
 
@@ -1377,7 +1272,9 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
                 <th>VAT</th>
                 <th>Cashier</th>
                 <th>Customer Card</th>
-                <th>Actions</th>
+                {% if session["role"] == "manager" %}
+                    <th>Actions</th>
+                {% endif %}
             </tr>
 
             </thead>
@@ -1420,19 +1317,11 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
                 <td class="customer-card">
                     {{ receipt['card_number'] or '-' }}
                 </td>
+                {% if session["role"] == "manager" %}
                 <td>
 
                     <div class="actions">
-                        {% if session["role"] == "cashier" %}
-                        <button
-                                class="edit-btn"
-                                onclick="openEditModal('{{ receipt['check_number'] }}')">
 
-                            Edit
-
-                        </button>
-                        {% endif %}
-                        {% if session["role"] == "manager" %}
                         <button
                                 class="delete-btn"
                                 onclick="deleteReceipt('{{ receipt['check_number'] }}')">
@@ -1440,10 +1329,11 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
                             Delete
 
                         </button>
-                        {% endif %}
+
                     </div>
 
                 </td>
+                {% endif %}
 
             </tr>
 
@@ -1532,150 +1422,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     }
 
 </script>
-<script>
 
-let originalData = {};
-
-function openEditModal(checkNumber){
-
-    fetch(`/receipts/get/${checkNumber}`)
-        .then(response => response.json())
-        .then(receipt => {
-
-            originalData = {...receipt};
-
-            document.getElementById("check_number").value =
-                receipt.check_number;
-
-            document.getElementById("print_date").value =
-                receipt.print_date;
-
-            document.getElementById("sum_total").value =
-                receipt.sum_total;
-
-            document.getElementById("vat").value =
-                receipt.vat;
-
-            document.getElementById("card_number").value =
-                receipt.card_number;
-
-            document.getElementById("id_employee").value =
-                receipt.id_employee;
-
-            document.getElementById("editForm").action =
-                `/receipts/edit/${receipt.check_number}`;
-
-            document.getElementById("editModal").style.display =
-                "flex";
-        })
-        .catch(error => {
-            console.error(error);
-            alert("Failed to load receipt data.");
-        });
-}
-
-function closeEditModal(){
-
-    document.getElementById("editModal").style.display =
-        "none";
-}
-
-function resetForm(){
-
-    document.getElementById("print_date").value =
-        originalData.print_date;
-
-    document.getElementById("sum_total").value =
-        originalData.sum_total;
-
-    document.getElementById("vat").value =
-        originalData.vat;
-
-    document.getElementById("id_employee").value =
-        originalData.id_employee;
-
-    document.getElementById("card_number").value =
-        originalData.card_number;
-
-    document.getElementById("check_number").value =
-        originalData.check_number;
-
-}
-document
-    .getElementById("editForm")
-    .addEventListener("submit", saveReceipt);
-
-async function saveReceipt(event){
-
-    event.preventDefault();
-
-    const form =
-        document.getElementById("editForm");
-
-    const response = await fetch(
-        form.action,
-        {
-            method: "POST",
-            body: new FormData(form)
-        }
-    );
-
-    const result = await response.json();
-
-    if(result.success){
-const productName =
-    document.getElementById("product-upc")
-        .selectedOptions[0]
-        .text;
-        const id =
-            document.getElementById(
-                "check_number"
-            ).value;
-
-        const row =
-            document.getElementById(
-                `receipt-row-${id}`
-            );
-
-        row.querySelector(".print-date").textContent =
-            document.getElementById(
-                "print_date"
-            ).value;
-
-        row.querySelector(".sum-total").textContent =
-            document.getElementById(
-                "sum_total"
-            ).value;
-
-        row.querySelector(".vat").textContent =
-            document.getElementById(
-                "vat"
-            ).value;
-
-        const employeeSelect =
-            document.getElementById(
-                "id_employee"
-            );
-
-        row.querySelector(".id-employee").textContent =
-            employeeSelect.options[
-                employeeSelect.selectedIndex
-            ].text;
-
-        const cardSelect =
-            document.getElementById(
-                "card_number"
-            );
-
-        row.querySelector(".customer-card").textContent =
-            cardSelect.options[
-                cardSelect.selectedIndex
-            ].text;
-
-        closeEditModal();
-    }
-}
-</script>
 <script>
 
 function openAddModal(){
@@ -1794,36 +1541,45 @@ window.addEventListener("load", () => {
 let currentReceipt = null;
 
 async function openDetailsModal(checkNumber){
-currentReceipt = checkNumber;
+
+    currentReceipt = checkNumber;
 
     const response =
-        await fetch(
-            `/receipts/${checkNumber}/sales`
-        );
+        await fetch(`/receipts/${checkNumber}/sales`);
 
     const sales =
         await response.json();
 
-    const tbody =
-        document.getElementById(
-            "salesTableBody"
-        );
-tbody.innerHTML = "";
+    const content =
+        document.getElementById("detailsContent");
+
+    content.innerHTML = "";
+
     sales.forEach(sale => {
 
-    tbody.innerHTML += `
-        <tr>
-            <td>${sale.UPC}</td>
-            <td>${sale.product_number}</td>
-            <td>${sale.selling_price}</td>
-        </tr>
-    `;
-});
+        content.innerHTML += `
+            <div class="detail-card">
+
+                <p>
+                    <b>Product:</b>
+                    ${sale.product_name}
+                </p>
+
+                <p>
+                    <b>Quantity:</b>
+                    ${sale.product_number}
+                </p>
+
+                <p>
+                    <b>Price:</b>
+                    ${sale.selling_price} ₴
+                </p>
+
+            </div>
+        `;
+    });
+
     document.getElementById("detailsModal").style.display = "flex";
-    document.getElementById("edit-details-btn").onclick = () => {
-        closeDetailsModal();
-        openEditModal(currentReceipt);
-    };
 }
 </script>
 <script>
@@ -1839,16 +1595,15 @@ function addSaleRow(){
 <script>
 let receiptProducts = [];
 
-function openAddProductModal(){
-    console.log("ID RECEIVED:", idEmployee);
 
-    document.getElementById("addUserForm").reset();
+    function openAddProductModal(){
 
-    document.getElementById("user_id_employee").value =
-        idEmployee;
+    document.getElementById("product-quantity").value = "";
+    document.getElementById("product-price").value = "";
+
     document.getElementById("addProductModal").style.display = "flex";
-
 }
+
 
 function closeAddProductModal(){
 
@@ -1948,9 +1703,14 @@ function renderProducts(){
 
 
     document.getElementById(
-        "vat_input"
-    ).value =
-        vat.toFixed(2);
+            "add_sum_total_input"
+        ).value =
+            total.toFixed(2);
+
+        document.getElementById(
+            "add_vat_input"
+        ).value =
+            vat.toFixed(2);
     }
     function removeProduct(index){
         receiptProducts.splice(index,1);
@@ -1963,7 +1723,7 @@ function renderProducts(){
         renderProducts();
         updateTotals();
     }
-</script>
+    </script>
     <script>
     const productSelect =
     document.getElementById("product-upc");

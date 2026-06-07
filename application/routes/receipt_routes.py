@@ -1,5 +1,5 @@
 import uuid
-
+from flask import session
 from flask import Blueprint, Flask, render_template, request, redirect, url_for, jsonify
 from sqlite_db import get_db_connection
 import json
@@ -161,7 +161,7 @@ def add_receipt():
                                      ORDER BY cust_surname""").fetchall()
     if request.method == "POST":
         check_number = str(uuid.uuid4())[:10]
-        id_employee = request.form["id_employee"]
+        employee_id = session["employee_id"]
         card_number = request.form.get("card_number")
         print_date = request.form["print_date"]
 
@@ -185,7 +185,7 @@ def add_receipt():
                                               sum_total,
                                               vat)
                         VALUES (?, ?, ?, ?, ?, ?)""",
-                     (check_number, id_employee, card_number if card_number else None, print_date, sum_total, vat))
+                     (check_number, employee_id, card_number if card_number else None, print_date, sum_total, vat))
         products = json.loads(
         request.form["products"]
     )
