@@ -111,7 +111,29 @@
                     inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
+        .search-wrapper select,
+        .search-wrapper input[type="date"]{
 
+            height:68px;
+
+            border:none;
+            outline:none;
+
+            padding:0 18px;
+
+            border-radius:24px;
+
+            font-size:15px;
+            font-weight:500;
+
+            background:rgba(255,255,255,0.78);
+
+            backdrop-filter:blur(14px);
+
+            box-shadow:
+                0 10px 35px rgba(15,23,42,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+        }
 
         table{
             width:100%;
@@ -950,7 +972,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     transform:translateY(0);
 }
 
-/* ДОДАЄМО СТИЛІ КАСТОМНОГО СЕЛЕКТОРУ ЗІ СТОРІНКИ ТОВАРІВ */
         .modal-select-wrapper {
             position: relative;
             width: 100%;
@@ -1025,6 +1046,140 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
             background: #eff6ff;
             color: #2563eb;
         }
+.filter-bar{
+    height:250px;
+
+    display:flex;
+    gap:12px;
+    margin-bottom:18px;
+    align-items:center;
+}
+
+.filter-chip{
+    padding:10px 16px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,0.75);
+    backdrop-filter:blur(14px);
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+    cursor:pointer;
+    font-size: 17px;
+    font-weight:600;
+    color:#334155;
+    transition:0.2s;
+}
+
+.filter-chip:hover{
+    transform:translateY(-2px);
+    background:#eff6ff;
+    color:#2563eb;
+}
+        .filter-wrapper{
+    position:relative;
+}
+
+.filter-menu{
+    position:absolute;
+    top:65px;
+    right:0;
+    left:auto;
+
+    width:340px;
+
+    background:rgba(255,255,255,0.95);
+    backdrop-filter:blur(12px);
+
+    border-radius:18px;
+    padding:12px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,0.12);
+
+    display:none;
+    flex-direction:column;
+    gap:10px;
+    z-index:999;
+}
+
+.filter-menu > button{
+    border:none;
+    padding:10px;
+    border-radius:12px;
+    cursor:pointer;
+    background:#f1f5f9;
+    font-weight:600;
+}
+
+.filter-menu button:hover{
+    background:#e2e8f0;
+}
+.period-box{
+    margin-top:12px;
+
+    display:none;
+    flex-direction:column;
+    gap:12px;
+}
+
+.date-field{
+
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.date-field label{
+    left:13px;
+    font-size:15px;
+    font-weight:700;
+    color:#64748b;
+}
+.apply-filter-btn{
+    width:100%;
+    height:36px;
+
+    border:none;
+    border-radius:12px;
+    top:10px;
+    cursor:pointer;
+
+    font-size:14px;
+    font-weight:700;
+
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
+
+    box-shadow:
+        0 14px 35px rgba(15,23,42,0.16);
+    margin-top:8px;
+    transition:0.25s;
+}
+
+.apply-filter-btn:hover{
+    transform:translateY(-3px);
+}
+.filter-menu .date-field input[type="date"]{
+    width:220px;
+    height:38px;
+
+    padding:0 12px;
+
+    border:none;
+    outline:none;
+
+    border-radius:12px;
+
+    font-size:13px;
+
+    background:#f8fafc;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.9);
+}
 </style>
 </head>
 
@@ -1322,18 +1477,64 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 
         <div class="search-wrapper">
 
-        <form id="searchForm"
-              method="GET"
-              action="/receipts">
+    <form id="searchForm"
+          method="GET"
+          action="/receipts"
+          style="display:flex; gap:16px; align-items:center;">
 
-            <input type="text"
-                   name="search"
-                   class="search-bar"
-                   placeholder="Search receipt..."
-                   value="{{ search if search else '' }}">
+        <input type="text"
+               name="search"
+               class="search-bar"
+               placeholder="Search receipt..."
+               value="{{ search if search else '' }}">
 
-        </form>
+        <div class="filter-wrapper">
+
+    <button type="button" class="filter-chip" onclick="toggleFilterMenu()">
+        Date ▾
+    </button>
+
+    <div id="filterMenu" class="filter-menu">
+
+        <button type="button" onclick="setTodayFilter()">
+            Today
+        </button>
+
+        <button type="button" onclick="showPeriod()">
+            Period
+        </button>
+
+        <div id="periodBox" class="period-box">
+
+            <div class="date-field">
+                <label>From</label>
+                <input type="date" id="dateFrom">
+            </div>
+
+            <div class="date-field">
+                <label>To</label>
+                <input type="date" id="dateTo">
+            </div>
+
+            <button type="button"
+                    class="apply-filter-btn"
+                    onclick="applyPeriod()">
+                Apply
+            </button>
+
+        </div>
+
     </div>
+
+    <input type="hidden" name="filter_type" id="filter_type">
+    <input type="hidden" name="date_from" id="date_from_hidden">
+    <input type="hidden" name="date_to" id="date_to_hidden">
+
+</div>
+
+    </form>
+
+</div>
     <div class="table-container">
 
         <table>
@@ -1948,7 +2149,48 @@ function outsideClick(event){
         closeProfileModal();
     }
 }
+function toggleFilterMenu(){
+    const menu = document.getElementById("filterMenu");
+    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
 
+window.addEventListener("click", function(e){
+    if(!e.target.closest(".filter-wrapper")){
+        document.getElementById("filterMenu").style.display = "none";
+    }
+});
+
+function setTodayFilter(){
+
+    const today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("filter_type").value = "today";
+    document.getElementById("date_from_hidden").value = today;
+    document.getElementById("date_to_hidden").value = today;
+
+    document.getElementById("searchForm").submit();
+}
+
+function showPeriod(){
+    document.getElementById("periodBox").style.display = "block";
+}
+
+function applyPeriod(){
+
+    const from = document.getElementById("dateFrom").value;
+    const to = document.getElementById("dateTo").value;
+
+    if(!from || !to){
+        alert("Select both dates");
+        return;
+    }
+
+    document.getElementById("filter_type").value = "period";
+    document.getElementById("date_from_hidden").value = from;
+    document.getElementById("date_to_hidden").value = to;
+
+    document.getElementById("searchForm").submit();
+}
 </script>
 <script>
 function toggleModalDropdown(menuId) {

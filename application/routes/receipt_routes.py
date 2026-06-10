@@ -3,6 +3,7 @@ from flask import session
 from flask import Blueprint, Flask, render_template, request, redirect, url_for, jsonify
 from sqlite_db import get_db_connection
 import json
+from datetime import date,datetime,timedelta
 
 from sqlite_db import get_db_connection
 from application.decorators import login_required, role_required
@@ -16,8 +17,14 @@ receipt_routes = Blueprint("receipt_routes", __name__)
 def receipts():
 
     conn = get_db_connection()
-    search = request.args.get("search", "").strip()
 
+    search = request.args.get("search", "").strip()
+    filter_type = request.args.get("filter_type", "")
+    date_from = request.args.get("date_from")
+    date_to = request.args.get("date_to")
+    cashier_id = request.args.get("cashier")  # тільки для manager
+
+    # допоміжні дані для UI
     employees = conn.execute("""
         SELECT *
         FROM employees
@@ -32,119 +39,96 @@ def receipts():
     """).fetchall()
 
     products = conn.execute("""
-            SELECT sp.UPC,
-                   p.product_name
-            FROM store_products sp
-            JOIN products p
-                 ON p.id_product = sp.id_product
-            ORDER BY p.product_name
-        """).fetchall()
+        SELECT sp.UPC,
+               p.product_name
+        FROM store_products sp
+        JOIN products p ON p.id_product = sp.id_product
+        ORDER BY p.product_name
+    """).fetchall()
 
-#cahier
+    # -----------------------------
+    # BASE QUERY (спільна частина)
+    # -----------------------------
+    query = """
+        SELECT r.check_number,
+               r.print_date,
+               r.sum_total,
+               r.vat,
+               e.empl_surname,
+               e.empl_name,
+               c.card_number,
+               c.cust_surname,
+               c.cust_name
+        FROM receipts r
+        JOIN employees e ON r.id_employee = e.id_employee
+        LEFT JOIN customer_cards c ON r.card_number = c.card_number
+        WHERE 1=1
+    """
+
+    params = []
+
+    # -----------------------------
+    # ROLE: CASHIER
+    # -----------------------------
     if session.get("role") == "cashier":
+        query += " AND r.id_employee = ?"
+        params.append(session["employee_id"])
 
-        if search:
-            receipts = conn.execute("""
-                SELECT r.check_number,
-                       r.print_date,
-                       r.sum_total,
-                       r.vat,
-                       e.empl_surname,
-                       e.empl_name,
-                       c.card_number,
-                       c.cust_surname,
-                       c.cust_name
-                FROM receipts r
-                JOIN employees e ON r.id_employee = e.id_employee
-                LEFT JOIN customer_cards c ON r.card_number = c.card_number
-                WHERE r.id_employee = ?
-                  AND (
-                      r.check_number LIKE ?
-                      OR e.empl_surname LIKE ?
-                      OR e.empl_name LIKE ?
-                      OR c.cust_surname LIKE ?
-                      OR c.cust_name LIKE ?
-                  )
-                ORDER BY r.print_date DESC
-            """, (
-                session["employee_id"],
-                f"%{search}%",
-                f"%{search}%",
-                f"%{search}%",
-                f"%{search}%",
-                f"%{search}%"
-            )).fetchall()
-
-        else:
-            receipts = conn.execute("""
-                SELECT r.check_number,
-                       r.print_date,
-                       r.sum_total,
-                       r.vat,
-                       e.empl_surname,
-                       e.empl_name,
-                       c.card_number,
-                       c.cust_surname,
-                       c.cust_name
-                FROM receipts r
-                JOIN employees e ON r.id_employee = e.id_employee
-                LEFT JOIN customer_cards c ON r.card_number = c.card_number
-                WHERE r.id_employee = ?
-                ORDER BY r.print_date DESC
-            """, (session["employee_id"],)).fetchall()
-
-#manager
+    # -----------------------------
+    # ROLE: MANAGER (фільтр касира)
+    # -----------------------------
     else:
+        if cashier_id:
+            query += " AND r.id_employee = ?"
+            params.append(cashier_id)
 
-        if search:
-            receipts = conn.execute("""
-                SELECT r.check_number,
-                       r.print_date,
-                       r.sum_total,
-                       r.vat,
-                       e.empl_surname,
-                       e.empl_name,
-                       c.card_number,
-                       c.cust_surname,
-                       c.cust_name
-                FROM receipts r
-                JOIN employees e ON r.id_employee = e.id_employee
-                LEFT JOIN customer_cards c ON r.card_number = c.card_number
-                WHERE r.check_number LIKE ?
-                   OR e.empl_surname LIKE ?
-                   OR e.empl_name LIKE ?
-                   OR c.cust_surname LIKE ?
-                   OR c.cust_name LIKE ?
-                ORDER BY r.print_date DESC
-            """, (
-                f"%{search}%",
-                f"%{search}%",
-                f"%{search}%",
-                f"%{search}%",
-                f"%{search}%"
-            )).fetchall()
+    # -----------------------------
+    # SEARCH
+    # -----------------------------
+    if search:
+        query += """
+            AND (
+                r.check_number LIKE ?
+                OR e.empl_surname LIKE ?
+                OR e.empl_name LIKE ?
+                OR c.cust_surname LIKE ?
+                OR c.cust_name LIKE ?
+            )
+        """
+        like = f"%{search}%"
+        params.extend([like, like, like, like, like])
 
-        else:
-            receipts = conn.execute("""
-                SELECT r.check_number,
-                       r.print_date,
-                       r.sum_total,
-                       r.vat,
-                       e.empl_surname,
-                       e.empl_name,
-                       c.card_number,
-                       c.cust_surname,
-                       c.cust_name
-                FROM receipts r
-                JOIN employees e ON r.id_employee = e.id_employee
-                LEFT JOIN customer_cards c ON r.card_number = c.card_number
-                ORDER BY r.print_date DESC
-            """).fetchall()
+    # -----------------------------
+    # PERIOD FILTER
+    # -----------------------------
+    if filter_type == "period" and date_from and date_to:
+        query += """
+            AND DATE(r.print_date) BETWEEN ? AND ?
+        """
+        params.extend([date_from, date_to])
+
+
+    elif filter_type == "today":
+
+        query += " AND DATE(r.print_date) = DATE('now') "
+
+    # -----------------------------
+    # ORDER
+    # -----------------------------
+    query += " ORDER BY r.print_date DESC"
+
+    receipts = conn.execute(query, params).fetchall()
 
     conn.close()
 
-    return render_template("receipts/receipts.html", receipts=receipts,products=products, employees=employees, customer_cards=customer_cards, search=search)
-
+    return render_template(
+        "receipts/receipts.html",
+        receipts=receipts,
+        products=products,
+        employees=employees,
+        customer_cards=customer_cards,
+        search=search
+    )
 @receipt_routes.route("/receipts/add", methods=["GET", "POST"])
 @login_required
 @role_required("manager", "cashier")

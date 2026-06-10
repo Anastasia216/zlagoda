@@ -7,8 +7,10 @@ def get_all_employees(search='', role=''):
 
     if search and role:
         cursor.execute("""
-            SELECT *
-            FROM employees
+            SELECT e.*, u.username
+            FROM employees e
+            LEFT JOIN users u
+                ON u.id_employee = e.id_employee
             WHERE (
                 empl_surname LIKE ?
                 OR empl_name LIKE ?
@@ -24,8 +26,10 @@ def get_all_employees(search='', role=''):
 
     elif search:
         cursor.execute("""
-            SELECT *
-            FROM employees
+            SELECT e.*, u.username
+            FROM employees e
+            LEFT JOIN users u
+                ON u.id_employee = e.id_employee
             WHERE empl_surname LIKE ?
                OR empl_name LIKE ?
             ORDER BY empl_surname
@@ -37,8 +41,10 @@ def get_all_employees(search='', role=''):
 
     elif role:
         cursor.execute("""
-            SELECT *
-            FROM employees
+            SELECT e.*, u.username
+            FROM employees e
+            LEFT JOIN users u
+                ON u.id_employee = e.id_employee
             WHERE empl_role = ?
             ORDER BY empl_surname
         """,
@@ -46,8 +52,10 @@ def get_all_employees(search='', role=''):
 
     else:
         cursor.execute("""
-            SELECT *
-            FROM employees
+            SELECT e.*, u.username
+            FROM employees e
+            LEFT JOIN users u
+                ON u.id_employee = e.id_employee
             ORDER BY empl_surname
         """)
 
@@ -58,10 +66,12 @@ def get_all_employees(search='', role=''):
 def get_all_cashiers():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT * '
-                   'FROM employees '
-                   'WHERE empl_role = ? '
-                   'ORDER BY empl_surname', ('cashier',))
+    cursor.execute('SELECT e.*, u.username '
+                    'FROM employees e '
+                    'LEFT JOIN users u '
+                        'ON u.id_employee = e.id_employee'
+                    'WHERE empl_role = ? '
+                    'ORDER BY empl_surname', ('cashier',))
     employees = cursor.fetchall()
     conn.close()
     return employees
@@ -69,9 +79,11 @@ def get_all_cashiers():
 def get_employee_by_id(id_employee):
     conn = get_db_connection()
     cursor=conn.cursor()
-    cursor.execute('SELECT * '
-                   'FROM employees '
-                   'WHERE id_employee = ?', (id_employee,))
+    cursor.execute('SELECT e.*, u.username '
+                    'FROM employees e '
+                    'LEFT JOIN users u '
+                        'ON u.id_employee = e.id_employee '
+                    'WHERE e.id_employee = ?', (id_employee,))
     employee = cursor.fetchone()
     conn.close()
     return employee
@@ -79,9 +91,11 @@ def get_employee_by_id(id_employee):
 def get_employee_by_surname(empl_surname):
     conn = get_db_connection()
     cursor=conn.cursor()
-    cursor.execute('SELECT * '
-                   'FROM employees '
-                   'WHERE empl_surname = ?', (empl_surname,))
+    cursor.execute( 'SELECT e.*, u.username'
+                    'FROM employees e '
+                    'LEFT JOIN users u '
+                         'ON u.id_employee = e.id_employee '
+                    'WHERE e.empl_surname = ?', (empl_surname,))
     employee = cursor.fetchall()
     conn.close()
     return employee
@@ -141,6 +155,7 @@ def update_employee(id_employee, data):
         data['city'],
         data['street'],
         data['zip_code'],
+        id_employee
     ))
     conn.commit()
     conn.close()

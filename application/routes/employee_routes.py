@@ -1,3 +1,5 @@
+from uuid import uuid4
+from datetime import datetime, date
 from flask import(Blueprint, render_template, request, redirect, url_for, jsonify)
 from application.queries.employee_queries import (get_all_employees, get_employee_by_id, create_employee, update_employee, delete_employee,get_all_roles)
 from application.validation.employee_validation import(validate_employee)
@@ -12,9 +14,14 @@ def employees():
     role = request.args.get('role', '').strip()
     employees = get_all_employees(search, role)
     roles = get_all_roles()
+    today = date.today()
+
+    max_birth_date = today.replace(
+        year=today.year - 18
+    )
 
     return render_template(
-        'employees/employees.html', employees=employees, search=search, role=role, roles=roles)
+        'employees/employees.html', employees=employees, search=search, role=role, roles=roles, max_birth_date=max_birth_date.isoformat())
 @employee_routes.route('/employees/add')
 @login_required
 @role_required('manager')
@@ -25,11 +32,21 @@ def employees_add_page():
 @login_required
 @role_required('manager')
 def add_employees():
-    data = request.form
+    data = request.form.to_dict()
+
+    errors = validate_employee(data)
+
+    if errors:
+        return jsonify({
+            "success": False,
+            "message": "<br>".join(errors)
+        })
+
+    data["id_employee"] = str(uuid4())
     id_employee = create_employee(data)
     return jsonify({
         "success": True,
-        "id_employee": id_employee
+        "id_employee": data["id_employee"]
     })
 
 @employee_routes.route('/employees/get/<id_employee>')
@@ -51,10 +68,13 @@ def employees_edit_page(id_employee):
 @role_required('manager')
 def employee_edit(id_employee):
     data = request.form
-    # errors = validate_employee(data)
-    # if errors:
-    #     employee = get_employee_by_id(id_employee)
-    #     return render_template('employees/edit.html', errors=errors, old=data)
+    errors = validate_employee(data)
+
+    if errors:
+        return jsonify({
+            "success": False,
+            "message": "<br>".join(errors)
+        })
     update_employee(id_employee,data)
     return jsonify({
         "success": True
