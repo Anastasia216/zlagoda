@@ -610,6 +610,74 @@
         }
 
     /* MENU */
+        .modal-select-wrapper{
+            position:relative;
+            width:100%;
+        }
+        .modal-select-btn{
+    width:100%;
+    height:54px;
+
+    padding:0 18px;
+
+    border:none;
+    border-radius:18px;
+
+    background:rgba(255,255,255,0.9);
+
+    box-shadow:
+        0 10px 35px rgba(15,23,42,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    font-family:'Inter', sans-serif;
+    font-size:15px;
+    font-weight:500;
+    color:#0f172a;
+
+    cursor:pointer;
+}
+        .modal-select-btn::after{
+            content:"⌄";
+            font-size:18px;
+            color:#64748b;
+        }
+        .modal-select-menu{
+
+            position:absolute;
+            top:60px;
+            left:0;
+
+            width:100%;
+
+            display:none;
+
+            background:rgba(255,255,255,0.98);
+
+            border-radius:18px;
+
+            box-shadow:
+                0 20px 50px rgba(15,23,42,0.15);
+
+            z-index:2000;
+        }
+        .modal-select-item{
+
+            padding:12px 18px;
+
+            cursor:pointer;
+
+            transition:0.2s;
+        }
+
+        .modal-select-item:hover{
+
+            background:#eff6ff;
+            color:#2563eb;
+        }
         .dropdown-menu{
             position:absolute;
             top:75px;
@@ -849,10 +917,39 @@
 .close-modal-btn:hover{
     background:#e0e7ff;
 }
-    .topbar{
-    display:flex;
-    align-items:center;
-    margin-bottom:30px;
+
+input[type="date"]{
+
+    width:100%;
+
+    border:none;
+    outline:none;
+
+    border-radius:18px;
+
+    padding:15px 18px;
+
+    font-size:15px;
+    font-weight:500;
+
+    background:rgba(255,255,255,0.9);
+
+    box-shadow:
+        0 10px 35px rgba(15,23,42,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+
+    color:#0f172a;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+input[type="date"]:focus{
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,0.15),
+        0 10px 35px rgba(15,23,42,0.06);
+
 }
 
 
@@ -986,15 +1083,7 @@
 
         <form id="addForm">
             <div class="form-grid">
-                <div class="form-group">
-                    <label>ID Employee</label>
 
-                    <input
-                        type="text"
-                        id="new_id_employee"
-                        name="id_employee"
-                        required>
-                </div>
                 <div class="form-group">
 
                     <label>Surname</label>
@@ -1017,7 +1106,7 @@
                 </div>
                 <div class="form-group">
 
-                    <label>Patronymic</label>
+                    <label>Patronymic(Optional)</label>
 
                     <input type="text"
                            id="new_empl_patronymic"
@@ -1028,15 +1117,47 @@
 
                     <label>Role</label>
 
-                    <select id="new_empl_role"
-                            name="empl_role"
-                            required>
+                    <div class="modal-select-wrapper">
 
-                        <option value="">Select role</option>
-                        <option value="cashier">Cashier</option>
-                        <option value="manager">Manager</option>
+                        <button
+                            type="button"
+                            class="modal-select-btn"
+                                id="addRoleBtn"
+                                onclick="toggleModalDropdown('addRoleMenu')">
 
-                    </select>
+                                Select role
+
+                            </button>
+
+                            <div
+                                class="modal-select-menu"
+                                id="addRoleMenu">
+
+                                <div
+                                    class="modal-select-item"
+                                    onclick="selectRole('cashier','Cashier')">
+
+                                    Cashier
+
+                                </div>
+
+                                <div
+                                    class="modal-select-item"
+                                    onclick="selectRole('manager','Manager')">
+
+                                    Manager
+
+                                </div>
+
+                            </div>
+
+                            <input
+                                type="hidden"
+                                id="new_empl_role"
+                                name="empl_role"
+                                required>
+
+                        </div>
                 </div>
                 <div class="form-group">
 
@@ -1052,7 +1173,7 @@
 
                     <label>Date Of Birth</label>
 
-                    <input type="text"
+                    <input type="date"
                            id="new_date_of_birth"
                            name="date_of_birth"
                            required>
@@ -1062,7 +1183,7 @@
 
                     <label>Date Of Start</label>
 
-                    <input type="text"
+                    <input type="date"
                            id="new_date_of_start"
                            name="date_of_start"
                            required>
@@ -1075,9 +1196,13 @@
                     <input type="text"
                            id="new_phone_number"
                            name="phone_number"
+                           placeholder="+380XXXXXXXXX"
+                           maxlength="13"
+                           pattern="\+?[0-9]{10,12}"
+                           title="Format: +380XXXXXXXXX (Max 13 characters)"
                            required>
+                    </div>
 
-                </div>
                 <div class="form-group">
 
                     <label>City</label>
@@ -1106,9 +1231,9 @@
                            id="new_zip_code"
                            name="zip_code"
                            required>
-
                 </div>
-            </div>
+                </div>
+        </form>
             <div class="modal-buttons">
 
                 <button type="button"
@@ -1147,7 +1272,8 @@
         <form id="editForm" method="POST">
 
             <input type="hidden"
-                   id="id_employee">
+                   id="id_employee"
+                   name="id_employee">
             <div class="form-grid">
                 <div class="form-group">
 
@@ -1172,28 +1298,62 @@
                 </div>
                 <div class="form-group">
 
-                    <label>Patronymic</label>
+                    <label>Patronymic(Optional)</label>
 
                     <input type="text"
                            id="empl_patronymic"
-                           name="empl_patronymic"
-                           required>
+                           name="empl_patronymic">
 
                 </div>
                 <div class="form-group">
 
-                    <label>Role</label>
+    <label>Role</label>
 
-                    <select id="empl_role"
-                            name="empl_role"
-                            required>
+    <div class="modal-select-wrapper">
 
-                        <option value="cashier">Cashier</option>
-                        <option value="manager">Manager</option>
+        <button
+            type="button"
+            class="modal-select-btn"
+            id="editRoleBtn"
+            onclick="toggleModalDropdown('editRoleMenu')">
 
-                    </select>
+            Select role
 
-                </div>
+        </button>
+
+        <div
+            class="modal-select-menu"
+            id="editRoleMenu">
+
+            <div
+                class="modal-select-item"
+                onclick="selectEditRole('cashier','Cashier')">
+
+                Cashier
+
+            </div>
+
+            <div
+                class="modal-select-item"
+                onclick="selectEditRole('manager','Manager')">
+
+                Manager
+
+            </div>
+
+        </div>
+
+        <input
+            type="hidden"
+            id="empl_role"
+            name="empl_role"
+            required>
+
+    </div>
+
+</div>
+
+
                 <div class="form-group">
 
                     <label>Salary</label>
@@ -1208,7 +1368,7 @@
 
                     <label>Date Of Birth</label>
 
-                    <input type="text"
+                    <input type="date"
                            id="date_of_birth"
                            name="date_of_birth"
                            required>
@@ -1218,7 +1378,7 @@
 
                     <label>Date Of Start</label>
 
-                    <input type="text"
+                    <input type="date"
                            id="date_of_start"
                            name="date_of_start"
                            required>
@@ -1231,7 +1391,10 @@
                     <input type="text"
                            id="phone_number"
                            name="phone_number"
-                           required>
+                           placeholder="+380XXXXXXXXX"
+                           maxlength="13"
+                           pattern="\+?[0-9]{10,12}"
+                           required title="Format: +380XXXXXXXXX (Max 13 characters)">
 
                 </div>
                 <div class="form-group">
@@ -1267,6 +1430,7 @@
                 </div>
             </div>
 
+
             <div class="modal-buttons">
 
                 <button type="button"
@@ -1285,6 +1449,7 @@
                 </button>
 
             </div>
+
 
         </form>
 
@@ -1424,6 +1589,7 @@
             <tr>
                 <th>ID</th>
                 <th>Full Name</th>
+                <th>Username</th>
                 <th>Role</th>
                 <th>Salary</th>
                 <th>Date of Birth</th>
@@ -1448,6 +1614,10 @@
                     {{ employee['empl_surname'] }}
                     {{ employee['empl_name'] }}
                     {{ employee['empl_patronymic'] }}
+                </td>
+
+                <td>
+                    {{ employee['username'] or '-' }}
                 </td>
 
                 <td class="empl-role">{{ employee['empl_role'] }}</td>
@@ -1555,6 +1725,45 @@
 
 </div>
 <script>
+    function validateEmployeeForm() {
+
+    const salary =parseFloat(document.getElementById("new_salary").value );
+
+    if (isNaN(salary) || salary <= 0) {
+        alert("Salary must be greater than 0.");
+        return false;
+    }
+
+    const phone = document.getElementById("new_phone_number").value.trim();
+
+    if (!/^\+380\d{9}$/.test(phone)) {
+        alert("Phone must be in format +380XXXXXXXXX");
+        return false;
+    }
+
+    const zip =
+        document.getElementById(
+            "new_zip_code"
+        ).value.trim();
+
+    if (!/^[0-9]{5,10}$/.test(zip)) {
+
+        alert(
+            "Invalid ZIP code."
+        );
+        return false;
+    }
+
+    const birth = new Date(document.getElementById("new_date_of_birth").value);
+    if (birth > new Date()) {
+        alert("Date of birth cannot be in the future.");
+        return false;
+    }
+
+    return true;
+}
+</script>
+<script>
 
     async function deleteEmployee(idEmployee){
 
@@ -1566,22 +1775,16 @@
         return;
     }
 
-    const response = await fetch(
-        `/employees/${idEmployee}/delete`
-    );
+    const response = await fetch( `/employees/${idEmployee}/delete` );
 
     const result = await response.json();
 
     if(result.success){
 
-        document
-            .getElementById(`employee-row-${idEmployee}`)
-            .remove();
+        document.getElementById(`employee-row-${idEmployee}`).remove();
 
     }else{
-
         alert("Failed to delete employee.");
-
     }
 }
 
@@ -1637,8 +1840,7 @@ function openEditModal(idEmployee){
             document.getElementById("editForm").action =
                 `/employees/${employee.id_employee}/edit`;
 
-            document.getElementById("editModal").style.display =
-                "flex";
+            document.getElementById("editModal").style.display ="flex";
         })
         .catch(error => {
             console.error(error);
@@ -1647,9 +1849,7 @@ function openEditModal(idEmployee){
 }
 
 function closeEditModal(){
-
-    document.getElementById("editModal").style.display =
-        "none";
+    document.getElementById("editModal").style.display ="none";
 }
 
 function resetForm(){
@@ -1687,22 +1887,33 @@ function resetForm(){
     document.getElementById("zip_code").value =
         originalData.zip_code;
 
-    document.getElementById("id_product").value =
+    document.getElementById("id_employee").value =
         originalData.id_employee;
 }
-document
-    .getElementById("editForm")
-    .addEventListener("submit", saveEmployee);
+document.getElementById("editForm").addEventListener("submit", saveEmployee);
 
 async function saveEmployee(event){
+    const salary = parseFloat(document.getElementById("salary").value);
 
+    if (isNaN(salary) ||salary <= 0){
+        alert("Please enter a correct value. Salary must be greater than 0.");
+        return;
+        }
+    const phone = document.getElementById("new_phone_number").value.trim();
+    if (!/^\+380\d{9}$/.test(phone)) {
+        alert("Phone must be in format +380XXXXXXXXX");
+        return false;
+    }
+    const zip = document.getElementById("zip_code").value.trim();
+    if(!/^[0-9]{5,10}$/.test(zip)){
+        alert("Invalid ZIP code.");
+    return;
+}
     event.preventDefault();
 
-    const form =
-        document.getElementById("editForm");
+    const form = document.getElementById("editForm");
 
-    const response = await fetch(
-        form.action,
+    const response = await fetch(form.action,
         {
             method: "POST",
             body: new FormData(form)
@@ -1712,16 +1923,8 @@ async function saveEmployee(event){
     const result = await response.json();
 
     if(result.success){
-
-        const id =
-            document.getElementById(
-                "id_employee"
-            ).value;
-
-        const row =
-            document.getElementById(
-                `employee-row-${id}`
-            );
+        const id = document.getElementById("id_employee").value;
+        const row = document.getElementById(`employee-row-${id}`);
 
         row.querySelector(".full-name").textContent =
             `${document.getElementById("empl_surname").value}
@@ -1729,36 +1932,31 @@ async function saveEmployee(event){
              ${document.getElementById("empl_patronymic").value}`;
 
         row.querySelector(".empl-role").textContent =
-            document.getElementById(
-                "empl_role"
-            ).value;
+            document.getElementById("empl_role").value;
+
         row.querySelector(".salary").textContent =
-            document.getElementById(
-                "salary"
-            ).value;
+            document.getElementById("salary").value;
+
         row.querySelector(".date-of-birth").textContent =
-            document.getElementById(
-                "date_of_birth"
-            ).value;
+            document.getElementById("date_of_birth").value;
+
         row.querySelector(".date-of-start").textContent =
-            document.getElementById(
-                "date_of_start"
-            ).value;
+            document.getElementById("date_of_start").value;
+
         row.querySelector(".phone-number").textContent =
-            document.getElementById(
-                "phone_number"
-            ).value;
+            document.getElementById("phone_number").value;
 
         row.querySelector(".address").textContent =
             `${document.getElementById("city").value},
              ${document.getElementById("street").value}`;
 
         row.querySelector(".zip-code").textContent =
-            document.getElementById(
-                "zip_code"
-            ).value;
+            document.getElementById("zip_code").value;
 
         closeEditModal();
+    }
+    else{
+        alert(result.message)
     }
 }
 </script>
@@ -1767,30 +1965,22 @@ async function saveEmployee(event){
 function openAddModal(){
 
     document.getElementById("addForm").reset();
-
-    document.getElementById("addModal").style.display =
-        "flex";
+    document.getElementById("addModal").style.display ="flex";
 }
 
 function closeAddModal(){
-
-    document.getElementById("addModal").style.display =
-        "none";
+    document.getElementById("addModal").style.display ="none";
 }
 
-document
-    .getElementById("addForm")
-    .addEventListener("submit", addEmployee);
+document.getElementById("addForm").addEventListener("submit", addEmployee);
 
 async function addEmployee(event){
 
     event.preventDefault();
+    if(!validateEmployeeForm()){ return; }
+    const form = document.getElementById("addForm");
 
-    const form =
-        document.getElementById("addForm");
-
-    const response = await fetch(
-        "/employees/add",
+    const response = await fetch("/employees/add",
         {
             method:"POST",
             body:new FormData(form)
@@ -1802,34 +1992,23 @@ async function addEmployee(event){
     if(result.success){
 
         closeAddModal();
-
-        openAddUserModal(
-            result.id_employee
-        );
+        openAddUserModal(result.id_employee);
 
     }else{
-
-        alert("Failed to add employee.");
-
+        alert(result.message);
     }
 }
 
 </script>
 <script>
 
-const searchInput =
-    document.querySelector(".search-bar");
+const searchInput = document.querySelector(".search-bar");
 
 searchInput.addEventListener("input", () => {
-
     clearTimeout(window.searchTimer);
 
     window.searchTimer = setTimeout(() => {
-
-        document
-            .getElementById("searchForm")
-            .submit();
-
+        document.getElementById("searchForm").submit();
     }, 300);
 
 });
@@ -1837,18 +2016,11 @@ searchInput.addEventListener("input", () => {
 </script>
 <script>
 window.addEventListener("load", () => {
-
-    const search =
-        document.querySelector(".search-bar");
+    const search = document.querySelector(".search-bar");
 
     if(search.value.length > 0){
-
         search.focus();
-
-        search.setSelectionRange(
-            search.value.length,
-            search.value.length
-        );
+        search.setSelectionRange(search.value.length,search.value.length);
     }
 });
 </script>
@@ -1857,27 +2029,20 @@ window.addEventListener("load", () => {
 
 function toggleDropdown(){
 
-    const menu =
-        document.getElementById("roleDropdown");
-
-    menu.style.display =
-        menu.style.display === "block"
-            ? "none"
-            : "block";
+    const menu = document.getElementById("roleDropdown");
+    menu.style.display = menu.style.display === "block"? "none" : "block";
 }
 
 function selectRole(role){
 
     document.getElementById("roleInput").value = role;
-
     document.getElementById("searchForm").submit();
 }
 
 /* close dropdown when clicking outside */
 document.addEventListener("click", function(event){
 
-    const dropdown =
-        document.querySelector(".dropdown");
+    const dropdown = document.querySelector(".dropdown");
 
     if(!dropdown.contains(event.target)){
         document.getElementById("roleDropdown").style.display = "none";
@@ -1889,57 +2054,34 @@ document.addEventListener("click", function(event){
     function openAddUserModal(idEmployee){
 
     document.getElementById("addUserForm").reset();
-
-    document.getElementById("user_id_employee").value =
-        idEmployee;
-
-    document.getElementById("addUserModal").style.display =
-        "flex";
+    document.getElementById("user_id_employee").value =idEmployee;
+    document.getElementById("addUserModal").style.display ="flex";
 }
 
 function closeAddUserModal(){
-
-    document.getElementById("addUserModal").style.display =
-        "none";
+    document.getElementById("addUserModal").style.display ="none";
 }
-    document
-    .getElementById("addUserForm")
-    .addEventListener(
-        "submit",
-        addUser
-    );
+
+    document.getElementById("addUserForm").addEventListener("submit",addUser);
 
 async function addUser(event){
-
     event.preventDefault();
+    const form = document.getElementById("addUserForm");
 
-    const form =
-        document.getElementById(
-            "addUserForm"
-        );
-
-    const response =
-        await fetch(
-            "/users/add",
+    const response = await fetch("/users/add",
             {
                 method:"POST",
                 body:new FormData(form)
             }
         );
 
-    const result =
-        await response.json();
+    const result = await response.json();
 console.log(result);
    if(result.success){
-
         closeAddUserModal();
-
         location.reload();
-
     }else{
-
         alert(result.error);
-
     }
 }
 
@@ -1950,19 +2092,15 @@ function togglePopup(){
 }
 
 window.addEventListener('click', function(e){
-
     if(!e.target.closest('.user-wrapper')){
         popup.classList.remove('active');
     }
-
 });
 
 function showProfile(){
-
     fetch("/profile")
         .then(response => response.json())
         .then(data => {
-
             document.getElementById("profileContent").innerHTML = `
                 <p><b>Name:</b> ${data.empl_name}</p>
                 <p><b>Surname:</b> ${data.empl_surname}</p>
@@ -1972,7 +2110,6 @@ function showProfile(){
                 <p><b>Street:</b> ${data.street}</p>
                 <p><b>Start date:</b> ${data.date_of_start}</p>
             `;
-
             document.getElementById("profileModal").style.display = "block";
         });
 }
@@ -1982,15 +2119,68 @@ function closeProfileModal(){
 }
 
 function outsideClick(event){
-
-    const windowBox =
-        document.getElementById("profileWindow");
-
+    const windowBox =document.getElementById("profileWindow");
     if(!windowBox.contains(event.target)){
         closeProfileModal();
     }
 }
 
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+    const maxBirthDate = new Date();
+
+    maxBirthDate.setFullYear(
+        maxBirthDate.getFullYear() - 18
+    );
+
+    const maxDate =
+        maxBirthDate.toISOString().split("T")[0];
+
+    document.getElementById("new_date_of_birth")
+        .setAttribute("max", maxDate);
+
+    document.getElementById("date_of_birth")
+        .setAttribute("max", maxDate);
+});
+    function selectAddRole(value,text){
+
+    document.getElementById(
+        "new_empl_role"
+    ).value = value;
+
+    document.getElementById(
+        "addRoleBtn"
+    ).innerText = text;
+
+    document.getElementById(
+        "addRoleMenu"
+    ).style.display = "none";
+}
+    function selectEditRole(value,text){
+
+    document.getElementById(
+        "empl_role"
+    ).value = value;
+
+    document.getElementById(
+        "editRoleBtn"
+    ).innerText = text;
+
+    document.getElementById(
+        "editRoleMenu"
+    ).style.display = "none";
+}
+    function toggleModalDropdown(menuId){
+
+    const menu = document.getElementById(menuId);
+
+    menu.style.display =
+        menu.style.display === "block"
+            ? "none"
+            : "block";
+}
 </script>
 </body>
 </html>
