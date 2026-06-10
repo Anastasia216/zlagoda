@@ -31,6 +31,7 @@ def store_products():
     sql_base = """
                SELECT sp.UPC,
                       sp.UPC_prom,
+                      sp.id_product,
                       sp.selling_price,
                       sp.products_number,
                       sp.promotional_product,
@@ -199,3 +200,39 @@ def delete_store_product(upc):
     return jsonify({
         "success": True
     })
+
+
+@store_product_routes.route("/store_products/analytics/quantity", methods=["GET"])
+@login_required
+@role_required("manager")
+def get_product_sales_quantity():
+    id_product = request.args.get("id")
+    start_date = request.args.get("start")
+    end_date = request.args.get("end")
+
+    if not id_product or not start_date or not end_date:
+        return jsonify({"success": False, "message": "All fields (product, start date, end date) are required."})
+
+    conn = get_db_connection()
+    try:
+        sql = """
+              SELECT COALESCE(SUM(s.product_number), 0) AS total_units_sold
+              FROM sales s
+                       JOIN receipts r ON s.check_number = r.check_number
+                       JOIN store_products sp ON s.UPC = sp.UPC
+              WHERE sp.id_product = ?
+                AND r.print_date BETWEEN ? AND ?
+              """
+
+        start_param = f"{start_date} 00:00:00"
+        end_param = f"{end_date} 23:59:59"
+
+        result = conn.execute(sql, (id_product, start_param, end_param)).fetchone()
+        total_sold = result["total_units_sold"] if result else 0
+
+        return jsonify({"success": True, "total_sold": total_sold})
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+    finally:
+        conn.close()

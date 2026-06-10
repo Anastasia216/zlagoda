@@ -363,3 +363,87 @@ def get_receipt_sales(check_number):
 
     return jsonify([dict(row) for row in sales])
 
+
+@receipt_routes.route("/manager/api/cashiers", methods=["GET"])
+@login_required
+@role_required("manager")
+def get_cashiers_api():
+    conn = get_db_connection()
+    try:
+        rows = conn.execute("""
+                            SELECT id_employee, empl_surname, empl_name
+                            FROM employees
+                            WHERE empl_role = 'cashier'
+                            ORDER BY empl_surname
+                            """).fetchall()
+        return jsonify([dict(r) for r in rows])
+    except Exception as e:
+        return jsonify([])
+    finally:
+        conn.close()
+
+
+@receipt_routes.route("/manager/receipts/analytics/data", methods=["GET"])
+@login_required
+@role_required("manager")
+def get_receipts_analytics_data():
+    cashier_id = request.args.get("cashier_id")
+    start_date = request.args.get("start", "").strip()
+    end_date = request.args.get("end", "").strip()
+
+    conn = get_db_connection()
+    try:
+        where_clauses = []
+        params = []
+
+        if start_date and end_date:
+            where_clauses.append("date(r.print_date) BETWEEN date(?) AND date(?)")
+            params.extend([start_date, end_date])
+
+        if cashier_id and cashier_id != "all":
+            where_clauses.append("r.id_employee = ?")
+            params.append(cashier_id)
+
+        where_str = ""
+        if where_clauses:
+            where_str = " WHERE " + " AND ".join(where_clauses)
+
+        sql_calc = f"""
+            SELECT COALESCE(SUM(r.sum_total), 0) AS revenue,
+                   COALESCE(SUM(r.vat), 0) AS vat_total
+            FROM receipts r
+            {where_str}
+        """
+        total_data = conn.execute(sql_calc, params).fetchone()
+        revenue = float(total_data["revenue"]) if total_data else 0.0
+        vat = float(total_data["vat_total"]) if total_data else 0.0
+
+        sql_receipts = f"""
+            SELECT r.check_number, r.print_date, r.sum_total,
+                   e.empl_surname || ' ' || e.empl_name AS cashier_name
+            FROM receipts r
+            JOIN employees e ON r.id_employee = e.id_employee
+            {where_str}
+            ORDER BY r.print_date DESC
+        """
+        receipts_rows = conn.execute(sql_receipts, params).fetchall()
+
+        receipts_list = []
+        for row in receipts_rows:
+            receipts_list.append({
+                "check_number": row["check_number"],
+                "print_date": str(row["print_date"]),
+                "sum_total": float(row["sum_total"]),
+                "cashier_name": row["cashier_name"]
+            })
+
+        return jsonify({
+            "success": True,
+            "revenue": revenue,
+            "vat": vat,
+            "receipts": receipts_list
+        })
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+    finally:
+        conn.close()
