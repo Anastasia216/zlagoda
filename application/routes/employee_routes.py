@@ -80,7 +80,7 @@ def employee_edit(id_employee):
         "success": True
     })
 
-@employee_routes.route('/employees/<id_employee>/delete')
+@employee_routes.route('/employees/<id_employee>/delete', methods=['POST'])
 @login_required
 @role_required('manager')
 def employee_delete_route(id_employee):

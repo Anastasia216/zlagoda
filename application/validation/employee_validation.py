@@ -1,9 +1,12 @@
 from datetime import datetime, date
+import re
 def validate_employee(data):
     errors =[]
     phone_number = data['phone_number']
-    if len(phone_number) > 13:
-        errors.append("Phone number must can't be more than 13")
+    if not re.fullmatch(r"\+380\d{9}", phone_number):
+        errors.append(
+            "Phone number must be in format +380XXXXXXXXX"
+        )
     try:
         salary = float(data['salary'])
 
