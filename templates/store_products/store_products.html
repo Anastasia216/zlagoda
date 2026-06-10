@@ -871,6 +871,18 @@
                 <td>
                     {% if session["role"] == "manager" %}
                     <div class="actions">
+                       <button class="edit-btn" style="background: #f0fdf4; color: #16a34a;"
+                               onclick="openAnalyticsModal('{{ product['id_product'] }}', '{{ product['product_name'] | escape }}')">
+                             Sales Info
+                        </button>
+                    </div>
+                    {% else %}
+                    <span style="color: #94a3b8; font-size: 13px;">No actions</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if session["role"] == "manager" %}
+                    <div class="actions">
                        <button class="edit-btn" onclick="openEditModal('{{ product['UPC'] }}')">Edit</button>
                        <button class="delete-btn" onclick="deleteStoreProduct('{{ product['UPC'] }}', '{{ product['product_name'] | escape }}')">Delete</button>
                     </div>
@@ -890,6 +902,35 @@
     {% endif %}
 </div>
 
+<div id="analyticsModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 480px; padding: 34px;">
+        <button class="close-btn" onclick="closeAnalyticsModal()">✕</button>
+        <h2 id="analyticsTitle" style="margin-left: 0; margin-bottom: 20px; font-size: 26px;">Product Analytics</h2>
+
+        <p id="analyticsSubtitle" style="color: #64748b; font-size: 15px; margin-bottom: 24px; font-weight: 500;"></p>
+        <input type="hidden" id="analytics_id_product">
+
+        <form id="analyticsForm">
+            <div class="form-group">
+                <label for="analytics_start_date">Start Date</label>
+                <input type="date" id="analytics_start_date" required>
+            </div>
+            <div class="form-group">
+                <label for="analytics_end_date">End Date</label>
+                <input type="date" id="analytics_end_date" required>
+            </div>
+
+            <div id="analyticsResultBlock" style="display: none; background: rgba(22, 163, 74, 0.06); border: 1px dashed #16a34a; padding: 16px; border-radius: 18px; margin: 20px 0; text-align: center;">
+                <span id="analyticsResultText" style="font-size: 18px; font-weight: 700; color: #16a34a;"></span>
+            </div>
+
+            <div class="modal-buttons" style="margin-top: 20px;">
+                <button type="button" class="reset-btn" onclick="closeAnalyticsModal()">Close</button>
+                <button type="submit" class="save-btn" style="background: linear-gradient(135deg, #16a34a, #15803d);">Calculate</button>
+            </div>
+        </form>
+    </div>
+</div>
 <div id="editModal" class="modal">
     <div class="modal-content">
         <button class="close-btn" onclick="closeEditModal()">✕</button>
@@ -1357,6 +1398,62 @@ document.addEventListener("click", function(event) {
         document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");
     }
 });
+
+function openAnalyticsModal(idProduct, productName) {
+    const form = document.getElementById("analyticsForm");
+    if (form) form.reset();
+
+    document.getElementById("analytics_id_product").value = idProduct;
+    document.getElementById("analyticsSubtitle").innerHTML = `Calculate units sold for: <b>${productName}</b>`;
+    document.getElementById("analyticsResultBlock").style.display = "none";
+    document.getElementById("analyticsModal").style.display = "flex";
+}
+
+function closeAnalyticsModal() {
+    document.getElementById("analyticsModal").style.display = "none";
+}
+
+const analyticsForm = document.getElementById("analyticsForm");
+if (analyticsForm) {
+    analyticsForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const idProduct = document.getElementById("analytics_id_product").value;
+        const startDate = document.getElementById("analytics_start_date").value;
+        const endDate = document.getElementById("analytics_end_date").value;
+
+        if (new Date(startDate) > new Date(endDate)) {
+            alert("Error: Start date cannot be later than end date!");
+            return;
+        }
+
+        if (!idProduct) {
+            alert("Error: Product ID is missing. Please close the modal and try again.");
+            return;
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {
+            alert("Error: Start date cannot be later than end date!");
+            return;
+        }
+        try {
+            const response = await fetch(`/store_products/analytics/quantity?id=${idProduct}&start=${startDate}&end=${endDate}`);
+            const result = await response.json();
+
+            if (result.success) {
+                const resultBlock = document.getElementById("analyticsResultBlock");
+                const resultText = document.getElementById("analyticsResultText");
+
+                resultText.innerHTML = `Units sold during this period: ${result.total_sold} pcs.`;
+                resultBlock.style.display = "block";
+            } else {
+                alert("Calculation error: " + result.message);
+            }
+        } catch (error) {
+            alert("Network error: Could not connect to the server.");
+        }
+    });
+}
 </script>
 </body>
 </html>

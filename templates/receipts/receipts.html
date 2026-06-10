@@ -949,6 +949,82 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     opacity:1;
     transform:translateY(0);
 }
+
+/* ДОДАЄМО СТИЛІ КАСТОМНОГО СЕЛЕКТОРУ ЗІ СТОРІНКИ ТОВАРІВ */
+        .modal-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .modal-select-btn {
+            width: 100%;
+            height: 54px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 18px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.2s;
+        }
+
+        .modal-select-btn:hover {
+            background: #ffffff;
+        }
+
+        .modal-select-btn::after {
+            content: "⌄";
+            font-size: 18px;
+            color: #64748b;
+        }
+
+        .modal-select-menu {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(15,23,42,0.15);
+            display: none;
+            z-index: 2000;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 6px 0;
+        }
+
+        .dropdown-search-input {
+            width: calc(100% - 20px);
+            margin: 4px 10px 8px 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .modal-select-item {
+            padding: 12px 18px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s;
+            color: #334155;
+            text-align: left;
+        }
+
+        .modal-select-item:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
 </style>
 </head>
 
@@ -1346,28 +1422,101 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     </div>
 
 </div>
+<div id="globalAnalyticsModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 800px; width: 92%; padding: 34px; box-sizing: border-box; position: relative;">
+        <button class="close-btn" type="button" onclick="closeGlobalAnalyticsModal()">✕</button>
+        <h2 style="margin-left: 0; margin-bottom: 28px; font-size: 34px; font-weight: 800;">Receipts Analytics</h2>
 
+        <form id="globalAnalyticsForm" style="margin-bottom: 25px; width: 100%; position: relative;">
+
+            <div style="display: flex; gap: 12px; align-items: center; background: rgba(37, 99, 235, 0.05); padding: 12px 18px; border-radius: 16px; margin-bottom: 20px; width: 100%; box-sizing: border-box;">
+                <input type="checkbox" id="analytics_all_time" style="width: 20px; height: 20px; appearance: auto; margin: 0; cursor: pointer;">
+                <label for="analytics_all_time" style="margin: 0; font-weight: 700; color: #2563eb; cursor: pointer; font-size: 15px;">
+                    Analyze All Time (Ignore date range)
+                </label>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 16px; align-items: flex-end; width: 100%; box-sizing: border-box; position: relative; z-index: 999999 !important;">
+
+                <div class="form-group" style="margin-bottom: 0; width: 100%; position: relative;">
+                    <label style="display: block; margin-bottom: 8px; font-size: 16px; font-weight: 600;">Cashier</label>
+                    <div class="modal-select-wrapper" style="position: relative; width: 100%;">
+                        <button type="button" class="modal-select-btn" id="analyticsCashierBtn" onclick="toggleModalDropdown('analyticsCashierMenu')">
+                            All Cashiers
+                        </button>
+
+                        <div class="modal-select-menu" id="analyticsCashierMenu" style="position: absolute; top: 60px; left: 0; min-width: 100%; width: max-content; background: #ffffff; border-radius: 18px; box-shadow: 0 20px 50px rgba(15,23,42,0.15); display: none; z-index: 999999 !important; max-height: 180px; overflow-y: auto; padding: 6px 0;">
+                            <input type="text" class="dropdown-search-input" id="analyticsCashierSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('analyticsCashierSearch', 'analyticsCashierMenu')" style="width: calc(100% - 20px); margin: 4px 10px 8px 10px; padding: 10px 14px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px; outline: none; background: #ffffff; box-sizing: border-box;">
+
+                            <div class="modal-select-item" onclick="selectAnalyticsCashier('all', 'All Cashiers')" style="padding: 12px 18px; cursor: pointer; font-size: 15px; font-weight: 500; color: #334155; text-align: left; white-space: nowrap;">
+                                All Cashiers
+                            </div>
+                            <div id="dynamicCashierItems"></div>
+                        </div>
+                        <input type="hidden" name="cashier_id" id="analytics_cashier_id" value="all">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0; width: 100%;">
+                    <label style="display: block; margin-bottom: 8px; font-size: 16px; font-weight: 600;">Start Date</label>
+                    <input type="date" id="analytics_start_date" style="width: 100%; height: 54px; box-sizing: border-box;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0; width: 100%;">
+                    <label style="display: block; margin-bottom: 8px; font-size: 16px; font-weight: 600;">End Date</label>
+                    <input type="date" id="analytics_end_date" style="width: 100%; height: 54px; box-sizing: border-box;">
+                </div>
+
+            </div>
+
+            <div class="addProductbtn" style="margin-top: 24px; display: flex; justify-content: flex-end; width: 100%; position: relative; z-index: 10;">
+                <button type="submit" class="save-btn" style="width: 100%; padding: 15px; font-size: 16px; font-weight: 700;">
+                    Calculate & Get Info
+                </button>
+            </div>
+        </form>
+
+        <div id="globalResultsBlock" class="totals-box" style="display: none; margin: 20px 0; border: 1px dashed rgba(37, 99, 235, 0.25); position: relative; z-index: 5;">
+            <div class="total-line">
+                <span>Total Revenue for Period:</span>
+                <strong id="text_total_revenue" style="color: #2563eb; font-weight: 800;">0.00 ₴</strong>
+            </div>
+            <div class="total-line" style="margin-top: 10px;">
+                <span>Total VAT Content (20%):</span>
+                <strong id="text_total_vat" style="color: #7c3aed; font-weight: 800;">0.00 ₴</strong>
+            </div>
+        </div>
+
+        <h3 id="analyticsTableTitle" style="margin-top: 28px; margin-bottom: 12px; font-size: 20px; font-weight: 700; display: none; position: relative; z-index: 5;">Filtered Receipts List</h3>
+        <div id="analyticsTableContainer" class="products-table-wrapper" style="display: none; max-height: 200px; overflow-y: auto; width: 100%; position: relative; z-index: 5;">
+            <table class="products-table" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Check No</th>
+                        <th>Print Date</th>
+                        <th>Cashier</th>
+                        <th>Total Sum</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="analyticsReceiptsBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 <!-- FLOATING BUTTONS -->
 
 <div class="floating-buttons">
     {% if session["role"] == "cashier" %}
-    <button class="main-btn add-btn"
-            onclick="openAddModal()">
-
-        Add
-
-    </button>
+    <button class="main-btn add-btn" onclick="openAddModal()">Add</button>
     {% endif %}
 
     {% if session["role"] == "manager" %}
-    <button class="main-btn report-btn"
-            onclick="window.location.href='/receipts/report'">
-
-        Reports
-
+    <button class="main-btn report-btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="openGlobalAnalyticsModal()">
+        Analytics
     </button>
+    <button class="main-btn report-btn" onclick="window.location.href='/receipts/report'">Reports</button>
     {% endif %}
-
 </div>
 
 <div id="profileModal"
@@ -1800,6 +1949,203 @@ function outsideClick(event){
     }
 }
 
+</script>
+<script>
+function toggleModalDropdown(menuId) {
+    const menu = document.getElementById(menuId);
+    const isVisible = menu.style.display === "block";
+
+    document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");
+
+    if(!isVisible && menu) {
+        menu.style.display = "block";
+        const searchInput = menu.querySelector(".dropdown-search-input");
+        if(searchInput) {
+            searchInput.value = "";
+            filterModalDropdown(searchInput.id, menuId);
+            searchInput.focus();
+        }
+    } else if(menu) {
+        menu.style.display = "none";
+    }
+}
+
+function filterModalDropdown(searchId, menuId) {
+    const filter = document.getElementById(searchId).value.toUpperCase();
+    const menu = document.getElementById(menuId);
+    const items = menu.querySelectorAll(".modal-select-item");
+
+    items.forEach(item => {
+        const text = item.textContent || item.innerText;
+        if (text.toUpperCase().indexOf(filter) > -1) {
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+function selectAnalyticsCashier(value, label) {
+    document.getElementById("analytics_cashier_id").value = value;
+    document.getElementById("analyticsCashierBtn").innerText = label;
+    document.getElementById("analyticsCashierMenu").style.display = "none";
+}
+
+document.addEventListener("click", function(event) {
+    if (!event.target.closest('.modal-select-wrapper')) {
+        document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");
+    }
+});
+
+document.addEventListener("change", function(event) {
+    if (event.target && event.target.id === "analytics_all_time") {
+        const startDateInput = document.getElementById("analytics_start_date");
+        const endDateInput = document.getElementById("analytics_end_date");
+
+        if (event.target.checked) {
+            startDateInput.value = "";
+            endDateInput.value = "";
+            startDateInput.disabled = true;
+            endDateInput.disabled = true;
+            startDateInput.style.opacity = "0.5";
+            endDateInput.style.opacity = "0.5";
+        } else {
+            startDateInput.disabled = false;
+            endDateInput.disabled = false;
+            startDateInput.style.opacity = "1";
+            endDateInput.style.opacity = "1";
+        }
+    }
+});
+
+async function openGlobalAnalyticsModal() {
+    document.getElementById("globalAnalyticsForm").reset();
+    document.getElementById("globalResultsBlock").style.display = "none";
+    document.getElementById("analyticsTableTitle").style.display = "none";
+    document.getElementById("analyticsTableContainer").style.display = "none";
+
+    const startDateInput = document.getElementById("analytics_start_date");
+    const endDateInput = document.getElementById("analytics_end_date");
+    startDateInput.disabled = false;
+    endDateInput.disabled = false;
+    startDateInput.style.opacity = "1";
+    endDateInput.style.opacity = "1";
+
+    document.getElementById("analytics_cashier_id").value = "all";
+    document.getElementById("analyticsCashierBtn").innerText = "All Cashiers";
+
+    try {
+        const response = await fetch("/manager/api/cashiers");
+        const cashiers = await response.json();
+        const dynamicContainer = document.getElementById("dynamicCashierItems");
+
+        dynamicContainer.innerHTML = "";
+        cashiers.forEach(c => {
+            const fullName = `${c.empl_surname} ${c.empl_name}`;
+            dynamicContainer.innerHTML += `
+                <div class="modal-select-item" onclick="selectAnalyticsCashier('${c.id_employee}', '${fullName}')">
+                    ${fullName}
+                </div>
+            `;
+        });
+    } catch (e) {
+        console.error("Error loading cashiers list:", e);
+    }
+
+    document.getElementById("globalAnalyticsModal").style.display = "flex";
+}
+
+function closeGlobalAnalyticsModal() {
+    document.getElementById("globalAnalyticsModal").style.display = "none";
+}
+
+document.getElementById("globalAnalyticsForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const cashierId = document.getElementById("analytics_cashier_id").value;
+    const isAllTime = document.getElementById("analytics_all_time").checked;
+
+    let startDate = "";
+    let endDate = "";
+
+    if (!isAllTime) {
+        startDate = document.getElementById("analytics_start_date").value;
+        endDate = document.getElementById("analytics_end_date").value;
+
+        if (!startDate || !endDate) {
+            alert("Error: Please select both start and end dates, or check 'Analyze All Time'.");
+            return;
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {
+            alert("Error: Start date cannot be later than end date!");
+            return;
+        }
+    }
+    try {
+        const response = await fetch(`/manager/receipts/analytics/data?cashier_id=${cashierId}&start=${startDate}&end=${endDate}`);
+        const result = await response.json();
+
+        if (result.success) {
+            document.getElementById("text_total_revenue").innerText = `${result.revenue.toFixed(2)} ₴`;
+            document.getElementById("text_total_vat").innerText = `${result.vat.toFixed(2)} ₴`;
+            document.getElementById("globalResultsBlock").style.display = "block";
+
+            const tbody = document.getElementById("analyticsReceiptsBody");
+            tbody.innerHTML = "";
+
+            if (result.receipts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:15px; color:#64748b;">No receipts found.</td></tr>`;
+            } else {
+                result.receipts.forEach(r => {
+                    tbody.innerHTML += `
+                        <tr style="border-top: 1px solid #f1f5f9;">
+                            <td><b>${r.check_number}</b></td>
+                            <td>${r.print_date}</td>
+                            <td>${r.cashier_name}</td>
+                            <td>${r.sum_total} ₴</td>
+                            <td>
+                                <button type="button" class="details-btn" style="padding: 6px 12px; font-size: 12px;" onclick="viewReceiptItemsInline('${r.check_number}')">View Items</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            document.getElementById("analyticsTableTitle").style.display = "block";
+            document.getElementById("analyticsTableContainer").style.display = "block";
+        } else {
+            alert("Calculation error: " + result.message);
+        }
+    } catch (error) {
+        alert("Network error: Could not connect to the server.");
+    }
+});
+
+async function viewReceiptItemsInline(checkNumber) {
+    try {
+        const response = await fetch(`/receipts/${checkNumber}/sales`);
+        const sales = await response.json();
+
+        const content = document.getElementById("detailsContent");
+        content.innerHTML = "";
+
+        sales.forEach(sale => {
+            content.innerHTML += `
+                <div class="detail-card">
+                    <p><b>Product:</b> ${sale.product_name}</p>
+                    <p><b>Quantity:</b> ${sale.product_number} pcs</p>
+                    <p><b>Price:</b> ${sale.selling_price} ₴</p>
+                </div>
+            `;
+        });
+
+        const detailsModal = document.getElementById("detailsModal");
+        detailsModal.style.zIndex = "10000";
+        detailsModal.style.display = "flex";
+    } catch (e) {
+        alert("Network error: Failed to fetch receipt details.");
+    }
+}
 </script>
 </body>
 </html>
