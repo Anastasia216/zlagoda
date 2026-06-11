@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-
         *{
             margin:0;
             padding:0;
@@ -69,8 +68,8 @@
          .topbar{
             display:flex;
             justify-content:space-between;
-            align-items:flex-start;
-            margin-bottom:42px;
+            align-items:center;
+            margin-bottom:30px;
         }
 
         .logo h1{
@@ -310,7 +309,7 @@
             background:linear-gradient(135deg, #7c3aed, #a855f7);
         }
 
-/* MODAL */
+    /* MODAL */
 
     .modal{
         display:none;
@@ -537,8 +536,7 @@
         gap:10px;
     }
 
-                /* USER */
-
+/* USER WRAPPER */
 .user-wrapper{
     position:relative;
 }
@@ -577,7 +575,6 @@
 }
 
 /* POPUP */
-
 .user-popup{
     position:absolute;
 
@@ -713,7 +710,6 @@
 }
 
 /* PROFILE MODAL */
-
 .close-modal-btn{
 
     margin-top:20px;
@@ -737,14 +733,8 @@
 .close-modal-btn:hover{
     background:#e0e7ff;
 }
-    .topbar{
-    display:flex;
-    align-items:center;
-    margin-bottom:30px;
-}
 
         /* RESPONSIVE */
-
         @media(max-width:1300px){
 
             .table-container{
@@ -1206,8 +1196,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     </div>
 
 </div>
-<!-- ADD RECEIPT MODAL -->
-
 <div id="addModal" class="modal">
 
     <div class="modal-content">
@@ -1345,8 +1333,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 </div>
 
 
-<!-- ADD PRODUCT MODAL -->
-
 <div id="addProductModal" class="modal">
 
     <div class="modal-content">
@@ -1419,60 +1405,41 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 <div class="container">
 
     <div class="topbar">
-    <div style="display:flex; align-items:center;">
-        <button class="back-btn"
-                onclick="window.location.href='/'">
-            ←
-        </button>
+        <div style="display:flex; align-items:center;">
+            <button class="back-btn"
+                    onclick="window.location.href='/'">
+                ←
+            </button>
 
-        <div class="logo">
-            <h1>Receipts</h1>
-        </div>
+            <div class="logo">
+                <h1>Receipts</h1>
             </div>
+        </div>
+
         <div class="user-wrapper">
-
-    <button class="user-btn" onclick="togglePopup()">
-
-        <svg viewBox="0 0 24 24">
-            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
-        </svg>
-
-    </button>
-
-    <div class="user-popup" id="popup">
-
-        <div class="profile">
-
-            <div class="profile-avatar">
+            <button class="user-btn" onclick="togglePopup()">
                 <svg viewBox="0 0 24 24">
                     <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
                 </svg>
-            </div>
-
-            <div>
-                <h3>{{ session["username"] }}</h3>
-                <p>{{ session["role"] }}</p>
-            </div>
-
-        </div>
-
-        <div class="popup-buttons">
-
-            <button class="profile-btn"
-                    onclick="showProfile()">
-                User Information
             </button>
-
-            <button class="logout-btn"
-                    onclick="window.location.href='/logout'">
-                Log out
-            </button>
-
+            <div class="user-popup" id="popup">
+                <div class="profile">
+                    <div class="profile-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>{{ session["username"] }}</h3>
+                        <p>{{ session["role"] }}</p>
+                    </div>
+                </div>
+                <div class="popup-buttons">
+                    <button class="profile-btn" onclick="showProfile()">User Information</button>
+                    <button class="logout-btn" onclick="window.location.href='/logout'">Log out</button>
+                </div>
+            </div>
         </div>
-
-    </div>
-
-</div>
     </div>
 
         <div class="search-wrapper">
@@ -1705,7 +1672,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
         </div>
     </div>
 </div>
-<!-- FLOATING BUTTONS -->
 
 <div class="floating-buttons">
     {% if session["role"] == "cashier" %}
@@ -1716,412 +1682,205 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     <button class="main-btn report-btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="openGlobalAnalyticsModal()">
         Analytics
     </button>
-    <button class="main-btn report-btn" onclick="window.location.href='/receipts/report'">Reports</button>
+<button class="main-btn report-btn" onclick="window.open('/receipts/report', '_blank')">Reports</button>
     {% endif %}
 </div>
 
-<div id="profileModal"
-     onclick="outsideClick(event)"
-     style="
-     display:none;
-     position:fixed;
-     top:0;
-     left:0;
-     width:100%;
-     height:100%;
-     background:rgba(0,0,0,0.4);
-     z-index:9999;
-     ">
-
-    <div id="profileWindow"
-         style="
-        background:white;
-        width:500px;
-        margin:100px auto;
-        padding:30px;
-        border-radius:20px;
-        position:relative;
-    ">
-
+<div id="profileModal" onclick="outsideClick(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:9999;">
+    <div id="profileWindow" style="background:white; width:500px; margin:100px auto; padding:30px; border-radius:20px; position:relative;">
         <h2>User Information</h2>
-
-        <div id="profileContent"></div>
-
-        <button class="close-modal-btn"
-                onclick="closeProfileModal()">
-            Close
-        </button>
-
+        <div id="profileContent" style="margin-top:20px; line-height:2;"></div>
+        <button class="close-modal-btn" onclick="closeProfileModal()">Close</button>
     </div>
-
 </div>
+
 <script>
-
     function deleteReceipt(checkNumber){
-
-        const confirmDelete = confirm(
-            "Are you sure you want to delete this receipt?"
-        );
-
-        if(confirmDelete){
-
-            window.location.href =
-                `/receipt/delete/${checkNumber}`;
-
-        }
+        const confirmDelete = confirm("Are you sure you want to delete this receipt?");
+        if(confirmDelete){ window.location.href = `/receipt/delete/${checkNumber}`; }
     }
-
 </script>
 
 <script>
-
 function openAddModal(){
-
     document.getElementById("addForm").reset();
     const now = new Date();
-    document.getElementById("add_print_date").value =
-    now.toISOString().split("T")[0];
+    document.getElementById("add_print_date").value = now.toISOString().split("T")[0];
     receiptProducts = [];
-
     renderProducts();
-
     updateTotals();
-
-    document.getElementById(
-        "addModal"
-    ).style.display = "flex";
+    document.getElementById("addModal").style.display = "flex";
 }
 
+function closeAddModal(){ document.getElementById("addModal").style.display = "none"; }
 
-function closeAddModal(){
-
-    document.getElementById("addModal").style.display =
-        "none";
-}
-
-document
-    .getElementById("addForm")
-    .addEventListener("submit", addReceipt);
-
+document.getElementById("addForm").addEventListener("submit", addReceipt);
 
 async function addReceipt(event){
-
     event.preventDefault();
-
-    const form =
-        document.getElementById("addForm");
-
-    const formData =
-        new FormData(form);
-
-    formData.append(
-        "products",
-        JSON.stringify(receiptProducts)
-    );
+    const form = document.getElementById("addForm");
+    const formData = new FormData(form);
+    formData.append("products", JSON.stringify(receiptProducts));
     if(receiptProducts.length === 0){
-
-        alert(
-            "Add at least one product."
-        );
-
+        alert("Add at least one product.");
         return;
     }
-    const response = await fetch(
-        "/receipts/add",
-        {
-            method:"POST",
-            body:formData
-        }
-    );
-
+    const response = await fetch("/receipts/add", { method:"POST", body:formData });
     const result = await response.json();
-
-    if(result.success){
-        location.reload();
-    }else{
-        alert("Failed to add receipt.");
-    }
+    if(result.success){ location.reload(); }else{ alert("Failed to add receipt."); }
 }
-
 </script>
+
 <script>
-
-const searchInput =
-    document.querySelector(".search-bar");
-
+const searchInput = document.querySelector(".search-bar");
 searchInput.addEventListener("input", () => {
-
     clearTimeout(window.searchTimer);
-
-    window.searchTimer = setTimeout(() => {
-
-        document
-            .getElementById("searchForm")
-            .submit();
-
-    }, 300);
-
+    window.searchTimer = setTimeout(() => { document.getElementById("searchForm").submit(); }, 300);
 });
-
 </script>
+
 <script>
 window.addEventListener("load", () => {
-
-    const search =
-        document.querySelector(".search-bar");
-
+    const search = document.querySelector(".search-bar");
     if(search.value.length > 0){
-
         search.focus();
-
-        search.setSelectionRange(
-            search.value.length,
-            search.value.length
-        );
+        search.setSelectionRange(search.value.length, search.value.length);
     }
 });
 </script>
-<script>
-    function closeDetailsModal(){
 
-    document.getElementById(
-        "detailsModal"
-    ).style.display = "none";
-}
+<script>
+function closeDetailsModal(){ document.getElementById("detailsModal").style.display = "none"; }
 let currentReceipt = null;
 
 async function openDetailsModal(checkNumber){
-
     currentReceipt = checkNumber;
-
-    const response =
-        await fetch(`/receipts/${checkNumber}/sales`);
-
-    const sales =
-        await response.json();
-
-    const content =
-        document.getElementById("detailsContent");
-
+    const response = await fetch(`/receipts/${checkNumber}/sales`);
+    const sales = await response.json();
+    const content = document.getElementById("detailsContent");
     content.innerHTML = "";
 
     sales.forEach(sale => {
-
         content.innerHTML += `
             <div class="detail-card">
-
-                <p>
-                    <b>Product:</b>
-                    ${sale.product_name}
-                </p>
-
-                <p>
-                    <b>Quantity:</b>
-                    ${sale.product_number}
-                </p>
-
-                <p>
-                    <b>Price:</b>
-                    ${sale.selling_price} ₴
-                </p>
-
+                <p><b>Product:</b> ${sale.product_name}</p>
+                <p><b>Quantity:</b> ${sale.product_number}</p>
+                <p><b>Price:</b> ${sale.selling_price} ₴</p>
             </div>
         `;
     });
-
     document.getElementById("detailsModal").style.display = "flex";
 }
 </script>
+
 <script>
-
 function addSaleRow(){
-
     const container = document.getElementById("sales-container");
     const row = document.querySelector(".sale-row").cloneNode(true);
     row.querySelectorAll("input").forEach(i => i.value = "");
     container.appendChild(row);
 }
 </script>
+
 <script>
 let receiptProducts = [];
 
-
-    function openAddProductModal(){
-
+function openAddProductModal(){
     document.getElementById("product-quantity").value = "";
     document.getElementById("product-price").value = "";
-
     document.getElementById("addProductModal").style.display = "flex";
 }
 
-
-function closeAddProductModal(){
-
-    document.getElementById(
-        "addProductModal"
-    ).style.display = "none";
-}
+function closeAddProductModal(){ document.getElementById("addProductModal").style.display = "none"; }
 
 function addProductToReceipt(){
     const product_name = document.getElementById("product-upc").selectedOptions[0].text;
     const upc = document.getElementById("product-upc").value;
     const quantity = parseInt (document.getElementById("product-quantity").value);
     const price = parseFloat (document.getElementById("product-price").value);
-if(isNaN(quantity) || isNaN(price)){
-    alert("Enter valid quantity and price");
-    return;
-}
-const existing = receiptProducts.find(
-    p => p.upc === upc
-);
-
-if(existing){
-    alert("This product is already in the receipt.");
-    return;
-}
-    receiptProducts.push({
-        product_name,
-        upc,
-        quantity,
-        price
-    });
-
+    if(isNaN(quantity) || isNaN(price)){
+        alert("Enter valid quantity and price");
+        return;
+    }
+    const existing = receiptProducts.find( p => p.upc === upc );
+    if(existing){
+        alert("This product is already in the receipt.");
+        return;
+    }
+    receiptProducts.push({ product_name, upc, quantity, price });
     renderProducts();
     updateTotals();
     document.getElementById("product-quantity").value = "";
-document.getElementById("product-price").value = "";
+    document.getElementById("product-price").value = "";
     closeAddProductModal();
 }
 
 function renderProducts(){
-
-    const container =
-        document.getElementById(
-            "selected-products"
-        );
-
+    const container = document.getElementById("selected-products");
     if(receiptProducts.length === 0){
-
-        container.innerHTML = `
-            <tr>
-                <td colspan="4">
-                    No products added yet.
-                </td>
-            </tr>
-        `;
-
+        container.innerHTML = `<tr><td colspan="4">No products added yet.</td></tr>`;
         return;
     }
-
     container.innerHTML = "";
-
     receiptProducts.forEach((product,index)=>{
-
         container.innerHTML += `
             <tr>
-
                 <td>${product.upc}</td>
-
                 <td>${product.quantity}</td>
-
                 <td>${product.price}</td>
-
-                <td>
-
-                    <button
-                        type="button"
-                        class="delete-btn"
-                        onclick="removeProduct(${index})">
-
-                        Remove
-
-                    </button>
-
-                </td>
-
+                <td><button type="button" class="delete-btn" onclick="removeProduct(${index})">Remove</button></td>
             </tr>
         `;
     });
 }
-    function updateTotals(){
-        let total = 0;
-        receiptProducts.forEach(product => {
-            total += Number(product.quantity) * Number(product.price);
-        });
-        const vat = total * 0.20;
-        document.getElementById("add_sum_total").textContent = total.toFixed(2);
 
+function updateTotals(){
+    let total = 0;
+    receiptProducts.forEach(product => { total += Number(product.quantity) * Number(product.price); });
+    const vat = total * 0.20;
+    document.getElementById("add_sum_total").textContent = total.toFixed(2);
+    document.getElementById("add_sum_total_input").value = total.toFixed(2);
+    document.getElementById("add_vat_input").value = vat.toFixed(2);
+}
 
-    document.getElementById(
-            "add_sum_total_input"
-        ).value =
-            total.toFixed(2);
+function removeProduct(index){
+    receiptProducts.splice(index,1);
+    renderProducts();
+    updateTotals();
+}
 
-        document.getElementById(
-            "add_vat_input"
-        ).value =
-            vat.toFixed(2);
-    }
-    function removeProduct(index){
-        receiptProducts.splice(index,1);
-        renderProducts();
-        updateTotals();
-    }
-    function resetReceiptForm(){
-        document.getElementById("addForm").reset();
-        receiptProducts = [];
-        renderProducts();
-        updateTotals();
-    }
-    </script>
-    <script>
-    const productSelect =
-    document.getElementById("product-upc");
-
-if(productSelect){
-
-    productSelect.addEventListener(
-        "change",
-        async function(){
-
-            const response =
-                await fetch(
-                    `/products/get-price/${this.value}`
-                );
-
-            const data =
-                await response.json();
-
-            document.getElementById(
-                "product-price"
-            ).value =
-                data.selling_price;
-        }
-    );
+function resetReceiptForm(){
+    document.getElementById("addForm").reset();
+    receiptProducts = [];
+    renderProducts();
+    updateTotals();
 }
 </script>
-<script>
 
+<script>
+const productSelect = document.getElementById("product-upc");
+if(productSelect){
+    productSelect.addEventListener("change", async function(){
+        const response = await fetch(`/products/get-price/${this.value}`);
+        const data = await response.json();
+        document.getElementById("product-price").value = data.selling_price;
+    });
+}
+</script>
+
+<script>
 const popup = document.getElementById('popup');
 
-function togglePopup(){
-    popup.classList.toggle('active');
-}
+function togglePopup(){ popup.classList.toggle('active'); }
 
 window.addEventListener('click', function(e){
-
-    if(!e.target.closest('.user-wrapper')){
-        popup.classList.remove('active');
-    }
-
+    if(!e.target.closest('.user-wrapper')){ popup.classList.remove('active'); }
 });
 
 function showProfile(){
-
     fetch("/profile")
         .then(response => response.json())
         .then(data => {
-
             document.getElementById("profileContent").innerHTML = `
                 <p><b>Name:</b> ${data.empl_name}</p>
                 <p><b>Surname:</b> ${data.empl_surname}</p>
@@ -2131,72 +1890,54 @@ function showProfile(){
                 <p><b>Street:</b> ${data.street}</p>
                 <p><b>Start date:</b> ${data.date_of_start}</p>
             `;
-
             document.getElementById("profileModal").style.display = "block";
         });
 }
 
-function closeProfileModal(){
-    document.getElementById("profileModal").style.display = "none";
-}
+function closeProfileModal(){ document.getElementById("profileModal").style.display = "none"; }
 
 function outsideClick(event){
-
-    const windowBox =
-        document.getElementById("profileWindow");
-
-    if(!windowBox.contains(event.target)){
-        closeProfileModal();
-    }
+    const windowBox = document.getElementById("profileWindow");
+    if(windowBox && !windowBox.contains(event.target)){ closeProfileModal(); }
 }
+
 function toggleFilterMenu(){
     const menu = document.getElementById("filterMenu");
     menu.style.display = menu.style.display === "flex" ? "none" : "flex";
 }
 
 window.addEventListener("click", function(e){
-    if(!e.target.closest(".filter-wrapper")){
-        document.getElementById("filterMenu").style.display = "none";
-    }
+    if(!e.target.closest(".filter-wrapper")){ document.getElementById("filterMenu").style.display = "none"; }
 });
 
 function setTodayFilter(){
-
     const today = new Date().toISOString().split("T")[0];
-
     document.getElementById("filter_type").value = "today";
     document.getElementById("date_from_hidden").value = today;
     document.getElementById("date_to_hidden").value = today;
-
     document.getElementById("searchForm").submit();
 }
 
-function showPeriod(){
-    document.getElementById("periodBox").style.display = "block";
-}
+function showPeriod(){ document.getElementById("periodBox").style.display = "block"; }
 
 function applyPeriod(){
-
     const from = document.getElementById("dateFrom").value;
     const to = document.getElementById("dateTo").value;
-
     if(!from || !to){
         alert("Select both dates");
         return;
     }
-
     document.getElementById("filter_type").value = "period";
     document.getElementById("date_from_hidden").value = from;
     document.getElementById("date_to_hidden").value = to;
-
     document.getElementById("searchForm").submit();
 }
 </script>
+
 <script>
 function toggleModalDropdown(menuId) {
     const menu = document.getElementById(menuId);
     const isVisible = menu.style.display === "block";
-
     document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");
 
     if(!isVisible && menu) {
@@ -2207,9 +1948,7 @@ function toggleModalDropdown(menuId) {
             filterModalDropdown(searchInput.id, menuId);
             searchInput.focus();
         }
-    } else if(menu) {
-        menu.style.display = "none";
-    }
+    } else if(menu) { menu.style.display = "none"; }
 }
 
 function filterModalDropdown(searchId, menuId) {
@@ -2219,11 +1958,7 @@ function filterModalDropdown(searchId, menuId) {
 
     items.forEach(item => {
         const text = item.textContent || item.innerText;
-        if (text.toUpperCase().indexOf(filter) > -1) {
-            item.style.display = "";
-        } else {
-            item.style.display = "none";
-        }
+        if (text.toUpperCase().indexOf(filter) > -1) { item.style.display = ""; } else { item.style.display = "none"; }
     });
 }
 
@@ -2290,20 +2025,15 @@ async function openGlobalAnalyticsModal() {
                 </div>
             `;
         });
-    } catch (e) {
-        console.error("Error loading cashiers list:", e);
-    }
+    } catch (e) { console.error("Error loading cashiers list:", e); }
 
     document.getElementById("globalAnalyticsModal").style.display = "flex";
 }
 
-function closeGlobalAnalyticsModal() {
-    document.getElementById("globalAnalyticsModal").style.display = "none";
-}
+function closeGlobalAnalyticsModal() { document.getElementById("globalAnalyticsModal").style.display = "none"; }
 
 document.getElementById("globalAnalyticsForm").addEventListener("submit", async function(event) {
     event.preventDefault();
-
     const cashierId = document.getElementById("analytics_cashier_id").value;
     const isAllTime = document.getElementById("analytics_all_time").checked;
 
@@ -2318,7 +2048,6 @@ document.getElementById("globalAnalyticsForm").addEventListener("submit", async 
             alert("Error: Please select both start and end dates, or check 'Analyze All Time'.");
             return;
         }
-
         if (new Date(startDate) > new Date(endDate)) {
             alert("Error: Start date cannot be later than end date!");
             return;
@@ -2355,19 +2084,14 @@ document.getElementById("globalAnalyticsForm").addEventListener("submit", async 
             }
             document.getElementById("analyticsTableTitle").style.display = "block";
             document.getElementById("analyticsTableContainer").style.display = "block";
-        } else {
-            alert("Calculation error: " + result.message);
-        }
-    } catch (error) {
-        alert("Network error: Could not connect to the server.");
-    }
+        } else { alert("Calculation error: " + result.message); }
+    } catch (error) { alert("Network error: Could not connect to the server."); }
 });
 
 async function viewReceiptItemsInline(checkNumber) {
     try {
         const response = await fetch(`/receipts/${checkNumber}/sales`);
         const sales = await response.json();
-
         const content = document.getElementById("detailsContent");
         content.innerHTML = "";
 
@@ -2384,9 +2108,7 @@ async function viewReceiptItemsInline(checkNumber) {
         const detailsModal = document.getElementById("detailsModal");
         detailsModal.style.zIndex = "10000";
         detailsModal.style.display = "flex";
-    } catch (e) {
-        alert("Network error: Failed to fetch receipt details.");
-    }
+    } catch (e) { alert("Network error: Failed to fetch receipt details."); }
 }
 </script>
 </body>
