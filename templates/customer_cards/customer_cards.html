@@ -74,6 +74,7 @@
             box-shadow: 0 25px 60px rgba(15,23,42,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
         }
         .modal-content h2{ font-size:34px; font-weight:800; margin-left:48px; margin-bottom:28px; }
+        #customConfirmModal h2{margin-left: 0; text-align: center;}
         .close-btn{ position:absolute; top:32px; left:20px; width:42px; height:42px; border:none; border-radius:12px; cursor:pointer; background:#f8fafc; font-size:20px; box-shadow: 0 5px 25px rgba(15,23,42,0.16); }
         .close-btn:hover{ transform:translateY(-3px); }
         .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
@@ -111,6 +112,7 @@
         .user-popup{ position:absolute; top:78px; right:0; width:300px; background:rgba(255,255,255,0.90); backdrop-filter:blur(18px); border-radius:30px; padding:24px; box-shadow: 0 25px 70px rgba(15,23,42,0.12); display:none; z-index:999; }
         .user-popup::before{ content:''; position:absolute; top:-10px; right:28px; width:22px; height:22px; background:rgba(255,255,255,0.90); transform:rotate(45deg); border-radius:4px; }
         .user-popup.active{ display:block; animation:popup 0.22s ease; }
+        input::-webkit-contacts-auto-fill-button, input::-webkit-credentials-auto-fill-button {visibility: hidden; display: none !important; pointer-events: none;}
         @keyframes popup{ from{ opacity:0; transform:translateY(-10px); } to{ opacity:1; transform:translateY(0); } }
         .profile{ display:flex; align-items:center; gap:14px; margin-bottom:22px; }
         .profile-avatar{ width:60px; height:60px; border-radius:20px; background:linear-gradient(135deg, #dbeafe, #ede9fe); display:flex; align-items:center; justify-content:center; }
@@ -250,10 +252,7 @@
 
         <form id="addForm">
             <div class="form-grid">
-                <div class="form-group">
-                    <label>Card Number (Generated Automatically)</label>
-                    <input type="text" name="card_number" id="add_card_number" readonly required>
-                </div>
+             <input type="hidden" name="card_number" id="add_card_number">
                 <div class="form-group">
                     <label>Customer Surname</label>
                     <input type="text" name="cust_surname" id="add_surname" maxlength="50" pattern="^[A-Za-zА-Яа-яЄєІіЇїҐґ'\s\-]+$" title="Only letters allowed" required>
@@ -280,7 +279,7 @@
                 </div>
                 <div class="form-group">
                     <label>Zip Code (Optional)</label>
-                    <input type="text" name="zip_code" maxlength="10">
+                    <input type="text" name="zip_code" maxlength="10" pattern="[0-9]{5,10}" title="ZIP-code has to be from 5 to 10 numbers">
                 </div>
                 <div class="form-group">
                     <label>Discount Percent</label>
@@ -329,7 +328,7 @@
                 </div>
                 <div class="form-group">
                     <label>Zip Code (Optional)</label>
-                    <input type="text" id="zip_code" name="zip_code" maxlength="10">
+                    <input type="text" id="zip_code" name="zip_code" maxlength="10" pattern="[0-9]{5,10}" title="ZIP-code has to be from 5 to 10 numbers">
                 </div>
                 <div class="form-group">
                     <label>Discount Percent</label>
@@ -337,7 +336,7 @@
                 </div>
             </div>
             <div class="modal-buttons">
-                <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>
+                <button type="button" class="reset-btn" onclick="resetCustomerForm()">Reset</button>
                 <button type="submit" class="save-btn">Save</button>
             </div>
         </form>
@@ -448,7 +447,7 @@ function showCustomDialog(title, message, isAlertOnly = false, actionButtonText 
 async function deleteCustomerCard(cardNumber, surname){
     const confirmed = await showCustomDialog(
         "Delete Card?",
-        `Are you sure you want to remove customer card for <b>${surname}</b> (ID: ${cardNumber})?`
+        `Are you sure you want to delete customer card?`
     );
     if (!confirmed) return;
 
@@ -550,6 +549,30 @@ function outsideClick(event){
     const windowBox = document.getElementById("profileWindow");
     if(windowBox && !windowBox.contains(event.target)) closeProfileModal();
 }
+    function resetCustomerForm() {
+    document.getElementById("card_number").value = originalData.card_number;
+    document.getElementById("cust_surname").value = originalData.cust_surname;
+    document.getElementById("cust_name").value = originalData.cust_name;
+    document.getElementById("cust_patronymic").value = originalData.cust_patronymic || "";
+    document.getElementById("phone_number").value = originalData.phone_number;
+    document.getElementById("city").value = originalData.city || "";
+    document.getElementById("street").value = originalData.street || "";
+    document.getElementById("zip_code").value = originalData.zip_code || "";
+    document.getElementById("percent").value = originalData.percent !== undefined ? originalData.percent : 0;
+}
+    document.querySelectorAll('#editForm input[pattern], #addForm input[pattern]').forEach(input => {
+
+    input.addEventListener('invalid', function() {
+        // Беремо текст із вашого англійського title і підставляємо його повністю
+        const customMessage = this.getAttribute('title') || 'Invalid format.';
+        this.setCustomValidity(`Please match the requested format: ${customMessage}`);
+    });
+
+    input.addEventListener('input', function() {
+        // Скидаємо помилку, коли користувач починає друкувати
+        this.setCustomValidity('');
+    });
+});
 </script>
 </body>
 </html>
