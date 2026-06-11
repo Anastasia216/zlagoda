@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-
         *{
             margin:0;
             padding:0;
@@ -39,8 +38,6 @@
                     );
         }
 
-        /* BACKGROUND */
-
         .blur{
             position:fixed;
             border-radius:50%;
@@ -64,19 +61,15 @@
             right:-60px;
         }
 
-        /* MAIN */
-
         .container{
             padding:30px 48px 40px;
         }
 
-        /* HEADER */
-
          .topbar{
             display:flex;
             justify-content:space-between;
-            align-items:flex-start;
-            margin-bottom:42px;
+            align-items:center;
+            margin-bottom:30px;
         }
 
         .logo h1{
@@ -89,8 +82,6 @@
             -webkit-background-clip:text;
             -webkit-text-fill-color:transparent;
         }
-
-        /* SEARCH */
 
         .search-wrapper{
             width:100%;
@@ -130,8 +121,6 @@
                     0 16px 40px rgba(59,130,246,0.12),
                     inset 0 1px 0 rgba(255,255,255,1);
         }
-
-        /* TABLE */
 
         .table-container{
             width:100%;
@@ -209,8 +198,6 @@
             background:rgba(248,250,252,0.85);
         }
 
-        /* BACK BUTTON */
-
         .back-btn{
             width:58px;
             height:58px;
@@ -253,8 +240,6 @@
                     inset 0 1px 0 rgba(255,255,255,1);
         }
 
-        /* ACTION BUTTONS */
-
         .actions{
             display:flex;
             gap:6px;
@@ -292,8 +277,6 @@
         .delete-btn:hover{
             background:#ffe4e6;
         }
-
-        /* FLOATING BUTTONS */
 
         .floating-buttons{
             position:fixed;
@@ -333,8 +316,6 @@
         .report-btn{
             background:linear-gradient(135deg, #7c3aed, #a855f7);
         }
-
-/* MODAL */
 
     .modal{
         display:none;
@@ -568,8 +549,6 @@
             grid-column:1 / -1;
         }
 
-        /* DROPDOWN */
-
         .dropdown{
             position:relative;
         }
@@ -602,14 +581,12 @@
             justify-content:space-between;
         }
 
-        /* ARROW */
         .dropdown-btn::after{
             content:"⌄";
             margin-left:10px;
             color:#64748b;
         }
 
-    /* MENU */
         .modal-select-wrapper{
             position:relative;
             width:100%;
@@ -700,7 +677,6 @@
             z-index:1000;
         }
 
-        /* ITEM */
         .dropdown-item{
             padding:14px 16px;
 
@@ -717,8 +693,7 @@
             color:#2563eb;
         }
 
-                /* USER */
-
+/* ВСТАВЛЕНІ СТИЛІ КОРИСТУВАЧА З PRODUCTS */
 .user-wrapper{
     position:relative;
 }
@@ -755,8 +730,6 @@
     height:30px;
     fill:#334155;
 }
-
-/* POPUP */
 
 .user-popup{
     position:absolute;
@@ -892,8 +865,6 @@
     background:#ffe4e6;
 }
 
-/* PROFILE MODAL */
-
 .close-modal-btn{
 
     margin-top:20px;
@@ -952,9 +923,6 @@ input[type="date"]:focus{
 
 }
 
-
-        /* RESPONSIVE */
-
         @media(max-width:1000px){
 
             .table-container{
@@ -1000,7 +968,6 @@ input[type="date"]:focus{
             width:95%;
         }
     }
-
     </style>
 </head>
 
@@ -1071,8 +1038,6 @@ input[type="date"]:focus{
     </div>
 
 </div>
-
-
 
 <div id="addModal" class="modal">
 
@@ -1288,6 +1253,7 @@ input[type="date"]:focus{
         </div>
     </div>
 </div>
+
 <div id="editModal" class="modal">
 
     <div class="modal-content">
@@ -1392,7 +1358,6 @@ input[type="date"]:focus{
 
 </div>
 
-
                 <div class="form-group">
 
                     <label>Salary</label>
@@ -1475,7 +1440,6 @@ input[type="date"]:focus{
                 </div>
             </div>
 
-
             <div class="modal-buttons">
 
                 <button type="button"
@@ -1495,7 +1459,6 @@ input[type="date"]:focus{
 
             </div>
 
-
         </form>
 
     </div>
@@ -1506,67 +1469,45 @@ input[type="date"]:focus{
 
 <div class="container">
 
-    <!-- HEADER -->
-
     <div class="topbar">
-    <div style="display:flex; align-items:center;">
-        <button class="back-btn"
-                onclick="window.location.href='/'">
-            ←
-        </button>
+        <div style="display:flex; align-items:center;">
+            <button class="back-btn"
+                    onclick="window.location.href='/'">
+                ←
+            </button>
 
-        <div class="logo">
-            <h1>Employees</h1>
-        </div>
+            <div class="logo">
+                <h1>Employees</h1>
             </div>
+        </div>
+
         <div class="user-wrapper">
-
-    <button class="user-btn" onclick="togglePopup()">
-
-        <svg viewBox="0 0 24 24">
-            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
-        </svg>
-
-    </button>
-
-    <div class="user-popup" id="popup">
-
-        <div class="profile">
-
-            <div class="profile-avatar">
+            <button class="user-btn" onclick="togglePopup()">
                 <svg viewBox="0 0 24 24">
                     <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
                 </svg>
-            </div>
-
-            <div>
-                <h3>{{ session["username"] }}</h3>
-                <p>{{ session["role"] }}</p>
-            </div>
-
-        </div>
-
-        <div class="popup-buttons">
-
-            <button class="profile-btn"
-                    onclick="showProfile()">
-                User Information
             </button>
-
-            <button class="logout-btn"
-                    onclick="window.location.href='/logout'">
-                Log out
-            </button>
-
+            <div class="user-popup" id="popup">
+                <div class="profile">
+                    <div class="profile-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>{{ session["username"] }}</h3>
+                        <p>{{ session["role"] }}</p>
+                    </div>
+                </div>
+                <div class="popup-buttons">
+                    <button class="profile-btn" onclick="showProfile()">User Information</button>
+                    <button class="logout-btn" onclick="window.location.href='/logout'">Log out</button>
+                </div>
+            </div>
         </div>
-
-    </div>
-
-</div>
     </div>
 
 
-    <!-- SEARCH + FILTER -->
     <div class="search-wrapper">
 
         <form id="searchForm"
@@ -1581,7 +1522,6 @@ input[type="date"]:focus{
                placeholder="Search employees..."
                value="{{ search if search else '' }}">
 
-            <!-- CUSTOM DROPDOWN WRAPPER -->
             <div class="dropdown">
 
                 <button type="button"
@@ -1622,8 +1562,6 @@ input[type="date"]:focus{
     </form>
 
 </div>
-
-    <!-- TABLE -->
 
     <div class="table-container">
 
@@ -1718,98 +1656,52 @@ input[type="date"]:focus{
 
 </div>
 
-<!-- FLOATING BUTTONS -->
-
 <div class="floating-buttons">
-
     <button class="main-btn add-btn"
             onclick="openAddModal()">
         Add
     </button>
-
     <button class="main-btn report-btn"
-            onclick="window.location.href='/employees/report'">
+            onclick="window.open('/employees/report', '_blank')">
         Report
     </button>
-
 </div>
 
-<div id="profileModal"
-     onclick="outsideClick(event)"
-     style="
-     display:none;
-     position:fixed;
-     top:0;
-     left:0;
-     width:100%;
-     height:100%;
-     background:rgba(0,0,0,0.4);
-     z-index:9999;
-     ">
-
-    <div id="profileWindow"
-         style="
-        background:white;
-        width:500px;
-        margin:100px auto;
-        padding:30px;
-        border-radius:20px;
-        position:relative;
-    ">
-
+<div id="profileModal" onclick="outsideClick(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:9999;">
+    <div id="profileWindow" style="background:white; width:500px; margin:100px auto; padding:30px; border-radius:20px; position:relative;">
         <h2>User Information</h2>
-
-        <div id="profileContent"></div>
-
-        <button class="close-modal-btn"
-                onclick="closeProfileModal()">
-            Close
-        </button>
-
+        <div id="profileContent" style="margin-top:20px; line-height:2;"></div>
+        <button class="close-modal-btn" onclick="closeProfileModal()">Close</button>
     </div>
-
 </div>
+
 <script>
     function validateEmployeeForm() {
-
     const salary =parseFloat(document.getElementById("new_salary").value );
-
     if (isNaN(salary) || salary <= 0) {
         alert("Salary must be greater than 0.");
         return false;
     }
-
     const phone = document.getElementById("new_phone_number").value.trim();
-
     if (!/^\+380\d{9}$/.test(phone)) {
         alert("Phone must be in format +380XXXXXXXXX");
         return false;
     }
-
-    const zip =
-        document.getElementById(
-            "new_zip_code"
-        ).value.trim();
-
+    const zip = document.getElementById("new_zip_code").value.trim();
     if (!/^[0-9]{5,10}$/.test(zip)) {
-
-        alert(
-            "Invalid ZIP code."
-        );
+        alert("Invalid ZIP code.");
         return false;
     }
-
     const birth = new Date(document.getElementById("new_date_of_birth").value);
     if (birth > new Date()) {
         alert("Date of birth cannot be in the future.");
         return false;
     }
-
     return true;
 }
 </script>
-<script>
 
+<script>
     function showCustomDialog(title, message, isAlertOnly = false, actionButtonText = "Delete") {
     return new Promise((resolve) => {
         const modal = document.getElementById("customConfirmModal");
@@ -1824,8 +1716,7 @@ input[type="date"]:focus{
 
         if (isAlertOnly) {
             cancelBtn.style.display = "none";
-            actionBtn.style.background =
-                "linear-gradient(135deg, #2563eb, #4f46e5)";
+            actionBtn.style.background = "linear-gradient(135deg, #2563eb, #4f46e5)";
         } else {
             cancelBtn.style.display = "block";
             actionBtn.style.background = "#e11d48";
@@ -1840,13 +1731,8 @@ input[type="date"]:focus{
             resolve(confirmed);
         }
 
-        function onCancel() {
-            handleClose(false);
-        }
-
-        function onConfirm() {
-            handleClose(true);
-        }
+        function onCancel() { handleClose(false); }
+        function onConfirm() { handleClose(true); }
 
         cancelBtn.addEventListener("click", onCancel);
         actionBtn.addEventListener("click", onConfirm);
@@ -1854,157 +1740,83 @@ input[type="date"]:focus{
 }
 
 async function deleteEmployee(employeeId, surname){
-    const confirmed = await showCustomDialog(
-        "Delete Card?",
-        `Are you sure you want to delete employee from service?`
-    );
+    const confirmed = await showCustomDialog( "Delete Card?", `Are you sure you want to delete employee from service?` );
     if (!confirmed) return;
 
     try {
         const res = await fetch(`/employees/${employeeId}/delete`, { method: "POST" });
         const result = await res.json();
-        if(result.success) {
-            location.reload();
-        } else {
+        if(result.success) { location.reload(); } else {
             await showCustomDialog("Action Blocked", result.message || "Failed to delete this employee.", true, "OK");
         }
-    } catch(err) {
-        await showCustomDialog("Network Error", "Could not complete operation.", true, "OK");
-    }
+    } catch(err) { await showCustomDialog("Network Error", "Could not complete operation.", true, "OK"); }
 }
-
 </script>
-<script>
 
+<script>
 let originalData = {};
 
 function openEditModal(idEmployee){
-
     fetch(`/employees/get/${idEmployee}`)
         .then(response => response.json())
         .then(employee => {
-
             originalData = {...employee};
-
-            document.getElementById("empl_surname").value =
-                employee.empl_surname;
-
-            document.getElementById("empl_name").value =
-                employee.empl_name;
-
-            document.getElementById("empl_patronymic").value =
-                employee.empl_patronymic;
-
-            document.getElementById("empl_role").value =
-                employee.empl_role;
-
-            document.getElementById("salary").value =
-                employee.salary;
-
-            document.getElementById("date_of_birth").value =
-                employee.date_of_birth;
-
-            document.getElementById("date_of_start").value =
-                employee.date_of_start;
-
-            document.getElementById("phone_number").value =
-                employee.phone_number;
-
-            document.getElementById("city").value =
-                employee.city;
-
-            document.getElementById("street").value =
-                employee.street;
-
-            document.getElementById("zip_code").value =
-                employee.zip_code;
-
-            document.getElementById("id_employee").value =
-                employee.id_employee;
-
-            document.getElementById("editForm").action =
-                `/employees/${employee.id_employee}/edit`;
-
+            document.getElementById("empl_surname").value = employee.empl_surname;
+            document.getElementById("empl_name").value = employee.empl_name;
+            document.getElementById("empl_patronymic").value = employee.empl_patronymic;
+            document.getElementById("empl_role").value = employee.empl_role;
+            document.getElementById("salary").value = employee.salary;
+            document.getElementById("date_of_birth").value = employee.date_of_birth;
+            document.getElementById("date_of_start").value = employee.date_of_start;
+            document.getElementById("phone_number").value = employee.phone_number;
+            document.getElementById("city").value = employee.city;
+            document.getElementById("street").value = employee.street;
+            document.getElementById("zip_code").value = employee.zip_code;
+            document.getElementById("id_employee").value = employee.id_employee;
+            document.getElementById("editForm").action = `/employees/${employee.id_employee}/edit`;
             document.getElementById("editModal").style.display ="flex";
         })
-        .catch(error => {
-            console.error(error);
-            alert("Failed to load employee data.");
-        });
+        .catch(error => { console.error(error); alert("Failed to load employee data."); });
 }
 
-function closeEditModal(){
-    document.getElementById("editModal").style.display ="none";
-}
+function closeEditModal(){ document.getElementById("editModal").style.display ="none"; }
 
 function resetForm(){
-
-    document.getElementById("empl_surname").value =
-        originalData.empl_surname;
-
-    document.getElementById("empl_name").value =
-        originalData.empl_name;
-
-    document.getElementById("empl_patronymic").value =
-        originalData.empl_patronymic || "";
-
-    document.getElementById("empl_role").value =
-        originalData.empl_role;
-
-    document.getElementById("salary").value =
-        originalData.salary;
-
-    document.getElementById("date_of_birth").value =
-        originalData.date_of_birth;
-
-    document.getElementById("date_of_start").value =
-        originalData.date_of_start;
-
-    document.getElementById("phone_number").value =
-        originalData.phone_number;
-
-    document.getElementById("city").value =
-       originalData.city;
-
-    document.getElementById("street").value =
-        originalData.street;
-
-    document.getElementById("zip_code").value =
-        originalData.zip_code;
-
-    document.getElementById("id_employee").value =
-        originalData.id_employee;
+    document.getElementById("empl_surname").value = originalData.empl_surname;
+    document.getElementById("empl_name").value = originalData.empl_name;
+    document.getElementById("empl_patronymic").value = originalData.empl_patronymic || "";
+    document.getElementById("empl_role").value = originalData.empl_role;
+    document.getElementById("salary").value = originalData.salary;
+    document.getElementById("date_of_birth").value = originalData.date_of_birth;
+    document.getElementById("date_of_start").value = originalData.date_of_start;
+    document.getElementById("phone_number").value = originalData.phone_number;
+    document.getElementById("city").value = originalData.city;
+    document.getElementById("street").value = originalData.street;
+    document.getElementById("zip_code").value = originalData.zip_code;
+    document.getElementById("id_employee").value = originalData.id_employee;
 }
+
 document.getElementById("editForm").addEventListener("submit", saveEmployee);
 
 async function saveEmployee(event){
     const salary = parseFloat(document.getElementById("salary").value);
-
-    if (isNaN(salary) ||salary <= 0){
+    if (isNaN(salary) || salary <= 0){
         alert("Please enter a correct value. Salary must be greater than 0.");
         return;
-        }
-    const phone = document.getElementById("new_phone_number").value.trim();
+    }
+    const phone = document.getElementById("phone_number").value.trim();
     if (!/^\+380\d{9}$/.test(phone)) {
         alert("Phone must be in format +380XXXXXXXXX");
-        return false;
+        return;
     }
     const zip = document.getElementById("zip_code").value.trim();
     if(!/^[0-9]{5,10}$/.test(zip)){
         alert("Invalid ZIP code.");
-    return;
-}
+        return;
+    }
     event.preventDefault();
-
     const form = document.getElementById("editForm");
-
-    const response = await fetch(form.action,
-        {
-            method: "POST",
-            body: new FormData(form)
-        }
-    );
-
+    const response = await fetch(form.action, { method: "POST", body: new FormData(form) });
     const result = await response.json();
 
     if(result.success){
@@ -2015,171 +1827,102 @@ async function saveEmployee(event){
             `${document.getElementById("empl_surname").value}
              ${document.getElementById("empl_name").value}
              ${document.getElementById("empl_patronymic").value}`;
-
-        row.querySelector(".empl-role").textContent =
-            document.getElementById("empl_role").value;
-
-        row.querySelector(".salary").textContent =
-            document.getElementById("salary").value;
-
-        row.querySelector(".date-of-birth").textContent =
-            document.getElementById("date_of_birth").value;
-
-        row.querySelector(".date-of-start").textContent =
-            document.getElementById("date_of_start").value;
-
-        row.querySelector(".phone-number").textContent =
-            document.getElementById("phone_number").value;
-
+        row.querySelector(".empl-role").textContent = document.getElementById("empl_role").value;
+        row.querySelector(".salary").textContent = document.getElementById("salary").value;
+        row.querySelector(".date-of-birth").textContent = document.getElementById("date_of_birth").value;
+        row.querySelector(".date-of-start").textContent = document.getElementById("date_of_start").value;
+        row.querySelector(".phone-number").textContent = document.getElementById("phone_number").value;
         row.querySelector(".address").textContent =
-            `${document.getElementById("city").value},
-             ${document.getElementById("street").value}`;
-
-        row.querySelector(".zip-code").textContent =
-            document.getElementById("zip_code").value;
-
+            `${document.getElementById("city").value}, ${document.getElementById("street").value}`;
+        row.querySelector(".zip-code").textContent = document.getElementById("zip_code").value;
         closeEditModal();
-    }
-    else{
-        alert(result.message)
-    }
+    } else { alert(result.message); }
 }
 </script>
+
 <script>
-
 function openAddModal(){
-
     document.getElementById("addForm").reset();
     document.getElementById("addModal").style.display ="flex";
 }
-
-function closeAddModal(){
-    document.getElementById("addModal").style.display ="none";
-}
+function closeAddModal(){ document.getElementById("addModal").style.display ="none"; }
 
 document.getElementById("addForm").addEventListener("submit", addEmployee);
 
 async function addEmployee(event){
-
     event.preventDefault();
     if(!validateEmployeeForm()){ return; }
     const form = document.getElementById("addForm");
-
-    const response = await fetch("/employees/add",
-        {
-            method:"POST",
-            body:new FormData(form)
-        }
-    );
-
+    const response = await fetch("/employees/add", { method:"POST", body:new FormData(form) });
     const result = await response.json();
 
     if(result.success){
-
         closeAddModal();
         openAddUserModal(result.id_employee);
-
-    }else{
-        alert(result.message);
-    }
+    }else{ alert(result.message); }
 }
-
 </script>
+
 <script>
-
 const searchInput = document.querySelector(".search-bar");
-
 searchInput.addEventListener("input", () => {
     clearTimeout(window.searchTimer);
-
-    window.searchTimer = setTimeout(() => {
-        document.getElementById("searchForm").submit();
-    }, 300);
-
+    window.searchTimer = setTimeout(() => { document.getElementById("searchForm").submit(); }, 300);
 });
-
 </script>
+
 <script>
 window.addEventListener("load", () => {
     const search = document.querySelector(".search-bar");
-
     if(search.value.length > 0){
         search.focus();
-        search.setSelectionRange(search.value.length,search.value.length);
+        search.setSelectionRange(search.value.length, search.value.length);
     }
 });
 </script>
 
 <script>
-
 function toggleDropdown(){
-
     const menu = document.getElementById("roleDropdown");
     menu.style.display = menu.style.display === "block"? "none" : "block";
 }
 
 function selectRole(role){
-
     document.getElementById("roleInput").value = role;
     document.getElementById("searchForm").submit();
 }
 
-/* close dropdown when clicking outside */
 document.addEventListener("click", function(event){
-
     const dropdown = document.querySelector(".dropdown");
-
-    if(!dropdown.contains(event.target)){
-        document.getElementById("roleDropdown").style.display = "none";
-    }
+    if(dropdown && !dropdown.contains(event.target)){ document.getElementById("roleDropdown").style.display = "none"; }
 });
-
 </script>
-<script>
-    function openAddUserModal(idEmployee){
 
+<script>
+function openAddUserModal(idEmployee){
     document.getElementById("addUserForm").reset();
-    document.getElementById("user_id_employee").value =idEmployee;
+    document.getElementById("user_id_employee").value = idEmployee;
     document.getElementById("addUserModal").style.display ="flex";
 }
 
-function closeAddUserModal(){
-    document.getElementById("addUserModal").style.display ="none";
-}
+function closeAddUserModal(){ document.getElementById("addUserModal").style.display ="none"; }
 
-    document.getElementById("addUserForm").addEventListener("submit",addUser);
+document.getElementById("addUserForm").addEventListener("submit", addUser);
 
 async function addUser(event){
     event.preventDefault();
     const form = document.getElementById("addUserForm");
-
-    const response = await fetch("/users/add",
-            {
-                method:"POST",
-                body:new FormData(form)
-            }
-        );
-
+    const response = await fetch("/users/add", { method:"POST", body:new FormData(form) });
     const result = await response.json();
-console.log(result);
-   if(result.success){
-        closeAddUserModal();
-        location.reload();
-    }else{
-        alert(result.error);
-    }
+
+    if(result.success){ closeAddUserModal(); location.reload(); }else{ alert(result.error); }
 }
 
 const popup = document.getElementById('popup');
-
-function togglePopup(){
-    popup.classList.toggle('active');
-}
+function togglePopup(){ popup.classList.toggle('active'); }
 
 window.addEventListener('click', function(e){
-    if(!e.target.closest('.user-wrapper')){
-        popup.classList.remove('active');
-    }
+    if(!e.target.closest('.user-wrapper')){ popup.classList.remove('active'); }
 });
 
 function showProfile(){
@@ -2199,72 +1942,39 @@ function showProfile(){
         });
 }
 
-function closeProfileModal(){
-    document.getElementById("profileModal").style.display = "none";
-}
+function closeProfileModal(){ document.getElementById("profileModal").style.display = "none"; }
 
 function outsideClick(event){
-    const windowBox =document.getElementById("profileWindow");
-    if(!windowBox.contains(event.target)){
-        closeProfileModal();
-    }
+    const windowBox = document.getElementById("profileWindow");
+    if(windowBox && !windowBox.contains(event.target)){ closeProfileModal(); }
 }
-
 </script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-
+document.addEventListener("DOMContentLoaded", () => {
     const maxBirthDate = new Date();
+    maxBirthDate.setFullYear( maxBirthDate.getFullYear() - 18 );
+    const maxDate = maxBirthDate.toISOString().split("T")[0];
 
-    maxBirthDate.setFullYear(
-        maxBirthDate.getFullYear() - 18
-    );
-
-    const maxDate =
-        maxBirthDate.toISOString().split("T")[0];
-
-    document.getElementById("new_date_of_birth")
-        .setAttribute("max", maxDate);
-
-    document.getElementById("date_of_birth")
-        .setAttribute("max", maxDate);
+    document.getElementById("new_date_of_birth").setAttribute("max", maxDate);
+    document.getElementById("date_of_birth").setAttribute("max", maxDate);
 });
-    function selectAddRole(value,text){
 
-    document.getElementById(
-        "new_empl_role"
-    ).value = value;
-
-    document.getElementById(
-        "addRoleBtn"
-    ).innerText = text;
-
-    document.getElementById(
-        "addRoleMenu"
-    ).style.display = "none";
+function selectAddRole(value, text){
+    document.getElementById("new_empl_role").value = value;
+    document.getElementById("addRoleBtn").innerText = text;
+    document.getElementById("addRoleMenu").style.display = "none";
 }
-    function selectEditRole(value,text){
 
-    document.getElementById(
-        "empl_role"
-    ).value = value;
-
-    document.getElementById(
-        "editRoleBtn"
-    ).innerText = text;
-
-    document.getElementById(
-        "editRoleMenu"
-    ).style.display = "none";
+function selectEditRole(value, text){
+    document.getElementById("empl_role").value = value;
+    document.getElementById("editRoleBtn").innerText = text;
+    document.getElementById("editRoleMenu").style.display = "none";
 }
-    function toggleModalDropdown(menuId){
 
+function toggleModalDropdown(menuId){
     const menu = document.getElementById(menuId);
-
-    menu.style.display =
-        menu.style.display === "block"
-            ? "none"
-            : "block";
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
 }
 </script>
 </body>

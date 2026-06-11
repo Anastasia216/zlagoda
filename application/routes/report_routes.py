@@ -29,7 +29,7 @@ def generate_report(page_source):
                                    street,
                                    zip_code,
                                    date_of_start
-                            FROM employee
+                            FROM employees -- <-- ТУТ БУЛО "employee", ДОДАЙ ЛІТЕРУ "s"!
                             ORDER BY empl_surname
                             """).fetchall()
         for r in rows:
@@ -118,12 +118,12 @@ def generate_report(page_source):
                 "Yes" if r['promotional_product'] == 1 else "No"
             ])
 
-    elif page_source == "checks":
+    elif page_source in ["checks", "receipts"]:
         report_title = "Store Register Receipts Report"
         headers = ["Check Number", "Cashier ID", "Customer Card", "Print Date", "Total Sum", "VAT (20%)"]
         rows = conn.execute("""
                             SELECT check_number, id_employee, card_number, print_date, sum_total, vat
-                            FROM checks
+                            FROM receipts
                             ORDER BY print_date DESC
                             """).fetchall()
         for r in rows:
