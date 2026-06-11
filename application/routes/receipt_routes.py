@@ -259,7 +259,7 @@ def edit_receipt(check_number):
     return render_template(  "receipts/edit.html", receipt=receipt, employees=employees, customer_cards=customer_cards
     )
 
-@receipt_routes.route("/receipt/delete/<string:check_number>")
+@receipt_routes.route("/receipts/delete/<string:check_number>")
 @login_required
 @role_required("manager")
 def delete_receipt(check_number):
