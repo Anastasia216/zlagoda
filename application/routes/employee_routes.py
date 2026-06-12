@@ -84,10 +84,16 @@ def employee_edit(id_employee):
 @login_required
 @role_required('manager')
 def employee_delete_route(id_employee):
-    delete_employee(id_employee)
-    return jsonify({
-        'success':True
-    })
+    try:
+        delete_employee(id_employee)
+        return jsonify({
+            'success': True
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': "Cannot delete this employee because they have generated active register receipts. Operational history must be preserved."
+        }), 400
 
 @employee_routes.route('/employees/reports')
 @login_required

@@ -9,1425 +9,265 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-        }
-
+        *{ margin:0; padding:0; box-sizing:border-box; }
         body{
-            font-family:'Inter', sans-serif;
-            min-height:100vh;
-            overflow-x:hidden;
-            color:#0f172a;
-
-            background:
-                    radial-gradient(circle at top left,
-                    rgba(59,130,246,0.12),
-                    transparent 28%),
-
-                    radial-gradient(circle at bottom right,
-                    rgba(168,85,247,0.10),
-                    transparent 24%),
-
-                    linear-gradient(
-                            135deg,
-                            #f8fbff 0%,
-                            #f4f7ff 55%,
-                            #f7f5ff 100%
-                    );
+            font-family:'Inter', sans-serif; min-height:100vh; overflow-x:hidden; color:#0f172a;
+            background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 28%), radial-gradient(circle at bottom right, rgba(168,85,247,0.10), transparent 24%), linear-gradient(135deg, #f8fbff 0%, #f4f7ff 55%, #f7f5ff 100%);
         }
-
-        .blur{
-            position:fixed;
-            border-radius:50%;
-            filter:blur(90px);
-            z-index:-1;
-        }
-
-        .blur1{
-            width:320px;
-            height:320px;
-            background:rgba(59,130,246,0.08);
-            top:-120px;
-            left:-80px;
-        }
-
-        .blur2{
-            width:280px;
-            height:280px;
-            background:rgba(236,72,153,0.08);
-            bottom:-80px;
-            right:-60px;
-        }
-
-        .container{
-            padding:30px 48px 40px;
-        }
-
-         .topbar{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:30px;
-        }
-
-        .logo h1{
-            font-size:42px;
-            font-weight:800;
-            letter-spacing:-2px;
-            line-height:1.15;
-            padding-right:4px;
-            background:linear-gradient(to right, #2563eb, #7c3aed);
-            -webkit-background-clip:text;
-            -webkit-text-fill-color:transparent;
-        }
-
-        .search-wrapper{
-            width:100%;
-            margin-bottom:28px;
-        }
-
-        .search-bar{
-            width:100%;
-            height:68px;
-
-            border:none;
-            outline:none;
-
-            padding:0 28px;
-
-            border-radius:24px;
-
-            font-size:17px;
-            font-weight:500;
-
-            background:rgba(255,255,255,0.78);
-            backdrop-filter:blur(14px);
-
-            box-shadow:
-                    0 10px 35px rgba(15,23,42,0.06),
-                    inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-
-        .search-wrapper select,
-        .search-wrapper input[type="date"]{
-
-            height:68px;
-
-            border:none;
-            outline:none;
-
-            padding:0 18px;
-
-            border-radius:24px;
-
-            font-size:15px;
-            font-weight:500;
-
-            background:rgba(255,255,255,0.78);
-
-            backdrop-filter:blur(14px);
-
-            box-shadow:
-                0 10px 35px rgba(15,23,42,0.06),
-                inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-
-        table{
-            width:100%;
-            border-collapse:collapse;
-        }
-        .table-container{
-            width:100%;
-
-            max-height:calc(100vh - 330px);
-
-            overflow-y:auto;
-            overflow-x:auto;
-
-            background:rgba(255,255,255,0.74);
-
-            backdrop-filter:blur(14px);
-
-            border-radius:34px;
-
-            box-shadow:
-                0 12px 40px rgba(15,23,42,0.06),
-                inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-        thead th{
-            position:sticky;
-            top:0;
-            z-index:10;
-
-            background:rgba(241,245,249,0.98);
-        }
-        thead{
-            background:rgba(241,245,249,0.85);
-        }
-
-        th{
-            text-align:left;
-            padding:22px 24px;
-
-            font-size:13px;
-            font-weight:700;
-            color:#475569;
-
-            letter-spacing:0.5px;
-        }
-
-        td{
-            padding:22px 24px;
-
-            font-size:14px;
-            font-weight:500;
-
-            border-top:1px solid rgba(226,232,240,0.8);
-        }
-
-        tbody tr:hover{
-            background:rgba(248,250,252,0.85);
-        }
-
-        .back-btn{
-            width:58px;
-            height:58px;
-
-            flex-shrink:0;
-
-            border:none;
-            border-radius:20px;
-
-            cursor:pointer;
-
-            font-size:28px;
-            font-weight:700;
-
-            color:#2563eb;
-
-            background:rgba(255,255,255,0.82);
-            backdrop-filter:blur(14px);
-
-            box-shadow:
-                    0 10px 30px rgba(15,23,42,0.08),
-                    inset 0 1px 0 rgba(255,255,255,0.9);
-
-            transition:0.25s;
-
-            display:flex;
-            align-items:center;
-            justify-content:center;
-
-            margin-right:18px;
-        }
-
-        .back-btn:hover{
-            transform:translateY(-3px);
-            background:#eff6ff;
-        }
-
-        .actions{
-            display:flex;
-            gap:10px;
-        }
-
-        .edit-btn,
-        .delete-btn{
-            border:none;
-            border-radius:14px;
-
-            padding:10px 16px;
-
-            font-size:13px;
-            font-weight:600;
-
-            cursor:pointer;
-
-            transition:0.2s;
-        }
-
-        .edit-btn{
-            background:#eff6ff;
-            color:#2563eb;
-        }
-
-        .edit-btn:hover{
-            background:#dbeafe;
-        }
-
-        .delete-btn{
-            background:#fff1f2;
-            color:#e11d48;
-        }
-
-        .delete-btn:hover{
-            background:#ffe4e6;
-        }
-
-      .floating-buttons{
-            position:fixed;
-
-            right:40px;
-            bottom:34px;
-
-            display:flex;
-            flex-direction:row;
-            gap:18px;
-        }
-
-        .main-btn{
-            min-width:150px;
-            height:62px;
-
-            border:none;
-            border-radius:22px;
-
-            font-size:16px;
-            font-weight:700;
-
-            cursor:pointer;
-
-            color:white;
-            background:linear-gradient(135deg, #2563eb, #4f46e5);
-            box-shadow:
-                    0 14px 35px rgba(15,23,42,0.16);
-
-            transition:0.25s;
-        }
-
-        .main-btn:hover{
-            transform:translateY(-4px);
-        }
-
-        .add-btn{
-            background:linear-gradient(135deg, #2563eb, #4f46e5);
-        }
-
-        .report-btn{
-            background:linear-gradient(135deg, #7c3aed, #a855f7);
-        }
-
-    /* MODAL */
-
-    .modal{
-        display:none;
-
-        position:fixed;
-        inset:0;
-
-        background:rgba(15,23,42,0.35);
-
-        backdrop-filter:blur(6px);
-
-        align-items:center;
-        justify-content:center;
-
-        z-index:1000;
-    }
-
-    .modal-content{
-
-        width:700px;
-        max-width:92%;
-
-       background:
-                    radial-gradient(circle at top left,
-                    rgba(59,130,246,0.12),
-                    transparent 28%),
-
-                    radial-gradient(circle at bottom right,
-                    rgba(168,85,247,0.10),
-                    transparent 24%),
-
-                    linear-gradient(
-                            135deg,
-                            #f8fbff 0%,
-                            #f4f7ff 55%,
-                            #f7f5ff 100%
-                    );
-
-        backdrop-filter:blur(10px);
-
-        border-radius:30px;
-
-        padding:34px;
-
-        position:relative;
-
-        box-shadow:
-                0 25px 60px rgba(15,23,42,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.9);
-    }
-
-
-    .modal-content h2{
-
-        font-size:34px;
-        font-weight:800;
-        margin-left:48px;
-        margin-bottom:28px;
-    }
-
-    .close-btn{
-
-        position:absolute;
-
-        top:32px;
-        left:20px;
-
-        width:42px;
-        height:42px;
-
-        border:none;
-        border-radius:12px;
-
-        cursor:pointer;
-
-        background:#f8fafc;
-
-        font-size:20px;
-        box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-    }
-
-    .close-btn:hover{
-                transform:translateY(-3px);
-                box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-            }
-
-    .form-group{
-        margin-bottom:18px;
-    }
-
-    .form-group label{
-
-        display:block;
-
-        margin-bottom:8px;
-
-        font-size:16px;
-        font-weight:600;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select{
-    width:100%;
-
-        border:none;
-        outline:none;
-
-        border-radius:18px;
-
-        padding:15px 18px;
-
-        font-size:15px;
-
-        background:rgba(255,255,255,0.9);
-
-        box-shadow:
-            0 10px 35px rgba(15,23,42,0.06),
-            inset 0 1px 0 rgba(255,255,255,0.9);
-
-        color:#0f172a;
-
-        appearance:none;
-        -webkit-appearance:none;
-        -moz-appearance:none;
-
-        cursor:pointer;
-    }
-    .form-group{
-        position:relative;
-    }
-
-    .form-group:has(select)::after{
-
-        content:"⌄";
-
-        position:absolute;
-
-        right:18px;
-        top:35px;
-
-        font-size:18px;
-
-        color:#64748b;
-
-        pointer-events:none;
-    }
-
-    .form-group textarea{
-        min-height:120px;
-        resize:vertical;
-    }
-
-    .modal-buttons{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:28px;
-}
-
-.right-buttons{
-    display:flex;
-    gap:12px;
-}
-
-        .save-btn{
-             appearance:none;
-             -webkit-appearance:none;
-
-            border:none;
-
-            padding:13px 24px;
-
-            border-radius:14px;
-
-            font-weight:700;
-
-            cursor:pointer;
-
-            color:white;
-
-            background:linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #4f46e5
-            );
-            box-shadow:
-                            0 5px 25px rgba(15,23,42,0.16);
-        }
-        .save-btn:hover{
-                transform:translateY(-3px);
-                box-shadow:
-                        0 5px 25px rgba(15,23,42,0.16);
-            }
-
-        .reset-btn{
-
-            border:none;
-
-            padding:13px 24px;
-
-            border-radius:14px;
-
-            font-weight:700;
-
-            cursor:pointer;
-
-            background:#f1f5f9;
-
-            color:#334155;
-            box-shadow:
-                            0 5px 25px rgba(15,23,42,0.16);
-        }
-        .reset-btn:hover{
-                   transform:translateY(-3px);
-                   box-shadow:
-                           0 5px 25px rgba(15,23,42,0.16);
-                }
-.form-grid{
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:10px;
-    }
-
-/* USER WRAPPER */
-.user-wrapper{
-    position:relative;
-}
-
-.user-btn{
-    width:62px;
-    height:62px;
-
-    border:none;
-    border-radius:22px;
-
-    background:rgba(255,255,255,0.80);
-    backdrop-filter:blur(14px);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-
-    box-shadow:
-            0 12px 30px rgba(15,23,42,0.08),
-            inset 0 1px 0 rgba(255,255,255,0.9);
-
-    transition:0.25s;
-}
-
-.user-btn:hover{
-    transform:translateY(-3px);
-}
-
-.user-btn svg{
-    width:30px;
-    height:30px;
-    fill:#334155;
-}
-
-/* POPUP */
-.user-popup{
-    position:absolute;
-
-    top:78px;
-    right:0;
-
-    width:300px;
-
-    background:rgba(255,255,255,0.90);
-    backdrop-filter:blur(18px);
-
-    border-radius:30px;
-
-    padding:24px;
-
-    box-shadow:
-            0 25px 70px rgba(15,23,42,0.12);
-
-    display:none;
-
-    z-index:999;
-}
-
-.user-popup::before{
-    content:'';
-
-    position:absolute;
-
-    top:-10px;
-    right:28px;
-
-    width:22px;
-    height:22px;
-
-    background:rgba(255,255,255,0.90);
-
-    transform:rotate(45deg);
-
-    border-radius:4px;
-}
-
-.user-popup.active{
-    display:block;
-    animation:popup 0.22s ease;
-}
-
-@keyframes popup{
-
-    from{
-        opacity:0;
-        transform:translateY(-10px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.profile{
-    display:flex;
-    align-items:center;
-    gap:14px;
-
-    margin-bottom:22px;
-}
-
-.profile-avatar{
-    width:60px;
-    height:60px;
-
-    border-radius:20px;
-
-    background:linear-gradient(135deg, #dbeafe, #ede9fe);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.profile-avatar svg{
-    width:30px;
-    fill:#2563eb;
-}
-
-.profile h3{
-    font-size:18px;
-    margin-bottom:4px;
-}
-
-.profile p{
-    color:#64748b;
-    font-size:13px;
-}
-
-.popup-buttons{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
-
-.profile-btn,
-.logout-btn{
-
-    border:none;
-    border-radius:18px;
-
-    padding:15px;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.profile-btn{
-    background:#eef2ff;
-    color:#4f46e5;
-}
-
-.profile-btn:hover{
-    background:#e0e7ff;
-}
-
-.logout-btn{
-    background:#fff1f2;
-    color:#e11d48;
-}
-
-.logout-btn:hover{
-    background:#ffe4e6;
-}
-
-/* PROFILE MODAL */
-.close-modal-btn{
-
-    margin-top:20px;
-
-    border:none;
-    border-radius:18px;
-
-    padding:14px 22px;
-
-    background:#eef2ff;
-    color:#4f46e5;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:0.2s;
-}
-
-.close-modal-btn:hover{
-    background:#e0e7ff;
-}
-
-        /* RESPONSIVE */
-        @media(max-width:1300px){
-
-            .table-container{
-                overflow-x:auto;
-            }
-
-            table{
-                min-width:1200px;
-            }
-        }
-        @media(max-width:760px){
-        .container{
-            padding:24px;
-        }
-        .logo h1{
-            font-size:34px;
-        }
-        .floating-buttons{
-            right:20px;
-            bottom:20px;
-        }
-        .main-btn{
-            min-width:130px;
-            height:58px;
-        }
-    }
-        .sale-row{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:10px;
-    margin-bottom:12px;
-}
-        .selected-product{
-    display:grid;
-    grid-template-columns:
-        2fr 1fr 1fr auto;
-
-    gap:12px;
-
-    align-items:center;
-
-    padding:14px;
-
-    margin-bottom:10px;
-
-    border-radius:16px;
-
-    background:white;
-
-    box-shadow:
-        0 5px 15px rgba(15,23,42,0.06);
-}
-.totals-box{
-    margin:20px 0;
-
-    padding:18px 22px;
-
-    border-radius:18px;
-
-    background:white;
-
-    box-shadow:
-        0 5px 15px rgba(15,23,42,0.06);
-}
-
-.total-line{
-    display:flex;
-    justify-content:space-between;
-
-    font-size:18px;
-
-    margin:8px 0;
-}
-
-.total-line strong{
-    font-size:22px;
-}
-        .right-only{
-    justify-content:flex-end;
-    gap:12px;
-}
-        input[type="date"]{
-    background:rgba(255,255,255,0.9);
-    cursor:pointer;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator{
-    cursor:pointer;
-
-    padding:6px;
-
-    border-radius:8px;
-
-    opacity:0.7;
-
-    transition:0.2s;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator:hover{
-    opacity:1;
-    transform:scale(1.05);
-}
-        .products-table-wrapper{
-
-    max-height:250px;
-
-    overflow-y:auto;
-
-    margin-top:15px;
-
-    border-radius:16px;
-
-    background:white;
-
-    box-shadow:
-        0 5px 15px rgba(15,23,42,0.06);
-}
-        .products-table thead th{
-    position:sticky;
-    top:0;
-    background:white;
-    z-index:2;
-}
-        .details-btn{
-    border:none;
-    border-radius:14px;
-
-    padding:10px 16px;
-
-    font-size:13px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:0.2s;
-
-    background:#f0fdf4;
-    color:#15803d;
-}
-
-.details-btn:hover{
-    background:#dcfce7;
-}
-        .details-table-container{
-
-    max-height:350px;
-
-    overflow-y:auto;
-
-    border-radius:18px;
-
-    background:white;
-
-    box-shadow:
-        0 5px 15px rgba(15,23,42,0.06);
-
-    margin-bottom:20px;
-}
-        .details-buttons{
-
-    display:flex;
-
-    justify-content:right;
-
-    margin-top:40px;
-}
-.addProductbtn{
-    display:flex;
-    justify-content:flex-end;
-    margin-top:20px;
-}
-        .details-list{
-
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-
-    margin-top:20px;
-}
-
-.detail-card{
-
-    background:white;
-
-    border-radius:18px;
-
-    padding:18px;
-
-    box-shadow:
-        0 5px 15px rgba(15,23,42,0.06);
-}
-
-.detail-card p{
-    margin:6px 0;
-}
-        .validation-message{
-    position:fixed;
-
-    top:30px;
-    right:30px;
-
-    padding:16px 22px;
-
-    border-radius:18px;
-
-    background:#fff1f2;
-    color:#e11d48;
-
-    font-weight:600;
-
-    box-shadow:
-        0 10px 30px rgba(15,23,42,0.12);
-
-    z-index:99999;
-
-    opacity:0;
-
-    transform:translateY(-10px);
-
-    transition:0.25s;
-}
-
-.validation-message.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
-        .modal-select-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
-        .modal-select-btn {
-            width: 100%;
-            height: 54px;
-            padding: 0 18px;
-            border: none;
-            border-radius: 18px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
-            color: #0f172a;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: 0.2s;
-        }
-
-        .modal-select-btn:hover {
-            background: #ffffff;
-        }
-
-        .modal-select-btn::after {
-            content: "⌄";
-            font-size: 18px;
-            color: #64748b;
-        }
-
-        .modal-select-menu {
-            position: absolute;
-            top: 60px;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(14px);
-            border-radius: 18px;
-            box-shadow: 0 20px 50px rgba(15,23,42,0.15);
-            display: none;
-            z-index: 2000;
-            max-height: 200px;
-            overflow-y: auto;
-            padding: 6px 0;
-        }
-
-        .dropdown-search-input {
-            width: calc(100% - 20px);
-            margin: 4px 10px 8px 10px;
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            font-size: 14px;
-            outline: none;
-            background: #ffffff;
-        }
-
-        .modal-select-item {
-            padding: 12px 18px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 500;
-            transition: 0.2s;
-            color: #334155;
-            text-align: left;
-        }
-
-        .modal-select-item:hover {
-            background: #eff6ff;
-            color: #2563eb;
-        }
-.filter-bar{
-    height:250px;
-
-    display:flex;
-    gap:12px;
-    margin-bottom:18px;
-    align-items:center;
-}
-
-.filter-chip{
-    padding:10px 16px;
-    border:none;
-    border-radius:14px;
-    background:rgba(255,255,255,0.75);
-    backdrop-filter:blur(14px);
-    box-shadow:0 10px 25px rgba(0,0,0,0.06);
-    cursor:pointer;
-    font-size: 17px;
-    font-weight:600;
-    color:#334155;
-    transition:0.2s;
-}
-
-.filter-chip:hover{
-    transform:translateY(-2px);
-    background:#eff6ff;
-    color:#2563eb;
-}
-        .filter-wrapper{
-    position:relative;
-}
-
-.filter-menu{
-    position:absolute;
-    top:65px;
-    right:0;
-    left:auto;
-
-    width:340px;
-
-    background:rgba(255,255,255,0.95);
-    backdrop-filter:blur(12px);
-
-    border-radius:18px;
-    padding:12px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,0.12);
-
-    display:none;
-    flex-direction:column;
-    gap:10px;
-    z-index:999;
-}
-
-.filter-menu > button{
-    border:none;
-    padding:10px;
-    border-radius:12px;
-    cursor:pointer;
-    background:#f1f5f9;
-    font-weight:600;
-}
-
-.filter-menu button:hover{
-    background:#e2e8f0;
-}
-.period-box{
-    margin-top:12px;
-
-    display:none;
-    flex-direction:column;
-    gap:12px;
-}
-
-.date-field{
-
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-}
-
-.date-field label{
-    left:13px;
-    font-size:15px;
-    font-weight:700;
-    color:#64748b;
-}
-.apply-filter-btn{
-    width:100%;
-    height:36px;
-
-    border:none;
-    border-radius:12px;
-    top:10px;
-    cursor:pointer;
-
-    font-size:14px;
-    font-weight:700;
-
-    color:white;
-
-    background:linear-gradient(
-        135deg,
-        #2563eb,
-        #4f46e5
-    );
-
-    box-shadow:
-        0 14px 35px rgba(15,23,42,0.16);
-    margin-top:8px;
-    transition:0.25s;
-}
-
-.apply-filter-btn:hover{
-    transform:translateY(-3px);
-}
-.filter-menu .date-field input[type="date"]{
-    width:220px;
-    height:38px;
-
-    padding:0 12px;
-
-    border:none;
-    outline:none;
-
-    border-radius:12px;
-
-    font-size:13px;
-
-    background:#f8fafc;
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.9);
-}
-</style>
+        .blur{ position:fixed; border-radius:50%; filter:blur(90px); z-index:-1; }
+        .blur1{ width:320px; height:320px; background:rgba(59,130,246,0.08); top:-120px; left:-80px; }
+        .blur2{ width:280px; height:280px; background:rgba(236,72,153,0.08); bottom:-80px; right:-60px; }
+        .container{ padding:30px 48px 40px; }
+        .topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; }
+        .logo h1{ font-size:42px; font-weight:800; letter-spacing:-2px; line-height:1.15; padding-right:4px; background:linear-gradient(to right, #2563eb, #7c3aed); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .search-wrapper{ width:100%; margin-bottom:28px; }
+        .search-bar{ width:100%; height:68px; border:none; outline:none; padding:0 28px; border-radius:24px; font-size:17px; font-weight:500; background:rgba(255,255,255,0.78); backdrop-filter:blur(14px); box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9); }
+        .search-wrapper select, .search-wrapper input[type="date"]{ height:68px; border:none; outline:none; padding:0 18px; border-radius:24px; font-size:15px; font-weight:500; background:rgba(255,255,255,0.78); backdrop-filter:blur(14px); box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9); }
+        table{ width:100%; border-collapse:collapse; }
+        .table-container{ width:100%; max-height:calc(100vh - 330px); overflow-y:auto; overflow-x:auto; background:rgba(255,255,255,0.74); backdrop-filter:blur(14px); border-radius:34px; box-shadow: 0 12px 40px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9); }
+        thead th{ position:sticky; top:0; z-index:10; background:rgba(241,245,249,0.98); }
+        thead{ background:rgba(241,245,249,0.85); }
+        th{ text-align:left; padding:22px 24px; font-size:13px; font-weight:700; color:#475569; letter-spacing:0.5px; }
+        td{ padding:22px 24px; font-size:14px; font-weight:500; border-top:1px solid rgba(226,232,240,0.8); }
+        tbody tr:hover{ background:rgba(248,250,252,0.85); }
+        .back-btn{ width:58px; height:58px; flex-shrink:0; border:none; border-radius:20px; cursor:pointer; font-size:28px; font-weight:700; color:#2563eb; background:rgba(255,255,255,0.82); backdrop-filter:blur(14px); box-shadow: 0 10px 30px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9); transition:0.25s; display:flex; align-items:center; justify-content:center; margin-right:18px; }
+        .back-btn:hover{ transform:translateY(-3px); background:#eff6ff; }
+        .actions{ display:flex; gap:10px; }
+        .delete-btn{ border:none; border-radius:14px; padding:10px 16px; font-size:13px; font-weight:600; cursor:pointer; transition:0.2s; background:#fff1f2; color:#e11d48; }
+        .delete-btn:hover{ background:#ffe4e6; }
+        .floating-buttons{ position:fixed; right:40px; bottom:34px; display:flex; flex-direction:row; gap:18px; z-index: 90; }
+        .main-btn{ min-width:150px; height:62px; border:none; border-radius:22px; font-size:16px; font-weight:700; cursor:pointer; color:white; background:linear-gradient(135deg, #2563eb, #4f46e5); box-shadow: 0 14px 35px rgba(15,23,42,0.16); transition:0.25s; }
+        .main-btn:hover{ transform:translateY(-4px); }
+        .add-btn{ background:linear-gradient(135deg, #2563eb, #4f46e5); }
+        .report-btn{ background:linear-gradient(135deg, #7c3aed, #a855f7); }
+
+        /* MODAL */
+        .modal{ display:none; position:fixed; inset:0; background:rgba(15,23,42,0.35); backdrop-filter:blur(6px); align-items:center; justify-content:center; z-index:1000; }
+        .modal-content{ width:700px; max-width:92%; background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 28%), radial-gradient(circle at bottom right, rgba(168,85,247,0.10), transparent 24%), linear-gradient(135deg, #f8fbff 0%, #f4f7ff 55%, #f7f5ff 100%); backdrop-filter:blur(10px); border-radius:30px; padding:34px; position:relative; box-shadow: 0 25px 60px rgba(15,23,42,0.15), inset 0 1px 0 rgba(255,255,255,0.9); }
+        .modal-content h2{ font-size:34px; font-weight:800; margin-bottom:28px; }
+        .close-btn{ position:absolute; top:32px; right:24px; width:42px; height:42px; border:none; border-radius:12px; cursor:pointer; background:#f8fafc; font-size:20px; box-shadow: 0 5px 25px rgba(15,23,42,0.16); display:flex; align-items:center; justify-content:center; transition: 0.2s; }
+        .close-btn:hover{ transform:translateY(-3px); }
+        .form-group{ margin-bottom:18px; position:relative; }
+        .form-group label{ display:block; margin-bottom:8px; font-size:16px; font-weight:600; }
+        .form-group input, .form-group textarea, .form-group select{ width:100%; border:none; outline:none; border-radius:18px; padding:15px 18px; font-size:15px; background:rgba(255,255,255,0.9); box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9); color:#0f172a; }
+        .form-group textarea{ min-height:120px; resize:vertical; }
+        .modal-buttons{ display:flex; justify-content:space-between; align-items:center; margin-top:28px; }
+        .right-buttons{ display:flex; gap:12px; }
+        .save-btn{ border:none; padding:13px 24px; border-radius:14px; font-weight:700; cursor:pointer; color:white; background:linear-gradient(135deg, #2563eb, #4f46e5); box-shadow: 0 5px 25px rgba(15,23,42,0.16); transition: 0.2s; }
+        .save-btn:hover{ transform:translateY(-3px); }
+        .reset-btn{ border:none; padding:13px 24px; border-radius:14px; font-weight:700; cursor:pointer; background:#f1f5f9; color:#334155; box-shadow: 0 5px 25px rgba(15,23,42,0.16); transition: 0.2s; }
+        .reset-btn:hover{ transform:translateY(-3px); }
+        .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+        /* USER PROFILE POPUP */
+        .user-wrapper{ position:relative; }
+        .user-btn{ width:62px; height:62px; border:none; border-radius:22px; background:rgba(255,255,255,0.80); backdrop-filter:blur(14px); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 12px 30px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9); transition:0.25s; }
+        .user-btn:hover{ transform:translateY(-3px); }
+        .user-btn svg{ width:30px; height:30px; fill:#334155; }
+        .user-popup{ position:absolute; top:78px; right:0; width:300px; background:rgba(255,255,255,0.90); backdrop-filter:blur(18px); border-radius:30px; padding:24px; box-shadow: 0 25px 70px rgba(15,23,42,0.12); display:none; z-index:999; }
+        .user-popup::before{ content:''; position:absolute; top:-10px; right:28px; width:22px; height:22px; background:rgba(255,255,255,0.90); transform:rotate(45deg); border-radius:4px; }
+        .user-popup.active{ display:block; animation:popup 0.22s ease; }
+        @keyframes popup{ from{ opacity:0; transform:translateY(-10px); } to{ opacity:1; transform:translateY(0); } }
+        .profile{ display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+        .profile-avatar{ width:60px; height:60px; border-radius:20px; background:linear-gradient(135deg, #dbeafe, #ede9fe); display:flex; align-items:center; justify-content:center; }
+        .profile-avatar svg{ width:30px; fill:#2563eb; }
+        .profile h3{ font-size:18px; margin-bottom:4px; }
+        .profile p{ color:#64748b; font-size:13px; }
+        .popup-buttons{ display:flex; flex-direction:column; gap:12px; }
+        .profile-btn, .logout-btn{ border:none; border-radius:18px; padding:15px; font-size:15px; font-weight:600; cursor:pointer; transition:0.2s; }
+        .profile-btn{ background:#eef2ff; color:#4f46e5; }
+        .profile-btn:hover{ background:#e0e7ff; }
+        .logout-btn{ background:#fff1f2; color:#e11d48; }
+        .logout-btn:hover{ background:#ffe4e6; }
+        .close-modal-btn{ margin-top:20px; border:none; border-radius:18px; padding:14px 22px; background:#eef2ff; color:#4f46e5; font-size:15px; font-weight:600; cursor:pointer; transition:0.2s; }
+        .close-modal-btn:hover{ background:#e0e7ff; }
+
+        /* КАСТОМНІ СЕЛЕКТИ */
+        .modal-select-wrapper { position: relative; width: 100%; }
+        .modal-select-btn { width: 100%; height: 54px; padding: 0 18px; border: none; border-radius: 18px; font-size: 15px; font-weight: 500; cursor: pointer; background: rgba(255, 255, 255, 0.9); box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9); color: #0f172a; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
+        .modal-select-btn:hover { background: #ffffff; }
+        .modal-select-btn::after { content: "⌄"; font-size: 18px; color: #64748b; }
+        .modal-select-menu { position: absolute; top: 60px; left: 0; width: 100%; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(14px); border-radius: 18px; box-shadow: 0 20px 50px rgba(15,23,42,0.15); display: none; z-index: 2000; max-height: 180px; overflow-y: auto; padding: 6px 0; }
+        .dropdown-search-input { width: calc(100% - 20px); margin: 4px 10px 8px 10px; padding: 10px 14px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px; outline: none; background: #ffffff; box-sizing: border-box; }
+        .modal-select-item { padding: 12px 18px; cursor: pointer; font-size: 15px; font-weight: 500; transition: 0.2s; color: #334155; text-align: left; }
+        .modal-select-item:hover { background: #eff6ff; color: #2563eb; }
+
+        .sale-row { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom:12px; }
+        .totals-box{ margin:20px 0; padding:18px 22px; border-radius:18px; background:white; box-shadow: 0 5px 15px rgba(15,23,42,0.06); }
+        .total-line{ display:flex; justify-content:space-between; font-size:18px; margin:8px 0; }
+        .total-line strong{ font-size:22px; }
+        .products-table-wrapper{ max-height:220px; overflow-y:auto; margin-top:15px; border-radius:16px; background:white; box-shadow: 0 5px 15px rgba(15,23,42,0.06); }
+        .products-table thead th{ position:sticky; top:0; background:white; z-index:2; }
+        .details-btn{ border:none; border-radius:14px; padding:10px 16px; font-size:13px; font-weight:600; cursor:pointer; transition:0.2s; background:#f0fdf4; color:#15803d; }
+        .details-btn:hover{ background:#dcfce7; }
+        .detail-card{ background:white; border-radius:18px; padding:18px; box-shadow: 0 5px 15px rgba(15,23,42,0.06); margin-bottom: 10px;}
+        .detail-card p{ margin:6px 0; }
+        .filter-chip{ padding:10px 16px; border:none; border-radius:14px; background:rgba(255,255,255,0.75); backdrop-filter:blur(14px); box-shadow:0 10px 25px rgba(0,0,0,0.06); cursor:pointer; font-size: 17px; font-weight:600; color:#334155; transition:0.2s; }
+        .filter-chip:hover{ transform:translateY(-2px); background:#eff6ff; color:#2563eb; }
+        .filter-wrapper{ position:relative; }
+        .filter-menu{ position:absolute; top:65px; right:0; left:auto; width:340px; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); border-radius:18px; padding:12px; box-shadow:0 15px 40px rgba(0,0,0,0.12); display:none; flex-direction:column; gap:10px; z-index:999; }
+        .filter-menu > button{ border:none; padding:10px; border-radius:12px; cursor:pointer; background:#f1f5f9; font-weight:600; }
+        .filter-menu button:hover{ background:#e2e8f0; }
+        .period-box{ margin-top:12px; display:none; flex-direction:column; gap:12px; }
+        .date-field{ display:flex; flex-direction:column; gap:6px; }
+        .date-field label{ font-size:15px; font-weight:700; color:#64748b; }
+        .apply-filter-btn{ width:100%; height:36px; border:none; border-radius:12px; cursor:pointer; font-size:14px; font-weight:700; color:white; background:linear-gradient(135deg, #2563eb, #4f46e5); box-shadow: 0 14px 35px rgba(15,23,42,0.16); margin-top:8px; transition:0.25s; }
+        .apply-filter-btn:hover{ transform:translateY(-3px); }
+        .filter-menu .date-field input[type="date"]{ width:220px; height:38px; padding:0 12px; border:none; outline:none; border-radius:12px; font-size:13px; background:#f8fafc; }
+        .addProductbtn { display:flex; justify-content:flex-end; margin-top:20px; }
+    </style>
 </head>
 
 <body>
+
 <div id="detailsModal" class="modal">
-
-    <div class="modal-content">
-
-        <button
-            class="close-btn"
-            onclick="closeDetailsModal()">
-
-            ✕
-
-        </button>
-
+    <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+        <button class="close-btn" onclick="closeDetailsModal()">✕</button>
         <h2>Receipt Details</h2>
-
-        <div
-            id="detailsContent"
-            class="details-list">
-        </div>
-
+        <div id="detailsContent" class="detail-card" style="max-height: 250px; overflow-y: auto; padding-right: 4px;"></div>
+        <div id="detailsFinancials"></div>
     </div>
-
 </div>
+
 <div id="addModal" class="modal">
-
     <div class="modal-content">
-
-        <button class="close-btn"
-                type="button"
-                onclick="closeAddModal()">
-            ✕
-        </button>
-
-        <h2>Add Receipt</h2>
-
+        <button class="close-btn" type="button" onclick="closeAddModal()" style="left: 24px; right: auto;">✕</button>
+        <h2 style="margin-left: 54px;">Add Receipt</h2>
         <form id="addForm">
-
             <div class="form-grid">
-                <input type="hidden"
-                       name="sum_total"
-                       id="add_sum_total_input">
-
-                <input type="hidden"
-                       name="vat"
-                       id="add_vat_input">
+                <input type="hidden" name="sum_total" id="add_sum_total_input">
+                <input type="hidden" name="vat" id="add_vat_input">
 
                 <div class="form-group">
                     <label>Print Date</label>
-
-                    <input type="date"
-                            id="add_print_date"
-                           name="print_date"
-                           required>
+                    <input type="date" id="add_print_date" name="print_date" required>
                 </div>
 
                 <div class="form-group">
                     <label>Customer Card</label>
-
-                    <select name="card_number">
-
-                        <option value="">
+                    <div class="modal-select-wrapper">
+                        <button type="button" class="modal-select-btn" id="addCardBtn" onclick="toggleModalDropdown('addCardMenu')">
                             No card
-                        </option>
+                        </button>
+                        <div class="modal-select-menu" id="addCardMenu">
+                            <input type="text" class="dropdown-search-input" id="addCardSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addCardSearch', 'addCardMenu')">
+                            <div class="modal-select-item" onclick="selectModalCard('', 'No card')">No card</div>
+                            {% for customer_card in customer_cards %}
+                            <div class="modal-select-item" onclick="selectModalCard('{{ customer_card['card_number'] }}', '{{ customer_card['card_number'] }} - {{ customer_card['cust_surname'] }} {{ customer_card['cust_name'] }}')">
+                                {{ customer_card['card_number'] }} - {{ customer_card['cust_surname'] }} {{ customer_card['cust_name'] }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" id="new_card_number" name="card_number" value="">
+                    </div>
+                </div>
+            </div>
 
-                        {% for customer_card in customer_cards %}
-                        <option value="{{ customer_card['card_number'] }}">
-                            {{ customer_card['card_number'] }}
-                        </option>
-                        {% endfor %}
-
-                    </select>
+            <div class="form-group">
+                <div class="totals-box">
+                    <div class="total-line"><span>Total Sum:</span><strong id="add_sum_total">0.00 ₴</strong></div>
+                    <div class="total-line"><span>VAT Rate:</span><strong>20%</strong></div>
                 </div>
 
+                <h3 style="margin-top:25px; margin-bottom:15px; font-size:20px; font-weight:700;">Products</h3>
+                <div class="products-table-wrapper">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>UPC</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="selected-products">
+                            <tr id="empty-products-message"><td colspan="4">No products added yet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="modal-buttons">
+                    <div class="left-buttons">
+                        <button type="button" class="save-btn" onclick="openAddProductModal()">Add Product</button>
+                    </div>
+                    <div class="right-buttons">
+                        <button type="button" class="reset-btn" onclick="resetReceiptForm()">Reset</button>
+                        <button type="submit" class="save-btn">Add Receipt</button>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-    <div class="totals-box">
-
-    <div class="total-line">
-        <span>Total Sum:</span>
-        <strong id="add_sum_total">0.00 ₴</strong>
+        </form>
     </div>
-
-    <div class="total-line">
-    <span>VAT Rate:</span>
-    <strong>20%</strong>
-    </div>
-
 </div>
-
-
-            <h3 style="
-                margin-top:25px;
-                margin-bottom:15px;
-                font-size:20px;
-                font-weight:700;
-            ">
-                Products
-            </h3>
-
-            <div class="products-table-wrapper">
-
-    <table class="products-table">
-
-        <thead>
-            <tr>
-                <th>UPC</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody id="selected-products">
-
-            <tr id="empty-products-message">
-                <td colspan="4">
-                    No products added yet.
-                </td>
-            </tr>
-
-        </tbody>
-
-    </table>
-
-</div>
-
-
-
-            <div class="modal-buttons">
-
-    <div class="left-buttons">
-        <button type="button"
-                class="save-btn"
-                onclick="openAddProductModal()">
-            Add Product
-        </button>
-    </div>
-
-    <div class="right-buttons">
-        <button type="button"
-                class="reset-btn"
-                onclick="resetReceiptForm()">
-            Reset
-        </button>
-
-        <button type="submit"
-                class="save-btn">
-            Add Receipt
-        </button>
-    </div>
-   </div>
- </div>
-</form>
-
-
-    </div>
-
-</div>
-
 
 <div id="addProductModal" class="modal">
-
     <div class="modal-content">
-
-        <button class="close-btn"
-                type="button"
-                onclick="closeAddProductModal()">
-            ✕
-        </button>
-
-        <h2>Add Product</h2>
+        <button class="close-btn" type="button" onclick="closeAddProductModal()" style="left: 24px; right: auto;">✕</button>
+        <h2 style="margin-left: 54px;">Add Product</h2>
 
         <div class="sale-row">
-            <div class="form-group">
+            <div class="form-group" style="grid-column: span 3; margin-bottom: 5px;">
+                <label>Product (UPC)</label>
+                <div class="modal-select-wrapper">
+                    <button type="button" class="modal-select-btn" id="addProductBtn" onclick="toggleModalDropdown('addProductMenu')">
+                        Select product upc...
+                    </button>
+                    <div class="modal-select-menu" id="addProductMenu">
+                        <input type="text" class="dropdown-search-input" id="addProductSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addProductSearch', 'addProductMenu')">
 
-                <label>UPC</label>
-
-                <select id="product-upc">
-
-                    {% for product in products %}
-                    <option value="{{ product['UPC'] }}">
-                        {{ product['UPC'] }}
-                    </option>
-                    {% endfor %}
-
-                </select>
-
+                        {% for product in products %}
+                        <div class="modal-select-item" onclick="selectModalProduct('{{ product['UPC'] }}', '{{ product['product_name'] | escape }}', '{{ product['products_number'] }}', '{{ product['promotional_product'] }}')">
+                            {% if product['promotional_product'] == 1 or product['promotional_product'] == True %}
+                                <span style="color: #e11d48; font-weight: 700; margin-right: 4px;">[PROMO]</span>
+                            {% endif %}
+                            {{ product['product_name'] }} (UPC: {{ product['UPC'] }}) — Available: {{ product['products_number'] }} pcs
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" id="product-upc" value="">
+                    <input type="hidden" id="product-stock-hidden" value="0">
+                    <input type="hidden" id="product-name-hidden" value="">
+                </div>
             </div>
 
-            <div class="form-group">
-
+            <div class="form-group" style="margin-top: 5px;">
                 <label>Quantity</label>
-
-                <input type="text"
-                       id="product-quantity"
-                       required>
-
+                <input type="text" id="product-quantity" required>
             </div>
-
-            <div class="form-group">
-
+            <div class="form-group" style="margin-top: 5px;">
                 <label>Selling Price</label>
-
-                <input type="text"
-                       id="product-price"
-                       required>
-
-            </div>
-
-</div>
-            <div class="addProductbtn">
-            <button type="button"
-                    class="save-btn"
-                    onclick="addProductToReceipt()">
-
-                Add Product
-
-            </button>
+                <input type="text" id="product-price" required>
             </div>
         </div>
 
+        <div class="modal-buttons" style="margin-top: 24px;">
+            <div class="left-buttons"></div>
+            <div class="right-buttons">
+                <button type="button" class="reset-btn" onclick="closeAddProductModal()">Cancel</button>
+                <button type="button" class="save-btn" onclick="addProductToReceipt()">Add Product</button>
+            </div>
+        </div>
     </div>
-
 </div>
-
 
 <div class="blur blur1"></div>
 <div class="blur blur2"></div>
 
 <div class="container">
-
     <div class="topbar">
         <div style="display:flex; align-items:center;">
-            <button class="back-btn"
-                    onclick="window.location.href='/'">
-                ←
-            </button>
-
-            <div class="logo">
-                <h1>Receipts</h1>
-            </div>
+            <button class="back-btn" onclick="window.location.href='/'">←</button>
+            <div class="logo"><h1>Receipts</h1></div>
         </div>
 
         <div class="user-wrapper">
             <button class="user-btn" onclick="togglePopup()">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/></svg>
             </button>
             <div class="user-popup" id="popup">
                 <div class="profile">
                     <div class="profile-avatar">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
-                        </svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/></svg>
                     </div>
                     <div>
                         <h3>{{ session["username"] }}</h3>
@@ -1442,219 +282,100 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
         </div>
     </div>
 
-        <div class="search-wrapper">
-
-    <form id="searchForm"
-          method="GET"
-          action="/receipts"
-          style="display:flex; gap:16px; align-items:center;">
-
-        <input type="text"
-               name="search"
-               class="search-bar"
-               placeholder="Search receipt..."
-               value="{{ search if search else '' }}">
-
-        <div class="filter-wrapper">
-
-    <button type="button" class="filter-chip" onclick="toggleFilterMenu()">
-        Date ▾
-    </button>
-
-    <div id="filterMenu" class="filter-menu">
-
-        <button type="button" onclick="setTodayFilter()">
-            Today
-        </button>
-
-        <button type="button" onclick="showPeriod()">
-            Period
-        </button>
-
-        <div id="periodBox" class="period-box">
-
-            <div class="date-field">
-                <label>From</label>
-                <input type="date" id="dateFrom">
-            </div>
-
-            <div class="date-field">
-                <label>To</label>
-                <input type="date" id="dateTo">
-            </div>
-
-            <button type="button"
-                    class="apply-filter-btn"
-                    onclick="applyPeriod()">
-                Apply
-            </button>
-
-        </div>
-
-    </div>
-
-    <input type="hidden" name="filter_type" id="filter_type">
-    <input type="hidden" name="date_from" id="date_from_hidden">
-    <input type="hidden" name="date_to" id="date_to_hidden">
-
-</div>
-
-    </form>
-
-</div>
-    <div class="table-container">
-
-        <table>
-
-            <thead>
-
-            <tr>
-                <th>Check Number</th>
-                <th>Details</th>
-                <th>Print Date</th>
-                <th>Total Sum</th>
-                <th>VAT</th>
-                <th>Cashier</th>
-                <th>Customer Card</th>
-                {% if session["role"] == "manager" %}
-                    <th>Actions</th>
-                {% endif %}
-            </tr>
-
-            </thead>
-
-            <tbody>
-
-            {% for receipt in receipts %}
-
-            <tr id="receipt-row-{{ receipt['check_number'] }}">
-
-                <td>{{ receipt['check_number'] }}</td>
-                <td>
-
-                    <button type="button"
-                        class="details-btn"
-                        onclick="openDetailsModal('{{ receipt['check_number'] }}')">
-
-                        Details
-
-                    </button>
-
-                </td>
-                <td class="print-date">
-                    {{ receipt['print_date'] }}
-                </td>
-
-                <td class="sum-total">
-                    {{ receipt['sum_total'] }}
-                </td>
-
-                <td class="vat">
-                    {{ receipt['vat'] }}
-                </td>
-
-                <td class="id-employee">
-                    {{ receipt['empl_surname'] }}
-                    {{ receipt['empl_name'] }}
-                </td>
-
-                <td class="customer-card">
-                    {{ receipt['card_number'] or '-' }}
-                </td>
-                {% if session["role"] == "manager" %}
-                <td>
-
-                    <div class="actions">
-
-                        <button
-                                class="delete-btn"
-                                onclick="deleteReceipt('{{ receipt['check_number'] }}')">
-
-                            Delete
-
-                        </button>
-
+    <div class="search-wrapper">
+        <form id="searchForm" method="GET" action="/receipts" style="display:flex; gap:16px; align-items:center;">
+            <input type="text" name="search" class="search-bar" placeholder="Search receipt..." value="{{ search if search else '' }}">
+            <div class="filter-wrapper">
+                <button type="button" class="filter-chip" onclick="toggleFilterMenu()">Date ▾</button>
+                <div id="filterMenu" class="filter-menu">
+                    <button type="button" onclick="setTodayFilter()">Today</button>
+                    <button type="button" onclick="showPeriod()">Period</button>
+                    <div id="periodBox" class="period-box">
+                        <div class="date-field"><label>From</label><input type="date" id="dateFrom"></div>
+                        <div class="date-field"><label>To</label><input type="date" id="dateTo"></div>
+                        <button type="button" class="apply-filter-btn" onclick="applyPeriod()">Apply</button>
                     </div>
-
-                </td>
-                {% endif %}
-
-            </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-
+                </div>
+                <input type="hidden" name="filter_type" id="filter_type">
+                <input type="hidden" name="date_from" id="date_from_hidden">
+                <input type="hidden" name="date_to" id="date_to_hidden">
+            </div>
+        </form>
     </div>
 
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Check Number</th>
+                    <th>Details</th>
+                    <th>Print Date</th>
+                    <th>Total Sum</th>
+                    <th>VAT</th>
+                    <th>Cashier</th>
+                    <th>Customer Card</th>
+                    {% if session["role"] == "manager" %}<th>Actions</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for receipt in receipts %}
+                <tr id="receipt-row-{{ receipt['check_number'] }}">
+                    <td><b>{{ receipt['check_number'] }}</b></td>
+                    <td><button type="button" class="details-btn" onclick="openDetailsModal('{{ receipt['check_number'] }}')">Details</button></td>
+                    <td class="print-date">{{ receipt['print_date'] }}</td>
+                    <td class="sum-total">{{ receipt['sum_total'] }} ₴</td>
+                    <td class="vat">{{ receipt['vat'] }} ₴</td>
+                    <td class="id-employee">{{ receipt['empl_surname'] }} {{ receipt['empl_name'] }}</td>
+                    <td class="customer-card">{{ receipt['card_number'] or '-' }}</td>
+                    {% if session["role"] == "manager" %}
+                    <td><div class="actions"><button class="delete-btn" onclick="deleteReceipt('{{ receipt['check_number'] }}')">Delete</button></div></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <div id="globalAnalyticsModal" class="modal" style="display: none;">
     <div class="modal-content" style="max-width: 800px; width: 92%; padding: 34px; box-sizing: border-box; position: relative;">
-        <button class="close-btn" type="button" onclick="closeGlobalAnalyticsModal()">✕</button>
-        <h2 style="margin-left: 0; margin-bottom: 28px; font-size: 34px; font-weight: 800;">Receipts Analytics</h2>
+        <button class="close-btn" type="button" onclick="closeGlobalAnalyticsModal()" style="left: 24px; right: auto;">✕</button>
+        <h2 style="margin-left: 54px; margin-bottom: 28px; font-size: 34px; font-weight: 800;">Receipts Analytics</h2>
 
         <form id="globalAnalyticsForm" style="margin-bottom: 25px; width: 100%; position: relative;">
-
             <div style="display: flex; gap: 12px; align-items: center; background: rgba(37, 99, 235, 0.05); padding: 12px 18px; border-radius: 16px; margin-bottom: 20px; width: 100%; box-sizing: border-box;">
                 <input type="checkbox" id="analytics_all_time" style="width: 20px; height: 20px; appearance: auto; margin: 0; cursor: pointer;">
-                <label for="analytics_all_time" style="margin: 0; font-weight: 700; color: #2563eb; cursor: pointer; font-size: 15px;">
-                    Analyze All Time (Ignore date range)
-                </label>
+                <label for="analytics_all_time" style="margin: 0; font-weight: 700; color: #2563eb; cursor: pointer; font-size: 15px;">Analyze All Time (Ignore date range)</label>
             </div>
-
             <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 16px; align-items: flex-end; width: 100%; box-sizing: border-box; position: relative; z-index: 999999 !important;">
-
                 <div class="form-group" style="margin-bottom: 0; width: 100%; position: relative;">
                     <label style="display: block; margin-bottom: 8px; font-size: 16px; font-weight: 600;">Cashier</label>
                     <div class="modal-select-wrapper" style="position: relative; width: 100%;">
-                        <button type="button" class="modal-select-btn" id="analyticsCashierBtn" onclick="toggleModalDropdown('analyticsCashierMenu')">
-                            All Cashiers
-                        </button>
-
+                        <button type="button" class="modal-select-btn" id="analyticsCashierBtn" onclick="toggleModalDropdown('analyticsCashierMenu')">All Cashiers</button>
                         <div class="modal-select-menu" id="analyticsCashierMenu" style="position: absolute; top: 60px; left: 0; min-width: 100%; width: max-content; background: #ffffff; border-radius: 18px; box-shadow: 0 20px 50px rgba(15,23,42,0.15); display: none; z-index: 999999 !important; max-height: 180px; overflow-y: auto; padding: 6px 0;">
-                            <input type="text" class="dropdown-search-input" id="analyticsCashierSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('analyticsCashierSearch', 'analyticsCashierMenu')" style="width: calc(100% - 20px); margin: 4px 10px 8px 10px; padding: 10px 14px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px; outline: none; background: #ffffff; box-sizing: border-box;">
+                            <input type="text" class="dropdown-search-input" id="analyticsCashierSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('analyticsCashierSearch', 'analyticsCashierMenu')">
+                            <div class="modal-select-item" onclick="selectAnalyticsCashier('all', 'All Cashiers')" style="padding: 12px 18px; cursor: pointer; font-size: 15px; font-weight: 500; color: #334155; text-align: left; white-space: nowrap;">All Cashiers</div>
 
-                            <div class="modal-select-item" onclick="selectAnalyticsCashier('all', 'All Cashiers')" style="padding: 12px 18px; cursor: pointer; font-size: 15px; font-weight: 500; color: #334155; text-align: left; white-space: nowrap;">
-                                All Cashiers
+                            <div id="dynamicCashierItems">
+                                {% for employee in employees %}
+                                <div class="modal-select-item" onclick="selectAnalyticsCashier('{{ employee['id_employee'] }}', '{{ employee['empl_surname'] }} {{ employee['empl_name'] }}')">
+                                    {{ employee['empl_surname'] }} {{ employee['empl_name'] }}
+                                </div>
+                                {% endfor %}
                             </div>
-                            <div id="dynamicCashierItems"></div>
                         </div>
                         <input type="hidden" name="cashier_id" id="analytics_cashier_id" value="all">
                     </div>
                 </div>
-
-                <div class="form-group" style="margin-bottom: 0; width: 100%;">
-                    <label style="display: block; margin-bottom: 8px; font-size: 16px; font-weight: 600;">Start Date</label>
-                    <input type="date" id="analytics_start_date" style="width: 100%; height: 54px; box-sizing: border-box;">
-                </div>
-
-                <div class="form-group" style="margin-bottom: 0; width: 100%;">
-                    <label style="display: block; margin-bottom: 8px; font-size: 16px; font-weight: 600;">End Date</label>
-                    <input type="date" id="analytics_end_date" style="width: 100%; height: 54px; box-sizing: border-box;">
-                </div>
-
+                <div class="form-group" style="margin-bottom: 0; width: 100%;"><label style="display: block; margin-bottom: 8px; font-size: 16px; font-weight: 600;">Start Date</label><input type="date" id="analytics_start_date" style="width: 100%; height: 54px; box-sizing: border-box;"></div>
+                <div class="form-group" style="margin-bottom: 0; width: 100%;"><label style="display: block; margin-bottom: 8px; font-size: 16px; font-weight: 600;">End Date</label><input type="date" id="analytics_end_date" style="width: 100%; height: 54px; box-sizing: border-box;"></div>
             </div>
-
-            <div class="addProductbtn" style="margin-top: 24px; display: flex; justify-content: flex-end; width: 100%; position: relative; z-index: 10;">
-                <button type="submit" class="save-btn" style="width: 100%; padding: 15px; font-size: 16px; font-weight: 700;">
-                    Calculate & Get Info
-                </button>
-            </div>
+            <div class="addProductbtn" style="margin-top: 24px; display: flex; justify-content: flex-end; width: 100%; position: relative; z-index: 10;"><button type="submit" class="save-btn" style="width: 100%; padding: 15px; font-size: 16px; font-weight: 700;">Calculate & Get Info</button></div>
         </form>
-
         <div id="globalResultsBlock" class="totals-box" style="display: none; margin: 20px 0; border: 1px dashed rgba(37, 99, 235, 0.25); position: relative; z-index: 5;">
-            <div class="total-line">
-                <span>Total Revenue for Period:</span>
-                <strong id="text_total_revenue" style="color: #2563eb; font-weight: 800;">0.00 ₴</strong>
-            </div>
-            <div class="total-line" style="margin-top: 10px;">
-                <span>Total VAT Content (20%):</span>
-                <strong id="text_total_vat" style="color: #7c3aed; font-weight: 800;">0.00 ₴</strong>
-            </div>
+            <div class="total-line"><span>Total Revenue for Period:</span><strong id="text_total_revenue" style="color: #2563eb; font-weight: 800;">0.00 ₴</strong></div>
+            <div class="total-line" style="margin-top: 10px;"><span>Total VAT Content (20%):</span><strong id="text_total_vat" style="color: #7c3aed; font-weight: 800;">0.00 ₴</strong></div>
         </div>
-
         <h3 id="analyticsTableTitle" style="margin-top: 28px; margin-bottom: 12px; font-size: 20px; font-weight: 700; display: none; position: relative; z-index: 5;">Filtered Receipts List</h3>
         <div id="analyticsTableContainer" class="products-table-wrapper" style="display: none; max-height: 200px; overflow-y: auto; width: 100%; position: relative; z-index: 5;">
             <table class="products-table" style="width: 100%;">
@@ -1677,12 +398,9 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
     {% if session["role"] == "cashier" %}
     <button class="main-btn add-btn" onclick="openAddModal()">Add</button>
     {% endif %}
-
     {% if session["role"] == "manager" %}
-    <button class="main-btn report-btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="openGlobalAnalyticsModal()">
-        Analytics
-    </button>
-<button class="main-btn report-btn" onclick="window.open('/receipts/report', '_blank')">Reports</button>
+    <button class="main-btn report-btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="openGlobalAnalyticsModal()">Analytics</button>
+    <button class="main-btn report-btn" onclick="window.open('/receipts/report', '_blank')">Reports</button>
     {% endif %}
 </div>
 
@@ -1695,15 +413,28 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{
 </div>
 
 <script>
-    function deleteReceipt(checkNumber){
-        const confirmDelete = confirm("Are you sure you want to delete this receipt?");
-        if(confirmDelete){ window.location.href = `/receipt/delete/${checkNumber}`; }
+let receiptProducts = [];
+
+function deleteReceipt(checkNumber){
+    if(confirm("Are you sure you want to delete this receipt?")){
+        window.location.href = `/receipts/delete/${checkNumber}`;
     }
+}
+
+function selectModalCard(value, label) {
+    document.getElementById("new_card_number").value = value;
+    document.getElementById("addCardBtn").innerText = label;
+    document.getElementById("addCardMenu").style.display = "none";
+}
 </script>
 
 <script>
+
 function openAddModal(){
     document.getElementById("addForm").reset();
+    document.getElementById("new_card_number").value = "";
+    document.getElementById("addCardBtn").innerText = "No card";
+
     const now = new Date();
     document.getElementById("add_print_date").value = now.toISOString().split("T")[0];
     receiptProducts = [];
@@ -1714,35 +445,37 @@ function openAddModal(){
 
 function closeAddModal(){ document.getElementById("addModal").style.display = "none"; }
 
-document.getElementById("addForm").addEventListener("submit", addReceipt);
-
-async function addReceipt(event){
+document.getElementById("addForm").addEventListener("submit", async function(event){
     event.preventDefault();
-    const form = document.getElementById("addForm");
-    const formData = new FormData(form);
-    formData.append("products", JSON.stringify(receiptProducts));
+
     if(receiptProducts.length === 0){
         alert("Add at least one product.");
         return;
     }
+
+    const formData = new FormData();
+    formData.append("print_date", document.getElementById("add_print_date").value);
+    formData.append("card_number", document.getElementById("new_card_number").value);
+    formData.append("products", JSON.stringify(receiptProducts));
+
     const response = await fetch("/receipts/add", { method:"POST", body:formData });
     const result = await response.json();
-    if(result.success){ location.reload(); }else{ alert("Failed to add receipt."); }
-}
-</script>
-
-<script>
-const searchInput = document.querySelector(".search-bar");
-searchInput.addEventListener("input", () => {
-    clearTimeout(window.searchTimer);
-    window.searchTimer = setTimeout(() => { document.getElementById("searchForm").submit(); }, 300);
+    if(result.success){ location.reload(); } else { alert("Error: " + result.message); }
 });
 </script>
 
 <script>
+const searchInput = document.querySelector(".search-bar");
+if(searchInput) {
+    searchInput.addEventListener("input", () => {
+        clearTimeout(window.searchTimer);
+        window.searchTimer = setTimeout(() => { document.getElementById("searchForm").submit(); }, 300);
+    });
+}
+
 window.addEventListener("load", () => {
     const search = document.querySelector(".search-bar");
-    if(search.value.length > 0){
+    if(search && search.value.length > 0){
         search.focus();
         search.setSelectionRange(search.value.length, search.value.length);
     }
@@ -1751,67 +484,93 @@ window.addEventListener("load", () => {
 
 <script>
 function closeDetailsModal(){ document.getElementById("detailsModal").style.display = "none"; }
-let currentReceipt = null;
 
 async function openDetailsModal(checkNumber){
-    currentReceipt = checkNumber;
     const response = await fetch(`/receipts/${checkNumber}/sales`);
-    const sales = await response.json();
-    const content = document.getElementById("detailsContent");
-    content.innerHTML = "";
+    const result = await response.json();
 
-    sales.forEach(sale => {
+    const content = document.getElementById("detailsContent");
+    const financialsContainer = document.getElementById("detailsFinancials");
+
+    content.innerHTML = "";
+    financialsContainer.innerHTML = "";
+
+    result.sales.forEach(sale => {
         content.innerHTML += `
             <div class="detail-card">
                 <p><b>Product:</b> ${sale.product_name}</p>
-                <p><b>Quantity:</b> ${sale.product_number}</p>
+                <p><b>Quantity:</b> ${sale.product_number} pcs</p>
                 <p><b>Price:</b> ${sale.selling_price} ₴</p>
             </div>
         `;
     });
+
+    const f = result.financials;
+    financialsContainer.innerHTML = `
+        <div class="totals-box" style="margin-top: 15px; background: rgba(37, 99, 235, 0.03); border: 1px dashed rgba(37, 99, 235, 0.2);">
+            <div class="total-line" style="font-size: 15px; color: #475569;"><span>Subtotal:</span><span>${f.subtotal.toFixed(2)} ₴</span></div>
+            <div class="total-line" style="font-size: 15px; color: #e11d48; font-weight: 600;"><span>Discount:</span><span>-${f.discount_percent}%</span></div>
+            <div class="total-line" style="font-size: 15px; color: #e11d48; font-weight: 600;"><span>Saved:</span><span>${f.discount_currency.toFixed(2)} ₴</span></div>
+            <div class="total-line" style="font-size: 15px; color: #475569;"><span>Included VAT (20%):</span><span>${f.vat.toFixed(2)} ₴</span></div>
+            <div class="total-line" style="margin-top: 10px;"><span>Final Total:</span><strong style="color: #2563eb;">${f.sum_total.toFixed(2)} ₴</strong></div>
+        </div>
+    `;
+
     document.getElementById("detailsModal").style.display = "flex";
 }
-</script>
-
-<script>
-function addSaleRow(){
-    const container = document.getElementById("sales-container");
-    const row = document.querySelector(".sale-row").cloneNode(true);
-    row.querySelectorAll("input").forEach(i => i.value = "");
-    container.appendChild(row);
-}
-</script>
-
-<script>
-let receiptProducts = [];
 
 function openAddProductModal(){
     document.getElementById("product-quantity").value = "";
     document.getElementById("product-price").value = "";
+    document.getElementById("product-upc").value = "";
+    document.getElementById("product-stock-hidden").value = "0";
+    document.getElementById("product-name-hidden").value = "";
+
+    document.getElementById("addProductBtn").innerText = "Select product upc...";
     document.getElementById("addProductModal").style.display = "flex";
 }
 
 function closeAddProductModal(){ document.getElementById("addProductModal").style.display = "none"; }
 
+function selectModalProduct(upc, name, stock, isPromo) {
+    document.getElementById("product-upc").value = upc;
+    document.getElementById("product-stock-hidden").value = stock;
+    document.getElementById("product-name-hidden").value = name;
+
+    let label = ((isPromo === "1" || isPromo === "True") ? "[PROMO] " : "") + name + " (" + upc + ")";
+    document.getElementById("addProductBtn").innerText = label;
+    document.getElementById("addProductMenu").style.display = "none";
+
+    fetch(`/products/get-price/${upc}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data && data.selling_price) {
+                document.getElementById("product-price").value = data.selling_price;
+            }
+        })
+        .catch(err => console.error("Error fetching price:", err));
+}
+
 function addProductToReceipt(){
-    const product_name = document.getElementById("product-upc").selectedOptions[0].text;
     const upc = document.getElementById("product-upc").value;
-    const quantity = parseInt (document.getElementById("product-quantity").value);
-    const price = parseFloat (document.getElementById("product-price").value);
-    if(isNaN(quantity) || isNaN(price)){
-        alert("Enter valid quantity and price");
+    const product_name = document.getElementById("product-name-hidden").value;
+    const quantity = parseInt(document.getElementById("product-quantity").value);
+    const price = parseFloat(document.getElementById("product-price").value);
+    const maxStock = parseInt(document.getElementById("product-stock-hidden").value);
+
+    if(!upc) { alert("Please select a product first!"); return; }
+    if(isNaN(quantity) || isNaN(price)){ alert("Enter valid quantity and price"); return; }
+    if(quantity <= 0) { alert("Quantity must be greater than 0"); return; }
+
+    if(quantity > maxStock) {
+        alert(`Error: Not enough stock on floor! Available: ${maxStock} pcs.`);
         return;
     }
-    const existing = receiptProducts.find( p => p.upc === upc );
-    if(existing){
-        alert("This product is already in the receipt.");
-        return;
-    }
+    if(receiptProducts.find(p => p.upc === upc)){ alert("This product is already in the receipt."); return; }
+
     receiptProducts.push({ product_name, upc, quantity, price });
     renderProducts();
     updateTotals();
-    document.getElementById("product-quantity").value = "";
-    document.getElementById("product-price").value = "";
     closeAddProductModal();
 }
 
@@ -1827,7 +586,7 @@ function renderProducts(){
             <tr>
                 <td>${product.upc}</td>
                 <td>${product.quantity}</td>
-                <td>${product.price}</td>
+                <td>${product.price} ₴</td>
                 <td><button type="button" class="delete-btn" onclick="removeProduct(${index})">Remove</button></td>
             </tr>
         `;
@@ -1838,7 +597,7 @@ function updateTotals(){
     let total = 0;
     receiptProducts.forEach(product => { total += Number(product.quantity) * Number(product.price); });
     const vat = total * 0.20;
-    document.getElementById("add_sum_total").textContent = total.toFixed(2);
+    document.getElementById("add_sum_total").textContent = total.toFixed(2) + " ₴";
     document.getElementById("add_sum_total_input").value = total.toFixed(2);
     document.getElementById("add_vat_input").value = vat.toFixed(2);
 }
@@ -1851,6 +610,8 @@ function removeProduct(index){
 
 function resetReceiptForm(){
     document.getElementById("addForm").reset();
+    document.getElementById("new_card_number").value = "";
+    document.getElementById("addCardBtn").innerText = "No card";
     receiptProducts = [];
     renderProducts();
     updateTotals();
@@ -1858,19 +619,7 @@ function resetReceiptForm(){
 </script>
 
 <script>
-const productSelect = document.getElementById("product-upc");
-if(productSelect){
-    productSelect.addEventListener("change", async function(){
-        const response = await fetch(`/products/get-price/${this.value}`);
-        const data = await response.json();
-        document.getElementById("product-price").value = data.selling_price;
-    });
-}
-</script>
-
-<script>
 const popup = document.getElementById('popup');
-
 function togglePopup(){ popup.classList.toggle('active'); }
 
 window.addEventListener('click', function(e){
@@ -1886,16 +635,11 @@ function showProfile(){
                 <p><b>Surname:</b> ${data.empl_surname}</p>
                 <p><b>Role:</b> ${data.empl_role}</p>
                 <p><b>Phone:</b> ${data.phone_number}</p>
-                <p><b>City:</b> ${data.city}</p>
-                <p><b>Street:</b> ${data.street}</p>
-                <p><b>Start date:</b> ${data.date_of_start}</p>
             `;
             document.getElementById("profileModal").style.display = "block";
         });
 }
-
 function closeProfileModal(){ document.getElementById("profileModal").style.display = "none"; }
-
 function outsideClick(event){
     const windowBox = document.getElementById("profileWindow");
     if(windowBox && !windowBox.contains(event.target)){ closeProfileModal(); }
@@ -1906,10 +650,6 @@ function toggleFilterMenu(){
     menu.style.display = menu.style.display === "flex" ? "none" : "flex";
 }
 
-window.addEventListener("click", function(e){
-    if(!e.target.closest(".filter-wrapper")){ document.getElementById("filterMenu").style.display = "none"; }
-});
-
 function setTodayFilter(){
     const today = new Date().toISOString().split("T")[0];
     document.getElementById("filter_type").value = "today";
@@ -1917,24 +657,18 @@ function setTodayFilter(){
     document.getElementById("date_to_hidden").value = today;
     document.getElementById("searchForm").submit();
 }
-
 function showPeriod(){ document.getElementById("periodBox").style.display = "block"; }
 
 function applyPeriod(){
     const from = document.getElementById("dateFrom").value;
     const to = document.getElementById("dateTo").value;
-    if(!from || !to){
-        alert("Select both dates");
-        return;
-    }
+    if(!from || !to){ alert("Select both dates"); return; }
     document.getElementById("filter_type").value = "period";
     document.getElementById("date_from_hidden").value = from;
     document.getElementById("date_to_hidden").value = to;
     document.getElementById("searchForm").submit();
 }
-</script>
 
-<script>
 function toggleModalDropdown(menuId) {
     const menu = document.getElementById(menuId);
     const isVisible = menu.style.display === "block";
@@ -1968,34 +702,22 @@ function selectAnalyticsCashier(value, label) {
     document.getElementById("analyticsCashierMenu").style.display = "none";
 }
 
-document.addEventListener("click", function(event) {
-    if (!event.target.closest('.modal-select-wrapper')) {
-        document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");
-    }
-});
-
 document.addEventListener("change", function(event) {
     if (event.target && event.target.id === "analytics_all_time") {
         const startDateInput = document.getElementById("analytics_start_date");
         const endDateInput = document.getElementById("analytics_end_date");
-
         if (event.target.checked) {
-            startDateInput.value = "";
-            endDateInput.value = "";
-            startDateInput.disabled = true;
-            endDateInput.disabled = true;
-            startDateInput.style.opacity = "0.5";
-            endDateInput.style.opacity = "0.5";
+            startDateInput.value = ""; endDateInput.value = "";
+            startDateInput.disabled = true; endDateInput.disabled = true;
+            startDateInput.style.opacity = "0.5"; endDateInput.style.opacity = "0.5";
         } else {
-            startDateInput.disabled = false;
-            endDateInput.disabled = false;
-            startDateInput.style.opacity = "1";
-            endDateInput.style.opacity = "1";
+            startDateInput.disabled = false; endDateInput.disabled = false;
+            startDateInput.style.opacity = "1"; endDateInput.style.opacity = "1";
         }
     }
 });
 
-async function openGlobalAnalyticsModal() {
+function openGlobalAnalyticsModal() {
     document.getElementById("globalAnalyticsForm").reset();
     document.getElementById("globalResultsBlock").style.display = "none";
     document.getElementById("analyticsTableTitle").style.display = "none";
@@ -2003,29 +725,11 @@ async function openGlobalAnalyticsModal() {
 
     const startDateInput = document.getElementById("analytics_start_date");
     const endDateInput = document.getElementById("analytics_end_date");
-    startDateInput.disabled = false;
-    endDateInput.disabled = false;
-    startDateInput.style.opacity = "1";
-    endDateInput.style.opacity = "1";
+    startDateInput.disabled = false; startDateInput.disabled = false;
+    startDateInput.style.opacity = "1"; endDateInput.style.opacity = "1";
 
     document.getElementById("analytics_cashier_id").value = "all";
     document.getElementById("analyticsCashierBtn").innerText = "All Cashiers";
-
-    try {
-        const response = await fetch("/manager/api/cashiers");
-        const cashiers = await response.json();
-        const dynamicContainer = document.getElementById("dynamicCashierItems");
-
-        dynamicContainer.innerHTML = "";
-        cashiers.forEach(c => {
-            const fullName = `${c.empl_surname} ${c.empl_name}`;
-            dynamicContainer.innerHTML += `
-                <div class="modal-select-item" onclick="selectAnalyticsCashier('${c.id_employee}', '${fullName}')">
-                    ${fullName}
-                </div>
-            `;
-        });
-    } catch (e) { console.error("Error loading cashiers list:", e); }
 
     document.getElementById("globalAnalyticsModal").style.display = "flex";
 }
@@ -2037,21 +741,12 @@ document.getElementById("globalAnalyticsForm").addEventListener("submit", async 
     const cashierId = document.getElementById("analytics_cashier_id").value;
     const isAllTime = document.getElementById("analytics_all_time").checked;
 
-    let startDate = "";
-    let endDate = "";
+    let startDate = ""; let endDate = "";
 
     if (!isAllTime) {
         startDate = document.getElementById("analytics_start_date").value;
         endDate = document.getElementById("analytics_end_date").value;
-
-        if (!startDate || !endDate) {
-            alert("Error: Please select both start and end dates, or check 'Analyze All Time'.");
-            return;
-        }
-        if (new Date(startDate) > new Date(endDate)) {
-            alert("Error: Start date cannot be later than end date!");
-            return;
-        }
+        if (!startDate || !endDate) { alert("Error: Please select both dates."); return; }
     }
     try {
         const response = await fetch(`/manager/receipts/analytics/data?cashier_id=${cashierId}&start=${startDate}&end=${endDate}`);
@@ -2075,27 +770,25 @@ document.getElementById("globalAnalyticsForm").addEventListener("submit", async 
                             <td>${r.print_date}</td>
                             <td>${r.cashier_name}</td>
                             <td>${r.sum_total} ₴</td>
-                            <td>
-                                <button type="button" class="details-btn" style="padding: 6px 12px; font-size: 12px;" onclick="viewReceiptItemsInline('${r.check_number}')">View Items</button>
-                            </td>
+                            <td><button type="button" class="details-btn" style="padding: 6px 12px; font-size: 12px;" onclick="viewReceiptItemsInline('${r.check_number}')">View Items</button></td>
                         </tr>
                     `;
                 });
             }
             document.getElementById("analyticsTableTitle").style.display = "block";
             document.getElementById("analyticsTableContainer").style.display = "block";
-        } else { alert("Calculation error: " + result.message); }
-    } catch (error) { alert("Network error: Could not connect to the server."); }
+        } else { alert("Error: " + result.message); }
+    } catch (error) { alert("Network error."); }
 });
 
 async function viewReceiptItemsInline(checkNumber) {
     try {
         const response = await fetch(`/receipts/${checkNumber}/sales`);
-        const sales = await response.json();
+        const result = await response.json();
         const content = document.getElementById("detailsContent");
         content.innerHTML = "";
 
-        sales.forEach(sale => {
+        result.sales.forEach(sale => {
             content.innerHTML += `
                 <div class="detail-card">
                     <p><b>Product:</b> ${sale.product_name}</p>
@@ -2104,11 +797,10 @@ async function viewReceiptItemsInline(checkNumber) {
                 </div>
             `;
         });
-
         const detailsModal = document.getElementById("detailsModal");
         detailsModal.style.zIndex = "10000";
         detailsModal.style.display = "flex";
-    } catch (e) { alert("Network error: Failed to fetch receipt details."); }
+    } catch (e) { alert("Failed to fetch receipt details."); }
 }
 </script>
 </body>

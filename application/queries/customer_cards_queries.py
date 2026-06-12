@@ -100,7 +100,7 @@ def create_customer_card(data):
                        data['card_number'].strip(),
                        data['cust_surname'].strip(),
                        data['cust_name'].strip(),
-                       data.get('cust_patronymic', '').strip() or None,  # Якщо порожньо — пишемо NULL
+                       data.get('cust_patronymic', '').strip() or None,
                        data['phone_number'].strip(),
                        data.get('city', '').strip() or None,
                        data.get('street', '').strip() or None,

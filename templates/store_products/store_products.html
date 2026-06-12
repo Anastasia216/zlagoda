@@ -174,32 +174,52 @@
             color:#2563eb;
         }
 
-        /* TABLE */
+       /* TABLE */
+
         .table-container{
             width:100%;
-            max-height:calc(100vh - 330px);
-            overflow-y:auto;
-            overflow-x:auto;
+
             background:rgba(255,255,255,0.74);
             backdrop-filter:blur(14px);
+
             border-radius:34px;
+
+            overflow:hidden;
+
             box-shadow:
-                0 12px 40px rgba(15,23,42,0.06),
-                inset 0 1px 0 rgba(255,255,255,0.9);
+                    0 12px 40px rgba(15,23,42,0.06),
+                    inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
         table{
             width:100%;
             border-collapse:collapse;
         }
+        .table-container{
+            width:100%;
 
+            max-height:calc(100vh - 330px);
+
+            overflow-y:auto;
+            overflow-x:auto;
+
+            background:rgba(255,255,255,0.74);
+
+            backdrop-filter:blur(14px);
+
+            border-radius:34px;
+
+            box-shadow:
+                0 12px 40px rgba(15,23,42,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+        }
         thead th{
             position:sticky;
             top:0;
             z-index:10;
+
             background:rgba(241,245,249,0.98);
         }
-
         thead{
             background:rgba(241,245,249,0.85);
         }
@@ -207,16 +227,20 @@
         th{
             text-align:left;
             padding:24px 28px;
+
             font-size:14px;
             font-weight:700;
             color:#475569;
+
             letter-spacing:0.5px;
         }
 
         td{
             padding:24px 28px;
+
             font-size:15px;
             font-weight:500;
+
             border-top:1px solid rgba(226,232,240,0.8);
         }
 
@@ -851,10 +875,12 @@
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Promotional</th>
+                    {% if session["role"] == "manager" %}
                     <th>Actions</th>
+                    {% endif %}
                 </tr>
             </thead>
-            <tbody>
+        <tbody>
             {% for product in store_products %}
             <tr>
                 <td><b>{{ product['UPC'] }}</b></td>
@@ -868,26 +894,20 @@
                         {{ 'Yes' if product['promotional_product'] else 'No' }}
                     </span>
                 </td>
+
+                {% if session["role"] == "manager" %}
                 <td>
-                    {% if session["role"] == "manager" %}
                     <div class="actions">
-                       <button class="edit-btn" style="background: #f0fdf4; color: #16a34a;"
-                               onclick="openAnalyticsModal('{{ product['id_product'] }}', '{{ product['product_name'] | escape }}')">
+                        <button class="edit-btn" style="background: #f0fdf4; color: #16a34a;"
+                                onclick="openAnalyticsModal('{{ product['id_product'] }}', '{{ product['product_name'] | escape }}')">
                              Sales Info
                         </button>
+
+                        <button class="edit-btn" onclick="openEditModal('{{ product['UPC'] }}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteStoreProduct('{{ product['UPC'] }}', '{{ product['product_name'] | escape }}')">Delete</button>
                     </div>
-                    {% else %}
-                    <span style="color: #94a3b8; font-size: 13px;">No actions</span>
-                    {% endif %}
                 </td>
-                <td>
-                    {% if session["role"] == "manager" %}
-                    <div class="actions">
-                       <button class="edit-btn" onclick="openEditModal('{{ product['UPC'] }}')">Edit</button>
-                       <button class="delete-btn" onclick="deleteStoreProduct('{{ product['UPC'] }}', '{{ product['product_name'] | escape }}')">Delete</button>
-                    </div>
-                    {% endif %}
-                </td>
+                {% endif %}
             </tr>
             {% endfor %}
             </tbody>
@@ -904,8 +924,8 @@
 
 <div id="analyticsModal" class="modal" style="display: none;">
     <div class="modal-content" style="max-width: 480px; padding: 34px;">
-        <button class="close-btn" onclick="closeAnalyticsModal()">✕</button>
-        <h2 id="analyticsTitle" style="margin-left: 0; margin-bottom: 20px; font-size: 26px;">Product Analytics</h2>
+        <button class="close-btn" onclick="closeAnalyticsModal()" style="left: 24px; right: auto;">✕</button>
+        <h2 id="analyticsTitle" style="margin-left: 54px; margin-bottom: 20px; font-size: 26px;">Product Analytics</h2>
 
         <p id="analyticsSubtitle" style="color: #64748b; font-size: 15px; margin-bottom: 24px; font-weight: 500;"></p>
         <input type="hidden" id="analytics_id_product">
@@ -925,7 +945,6 @@
             </div>
 
             <div class="modal-buttons" style="margin-top: 20px;">
-                <button type="button" class="reset-btn" onclick="closeAnalyticsModal()">Close</button>
                 <button type="submit" class="save-btn" style="background: linear-gradient(135deg, #16a34a, #15803d);">Calculate</button>
             </div>
         </form>
@@ -993,7 +1012,7 @@
             </div>
 
             <div class="modal-buttons">
-                <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>
+{#                <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>#}
                 <button type="submit" class="save-btn">Save Changes</button>
             </div>
         </form>
@@ -1337,7 +1356,6 @@ async function deleteStoreProduct(upc, productName) {
     }
 }
 
-// CUSTOM DROPDOWNS LOGIC WITH LIVE SEARCH FILTER
 function toggleModalDropdown(menuId) {
     const menu = document.getElementById(menuId);
     const isVisible = menu.style.display === "block";

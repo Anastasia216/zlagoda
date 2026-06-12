@@ -1121,7 +1121,6 @@
     </div>
 </div>
                 <div class="modal-buttons">
-                    <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>
                     <button type="submit" class="save-btn">Save</button>
                 </div>
             </form>
@@ -1137,7 +1136,9 @@
                     <th>Category</th>
                     <th>Manufacturer</th>
                     <th>Characteristics</th>
+                    {% if session["role"] == "manager" %}
                     <th>Actions</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -1148,14 +1149,15 @@
                     <td class="category">{{ product['category_name'] }}</td>
                     <td class="manufacturer">{{ product['manufacturer'] }}</td>
                     <td class="characteristics">{{ product['characteristics'] }}</td>
+
+                    {% if session["role"] == "manager" %}
                     <td>
-                        {% if session["role"] == "manager" %}
                         <div class="actions">
                             <button class="edit-btn" onclick="openEditModal('{{ product['id_product'] }}')">Edit</button>
                             <button class="delete-btn" onclick="deleteProduct('{{ product['id_product'] }}')">Delete</button>
                         </div>
-                        {% endif %}
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -1293,20 +1295,34 @@ function openEditModal(idProduct){
             document.getElementById("product_name").value = product.product_name;
             document.getElementById("manufacturer").value = product.manufacturer;
             document.getElementById("characteristics").value = product.characteristics;
+
+            // ВСТАНОВЛЮЄМО ІД КАТЕГОРІЇ В ПРИХОВАНИЙ ІНПУТ
+            document.getElementById("category_number").value = product.category_number;
+
+            // Беремо назву категорії з тексту рядка таблиці та пишемо на кнопку
             const row = document.getElementById(`product-row-${idProduct}`);
-if (row) {
-    document.getElementById("editCategoryBtn").innerText = row.querySelector(".category").textContent;
-}
+            if (row) {
+                document.getElementById("editCategoryBtn").innerText = row.querySelector(".category").textContent.trim();
+            }
+
             document.getElementById("editForm").action = `/products/edit/${product.id_product}`;
             document.getElementById("editModal").style.display = "flex";
         })
         .catch(error => alert("Failed to load product data."));
 }
-
 function closeEditModal(){ document.getElementById("editModal").style.display = "none"; }
 
+// === ОРИГІНАЛЬНИЙ БЛОК, ЯКИЙ ТРЕБА ЗАМІНИТИ (приблизно 353-й рядок) ===
 document.getElementById("editForm").addEventListener("submit", async function(event){
     event.preventDefault();
+
+    // Перевіряємо значення категорії безпосередньо в JavaScript
+    const categoryInput = document.getElementById("category_number");
+    if(!categoryInput || !categoryInput.value || categoryInput.value.trim() === "") {
+        alert("Please select a category from the dropdown list first.");
+        return;
+    }
+
     const response = await fetch(this.action, {
         method: "POST",
         body: new FormData(this)
@@ -1317,12 +1333,15 @@ document.getElementById("editForm").addEventListener("submit", async function(ev
         const id = document.getElementById("id_product").value;
         const row = document.getElementById(`product-row-${id}`);
 
-        row.querySelector(".product-name").textContent = document.getElementById("product_name").value;
-        row.querySelector(".manufacturer").textContent = document.getElementById("manufacturer").value;
-        row.querySelector(".characteristics").textContent = document.getElementById("characteristics").value;
+        if (row) {
+            row.querySelector(".product-name").textContent = document.getElementById("product_name").value;
+            row.querySelector(".manufacturer").textContent = document.getElementById("manufacturer").value;
+            row.querySelector(".characteristics").textContent = document.getElementById("characteristics").value;
 
-        const select = document.getElementById("category_number");
-        row.querySelector(".category").textContent = select.options[select.selectedIndex].text;
+            // Зчитуємо нове текстове значення категорії прямо з нашої кастомної кнопки
+            const currentCategoryName = document.getElementById("editCategoryBtn").innerText;
+            row.querySelector(".category").textContent = currentCategoryName;
+        }
 
         closeEditModal();
     } else {
