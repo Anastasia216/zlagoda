@@ -119,4 +119,7 @@ def delete_customer_card_route(card_number):
         delete_customer_card(card_number)
         return jsonify({"success": True})
     except Exception as e:
-        return jsonify({"success": False, "message": str(e)})
+        return jsonify({
+            "success": False,
+            "message": "Cannot delete this customer card because it has already been used in existing store receipts. Operational history must be preserved."
+        }), 400

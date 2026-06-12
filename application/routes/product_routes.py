@@ -224,3 +224,29 @@ def delete_product(id_product):
         return jsonify({"success": False, "message": str(e)}), 500
     finally:
         conn.close()
+
+
+@product_routes.route("/products/get-price/<string:upc>")
+@login_required
+@role_required("manager", "cashier")
+def get_product_price_by_upc(upc):
+    conn = get_db_connection()
+
+    store_item = conn.execute("""
+                              SELECT selling_price
+                              FROM store_products
+                              WHERE UPC = ?
+                              """, (upc,)).fetchone()
+
+    conn.close()
+
+    if store_item:
+        return jsonify({
+            "success": True,
+            "selling_price": float(store_item["selling_price"])
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "Product not found"
+        }), 404
