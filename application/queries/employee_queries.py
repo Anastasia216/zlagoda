@@ -69,7 +69,7 @@ def get_all_cashiers():
     cursor.execute('SELECT e.*, u.username '
                     'FROM employees e '
                     'LEFT JOIN users u '
-                        'ON u.id_employee = e.id_employee'
+                        'ON u.id_employee = e.id_employee '
                     'WHERE empl_role = ? '
                     'ORDER BY empl_surname', ('cashier',))
     employees = cursor.fetchall()
@@ -91,7 +91,7 @@ def get_employee_by_id(id_employee):
 def get_employee_by_surname(empl_surname):
     conn = get_db_connection()
     cursor=conn.cursor()
-    cursor.execute( 'SELECT e.*, u.username'
+    cursor.execute( 'SELECT e.*, u.username '
                     'FROM employees e '
                     'LEFT JOIN users u '
                          'ON u.id_employee = e.id_employee '
@@ -164,6 +164,9 @@ def update_employee(id_employee, data):
 def delete_employee(id_employee):
     conn = get_db_connection()
     cursor=conn.cursor()
+    cursor.execute(
+        'DELETE FROM users '
+        'WHERE id_employee = ?',(id_employee,))
     cursor.execute('DELETE FROM employees '
                    'WHERE id_employee = ?', (id_employee,))
     conn.commit()

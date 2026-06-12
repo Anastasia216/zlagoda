@@ -100,10 +100,3 @@ def employee_delete_route(id_employee):
 @role_required('manager')
 def employees_reports_page():
     return render_template('employees/reports.html')
-
-#@employee_routes.route('/employees/reports', methods=['POST'])
-#def employee_reports():
-##############################################################
-###################################################################
-# need to write it later
-###################################################################
