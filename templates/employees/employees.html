@@ -1799,6 +1799,7 @@ function resetForm(){
 document.getElementById("editForm").addEventListener("submit", saveEmployee);
 
 async function saveEmployee(event){
+    event.preventDefault();
     const salary = parseFloat(document.getElementById("salary").value);
     if (isNaN(salary) || salary <= 0){
         alert("Please enter a correct value. Salary must be greater than 0.");
@@ -1814,7 +1815,6 @@ async function saveEmployee(event){
         alert("Invalid ZIP code.");
         return;
     }
-    event.preventDefault();
     const form = document.getElementById("editForm");
     const response = await fetch(form.action, { method: "POST", body: new FormData(form) });
     const result = await response.json();

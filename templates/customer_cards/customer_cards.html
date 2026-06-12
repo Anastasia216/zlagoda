@@ -563,13 +563,11 @@ function outsideClick(event){
     document.querySelectorAll('#editForm input[pattern], #addForm input[pattern]').forEach(input => {
 
     input.addEventListener('invalid', function() {
-        // Беремо текст із вашого англійського title і підставляємо його повністю
         const customMessage = this.getAttribute('title') || 'Invalid format.';
         this.setCustomValidity(`Please match the requested format: ${customMessage}`);
     });
 
     input.addEventListener('input', function() {
-        // Скидаємо помилку, коли користувач починає друкувати
         this.setCustomValidity('');
     });
 });
