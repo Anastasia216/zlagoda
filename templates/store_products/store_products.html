@@ -918,7 +918,7 @@
 <div class="floating-buttons">
     {% if session["role"] == "manager" %}
     <button class="main-btn add-btn" onclick="openAddModal()">Add</button>
-    <button class="main-btn report-btn" onclick="window.open('/store_products/report', '_blank')">Report</button>
+    <button class="main-btn report-btn" onclick="window.location.href='/store_products/report'">Report</button>
     {% endif %}
 </div>
 
@@ -952,52 +952,27 @@
 </div>
 <div id="editModal" class="modal">
     <div class="modal-content">
-        <button class="close-btn" onclick="closeEditModal()">✕</button>
-        <h2>Edit Store Product</h2>
+        <button class="close-btn" onclick="closeEditModal()" style="left: 24px; right: auto;">✕</button>
+        <h2 style="margin-left: 54px;">Edit Store Product</h2>
 
         <form id="editForm">
             <input type="hidden" name="UPC" id="edit_upc">
+            <input type="hidden" name="UPC_prom" id="edit_upc_prom">
+            <input type="hidden" name="id_product" id="edit_id_product">
+            <input type="hidden" name="promotional_product" id="edit_promo_hidden">
 
             <div class="form-group">
-                <label>Link to Promotional Partner (Optional)</label>
-                <div class="modal-select-wrapper">
-                    <button type="button" class="modal-select-btn" id="editPromoPartnerBtn" onclick="toggleModalDropdown('editPromoPartnerMenu')">-- No Promotional Variant --</button>
-                    <div class="modal-select-menu" id="editPromoPartnerMenu">
-                        <input type="text" class="dropdown-search-input" id="editPromoSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('editPromoSearch', 'editPromoPartnerMenu')">
-                        <div class="modal-select-item" onclick="selectStoreProduct('edit_promo', '', '-- No Promotional Variant --')">-- No Promotional Variant --</div>
-                        {% for item in all_existing_upcs %}
-                            {% if item['promotional_product'] == 1 %}
-                            <div class="modal-select-item" onclick="selectStoreProduct('edit_promo', '{{ item['UPC'] }}', '{{ item['product_name'] | escape }} (Promo: {{ item['UPC'] }})')">
-                                {{ item['product_name'] }} (Promo: {{ item['UPC'] }})
-                            </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <input type="hidden" name="UPC_prom" id="edit_upc_prom">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Product Catalog Entry</label>
-                <div class="modal-select-wrapper">
-                    <button type="button" class="modal-select-btn" id="editProductCatalogBtn" onclick="toggleModalDropdown('editProductCatalogMenu')">Select product</button>
-                    <div class="modal-select-menu" id="editProductCatalogMenu">
-                        <input type="text" class="dropdown-search-input" id="editCatalogSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('editCatalogSearch', 'editProductCatalogMenu')">
-                        {% for product in products %}
-                        <div class="modal-select-item" onclick="selectStoreProduct('edit_catalog', '{{ product['id_product'] }}', '{{ product['product_name'] | escape }}')">
-                            {{ product['product_name'] }}
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <input type="hidden" name="id_product" id="edit_id_product">
+                <label>Product Name</label>
+                <div id="edit_product_name_display" style="width: 100%; height: 54px; padding: 15px 18px; border-radius: 18px; background: rgba(15, 23, 42, 0.04); font-size: 15px; font-weight: 700; color: #475569; box-shadow: inset 0 1px 0 rgba(0,0,0,0.05);">
+                    Loading product name...
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Base Price (₴)</label>
                 <input type="number" name="selling_price" id="edit_price" step="0.01" min="0.01" required>
-                <small id="edit_price_hint" style="color: #64748b; display:none; font-size:12px; margin-top:4px;">
-                    This is a promotional item. Saving will automatically reduce this price by 20%.
+                <small id="edit_price_hint" style="color: #4f46e5; display:none; font-size:12px; margin-top:6px; font-weight: 600;">
+                    Promotional Item: Price is locked and computed automatically from the original store item (-20%).
                 </small>
             </div>
 
@@ -1006,13 +981,7 @@
                 <input type="number" name="products_number" id="edit_quantity" min="0" required>
             </div>
 
-            <div class="form-group" style="display: flex; gap: 12px; align-items: center;">
-                <label for="edit_promo" style="margin: 0;">Mark as Promotional Product</label>
-                <input type="checkbox" name="promotional_product" id="edit_promo" style="width: 20px; height: 20px; appearance: auto; margin: 0;">
-            </div>
-
-            <div class="modal-buttons">
-{#                <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>#}
+            <div class="modal-buttons" style="margin-top: 28px;">
                 <button type="submit" class="save-btn">Save Changes</button>
             </div>
         </form>
@@ -1213,51 +1182,93 @@ if (addForm) {
     });
 }
 
+///edit////
+let originalData = {};
+
 function openEditModal(upc) {
     fetch(`/store_products/get/${upc}`)
         .then(response => response.json())
         .then(product => {
+            originalData = {...product};
             document.getElementById("edit_upc").value = product.UPC;
             document.getElementById("edit_upc_prom").value = product.UPC_prom || "";
             document.getElementById("edit_id_product").value = product.id_product;
-            document.getElementById("edit_price").value = product.selling_price;
             document.getElementById("edit_quantity").value = product.products_number;
 
-            const catalogItems = document.querySelectorAll("#editProductCatalogMenu .modal-select-item");
-            catalogItems.forEach(item => {
-                if(item.innerHTML.includes(product.product_name)) {
-                    document.getElementById("editProductCatalogBtn").innerText = item.innerText.trim();
+            const isPromo = (product.promotional_product === 1 || product.promotional_product === true || product.promotional_product === "1");
+            document.getElementById("edit_promo_hidden").value = isPromo ? "1" : "0";
+
+            const rows = document.querySelectorAll("tbody tr");
+            let foundName = "Unknown Product";
+            rows.forEach(row => {
+                if (row.innerHTML.includes(product.UPC)) {
+                    foundName = row.cells[2].textContent.trim();
                 }
             });
+            document.getElementById("edit_product_name_display").innerText = foundName;
 
-            if(product.UPC_prom) {
-                document.getElementById("editPromoPartnerBtn").innerText = `Product Variant (UPC: ${product.UPC_prom})`;
-            } else {
-                document.getElementById("editPromoPartnerBtn").innerText = "-- No Promotional Variant --";
-            }
-
-            const isPromo = product.promotional_product == 1;
-            document.getElementById("edit_promo").checked = isPromo;
-
+            const priceInput = document.getElementById("edit_price");
             const hint = document.getElementById("edit_price_hint");
-            if (hint) hint.style.display = isPromo ? "block" : "none";
+
+            if (isPromo) {
+                priceInput.value = product.selling_price;
+                priceInput.readOnly = true;
+                priceInput.style.background = "rgba(15, 23, 42, 0.04)";
+                priceInput.style.color = "#64748b";
+                priceInput.style.fontWeight = "700";
+                if (hint) hint.style.display = "block";
+            } else {
+                priceInput.value = product.selling_price;
+                priceInput.readOnly = false;
+                priceInput.style.background = "rgba(255, 255, 255, 0.9)";
+                priceInput.style.color = "#0f172a";
+                priceInput.style.fontWeight = "500";
+                if (hint) hint.style.display = "none";
+            }
 
             document.getElementById("editModal").style.display = "flex";
         })
-        .catch(err => alert("Error loading product: " + err));
+        .catch(err => alert("Error loading product data: " + err));
 }
 
 function closeEditModal() {
     document.getElementById("editModal").style.display = "none";
 }
 
-const editPromoCheck = document.getElementById("edit_promo");
-if (editPromoCheck) {
-    editPromoCheck.addEventListener("change", function() {
-        const hint = document.getElementById("edit_price_hint");
-        if (hint) hint.style.display = this.checked ? "block" : "none";
+document.getElementById("editForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    const upc = document.getElementById("edit_upc").value;
+
+    const price = parseFloat(formData.get("selling_price"));
+    const quantity = parseInt(formData.get("products_number"));
+
+    if (price <= 0) {
+        alert("Error: Price must be greater than 0 ₴!");
+        return;
+    }
+    if (quantity < 0) {
+        alert("Error: Quantity cannot be negative!");
+        return;
+    }
+
+    const isPromoHidden = document.getElementById("edit_promo_hidden").value;
+    if (isPromoHidden === "1") {
+        formData.append("promotional_product", "on");
+    }
+
+    const response = await fetch(`/store_products/edit/${upc}`, {
+        method: "POST",
+        body: formData
     });
-}
+
+    const result = await response.json();
+    if (result.success) {
+        location.reload();
+    } else {
+        alert("Error while saving changes: " + result.message);
+    }
+});
 
 const editForm = document.getElementById("editForm");
 if (editForm) {
@@ -1347,15 +1358,18 @@ async function deleteStoreProduct(upc, productName) {
         } else {
             await showCustomConfirm(
                 "Action Blocked",
-                result.message || "Failed to delete this product from store.",
+                result.message || "This item cannot be deleted due to database integrity constraints.",
                 "OK"
             );
         }
     } catch (error) {
-        alert("Network error: Could not connect to the server.");
+        await showCustomConfirm(
+            "Network Error",
+            "Could not connect to the server. Please check your connection.",
+            "OK"
+        );
     }
 }
-
 function toggleModalDropdown(menuId) {
     const menu = document.getElementById(menuId);
     const isVisible = menu.style.display === "block";

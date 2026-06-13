@@ -124,7 +124,7 @@
     <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
         <button class="close-btn" onclick="closeDetailsModal()">✕</button>
         <h2>Receipt Details</h2>
-        <div id="detailsContent" class="detail-card" style="max-height: 250px; overflow-y: auto; padding-right: 4px;"></div>
+        <div id="detailsContent" style="max-height: 250px; overflow-y: auto; padding-right: 4px; margin-bottom: 15px;"></div>
         <div id="detailsFinancials"></div>
     </div>
 </div>
@@ -132,16 +132,17 @@
 <div id="addModal" class="modal">
     <div class="modal-content">
         <button class="close-btn" type="button" onclick="closeAddModal()" style="left: 24px; right: auto;">✕</button>
-        <h2 style="margin-left: 54px;">Add Receipt</h2>
+        <h2 style="margin-left: 54px; margin-bottom: 28px;">Add Receipt</h2>
         <form id="addForm">
             <div class="form-grid">
                 <input type="hidden" name="sum_total" id="add_sum_total_input">
                 <input type="hidden" name="vat" id="add_vat_input">
 
-                <div class="form-group">
-                    <label>Print Date</label>
-                    <input type="date" id="add_print_date" name="print_date" required>
-                </div>
+        <div class="form-group">
+            <label>Print Date</label>
+            <input type="date" id="add_print_date" name="print_date" readonly required
+                style="background: rgba(15, 23, 42, 0.04); color: #475569; font-weight: 700; cursor: not-allowed; box-shadow: inset 0 1px 0 rgba(0,0,0,0.05);">
+        </div>
 
                 <div class="form-group">
                     <label>Customer Card</label>
@@ -203,7 +204,7 @@
 <div id="addProductModal" class="modal">
     <div class="modal-content">
         <button class="close-btn" type="button" onclick="closeAddProductModal()" style="left: 24px; right: auto;">✕</button>
-        <h2 style="margin-left: 54px;">Add Product</h2>
+        <h2 style="margin-left: 54px; margin-bottom: 28px;">Add Product</h2>
 
         <div class="sale-row">
             <div class="form-group" style="grid-column: span 3; margin-bottom: 5px;">
@@ -229,21 +230,19 @@
                     <input type="hidden" id="product-name-hidden" value="">
                 </div>
             </div>
-
             <div class="form-group" style="margin-top: 5px;">
                 <label>Quantity</label>
                 <input type="text" id="product-quantity" required>
             </div>
-            <div class="form-group" style="margin-top: 5px;">
+            <div class="form-group" style="margin-top: 5px; display: none;">
                 <label>Selling Price</label>
-                <input type="text" id="product-price" required>
+                <input type="hidden" id="product-price" required>
             </div>
         </div>
 
         <div class="modal-buttons" style="margin-top: 24px;">
             <div class="left-buttons"></div>
             <div class="right-buttons">
-                <button type="button" class="reset-btn" onclick="closeAddProductModal()">Cancel</button>
                 <button type="button" class="save-btn" onclick="addProductToReceipt()">Add Product</button>
             </div>
         </div>
@@ -288,6 +287,7 @@
             <div class="filter-wrapper">
                 <button type="button" class="filter-chip" onclick="toggleFilterMenu()">Date ▾</button>
                 <div id="filterMenu" class="filter-menu">
+                    <button type="button" onclick="clearDateFilter()" style="color: #2563eb; font-weight: 700;">All Receipts</button>
                     <button type="button" onclick="setTodayFilter()">Today</button>
                     <button type="button" onclick="showPeriod()">Period</button>
                     <div id="periodBox" class="period-box">
@@ -400,7 +400,7 @@
     {% endif %}
     {% if session["role"] == "manager" %}
     <button class="main-btn report-btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="openGlobalAnalyticsModal()">Analytics</button>
-    <button class="main-btn report-btn" onclick="window.open('/receipts/report', '_blank')">Reports</button>
+    <button class="main-btn report-btn" onclick="window.location.href='/receipts/report'">Reports</button>
     {% endif %}
 </div>
 
@@ -411,13 +411,87 @@
         <button class="close-modal-btn" onclick="closeProfileModal()">Close</button>
     </div>
 </div>
-
+<div id="customConfirmModal" class="modal" style="display: none; z-index: 10000;">
+    <div class="modal-content" style="max-width: 450px; text-align: center; padding: 35px; box-sizing: border-box;">
+        <h2 id="confirmTitle" style="margin: 0 0 15px 0; color: #0f172a; font-size: 24px; font-weight: 700; width: 100%;">Are you sure?</h2>
+        <p id="confirmMessage" style="color: #64748b; font-size: 15px; line-height: 1.6; margin: 0 0 30px 0; width: 100%;">This action cannot be undone.</p>
+        <div style="display: flex; justify-content: center; gap: 16px; width: 100%; box-sizing: border-box;">
+            <button type="button" class="reset-btn" id="confirmCancelBtn" style="margin: 0; padding: 12px 24px; min-width: 140px; flex: 1; justify-content: center;">Cancel</button>
+            <button type="button" class="save-btn" id="confirmActionBtn" style="background: #ef4444; margin: 0; padding: 12px 24px; min-width: 140px; flex: 1; justify-content: center;">Delete</button>
+        </div>
+    </div>
+</div>
 <script>
 let receiptProducts = [];
 
-function deleteReceipt(checkNumber){
-    if(confirm("Are you sure you want to delete this receipt?")){
-        window.location.href = `/receipts/delete/${checkNumber}`;
+function showCustomConfirm(title, message, buttonText = "Delete") {
+    return new Promise((resolve) => {
+        const modal = document.getElementById("customConfirmModal");
+        const titleEl = document.getElementById("confirmTitle");
+        const msgEl = document.getElementById("confirmMessage");
+        const cancelBtn = document.getElementById("confirmCancelBtn");
+        const actionBtn = document.getElementById("confirmActionBtn");
+
+        if(!modal || !titleEl || !msgEl) return resolve(false);
+
+        titleEl.innerText = title;
+        msgEl.innerHTML = message.replace(/\n/g, "<br>");
+        actionBtn.innerText = buttonText;
+
+        if (buttonText === "OK") {
+            cancelBtn.style.display = "none";
+            actionBtn.style.background = "#2563eb";
+        } else {
+            cancelBtn.style.display = "block";
+            actionBtn.style.background = "#ef4444";
+        }
+
+        modal.style.display = "flex";
+
+        function closeConfirm(value) {
+            modal.style.display = "none";
+            cancelBtn.removeEventListener("click", onCancel);
+            actionBtn.removeEventListener("click", onConfirm);
+            resolve(value);
+        }
+
+        function onCancel() { closeConfirm(false); }
+        function onConfirm() { closeConfirm(true); }
+
+        cancelBtn.addEventListener("click", onCancel);
+        actionBtn.addEventListener("click", onConfirm);
+    });
+}
+
+async function deleteReceipt(checkNumber) {
+    const confirmDelete = await showCustomConfirm(
+        "Delete Receipt?",
+        `Are you sure you want to delete receipt <b>#${checkNumber}</b> from the log?`
+    );
+    if (!confirmDelete) return;
+
+    try {
+        const response = await fetch(`/receipts/delete/${checkNumber}`);
+        if (response.ok) {
+            const row = document.getElementById(`receipt-row-${checkNumber}`);
+            if (row) {
+                row.remove();
+            } else {
+                location.reload();
+            }
+        } else {
+            await showCustomConfirm(
+                "Action Blocked",
+                "Cannot delete this receipt due to database integrity constraints.",
+                "OK"
+            );
+        }
+    } catch (error) {
+        await showCustomConfirm(
+            "Network Error",
+            "Could not connect to the server. Please check your connection.",
+            "OK"
+        );
     }
 }
 
@@ -426,9 +500,6 @@ function selectModalCard(value, label) {
     document.getElementById("addCardBtn").innerText = label;
     document.getElementById("addCardMenu").style.display = "none";
 }
-</script>
-
-<script>
 
 function openAddModal(){
     document.getElementById("addForm").reset();
@@ -449,7 +520,7 @@ document.getElementById("addForm").addEventListener("submit", async function(eve
     event.preventDefault();
 
     if(receiptProducts.length === 0){
-        alert("Add at least one product.");
+        await showCustomConfirm("Action Blocked", "Please add at least one product before submitting the receipt.", "OK");
         return;
     }
 
@@ -462,9 +533,7 @@ document.getElementById("addForm").addEventListener("submit", async function(eve
     const result = await response.json();
     if(result.success){ location.reload(); } else { alert("Error: " + result.message); }
 });
-</script>
 
-<script>
 const searchInput = document.querySelector(".search-bar");
 if(searchInput) {
     searchInput.addEventListener("input", () => {
@@ -480,43 +549,55 @@ window.addEventListener("load", () => {
         search.setSelectionRange(search.value.length, search.value.length);
     }
 });
-</script>
 
-<script>
 function closeDetailsModal(){ document.getElementById("detailsModal").style.display = "none"; }
 
-async function openDetailsModal(checkNumber){
-    const response = await fetch(`/receipts/${checkNumber}/sales`);
-    const result = await response.json();
+async function openDetailsModal(checkNumber) {
+    try {
+        const response = await fetch(`/receipts/${checkNumber}/sales`);
+        const result = await response.json();
 
-    const content = document.getElementById("detailsContent");
-    const financialsContainer = document.getElementById("detailsFinancials");
+        const content = document.getElementById("detailsContent");
+        const financialsContainer = document.getElementById("detailsFinancials");
 
-    content.innerHTML = "";
-    financialsContainer.innerHTML = "";
+        if (!content) return;
+        content.innerHTML = "";
 
-    result.sales.forEach(sale => {
-        content.innerHTML += `
-            <div class="detail-card">
-                <p><b>Product:</b> ${sale.product_name}</p>
-                <p><b>Quantity:</b> ${sale.product_number} pcs</p>
-                <p><b>Price:</b> ${sale.selling_price} ₴</p>
-            </div>
-        `;
-    });
+        result.sales.forEach(sale => {
+            content.innerHTML += `
+                <div style="background: #ffffff; border-radius: 18px; padding: 18px; margin-bottom: 12px; box-shadow: 0 5px 15px rgba(15,23,42,0.04); border: 1px solid rgba(226,232,240,0.6); text-align: left;">
+                    <p style="margin: 4px 0; font-size: 15px; color: #0f172a;"><b>Product:</b> ${sale.product_name}</p>
+                    <p style="margin: 4px 0; font-size: 14px; color: #475569;"><b>Quantity:</b> ${sale.product_number} pcs</p>
+                    <p style="margin: 4px 0; font-size: 14px; color: #475569;"><b>Price:</b> ${sale.selling_price} ₴</p>
+                </div>
+            `;
+        });
 
-    const f = result.financials;
-    financialsContainer.innerHTML = `
-        <div class="totals-box" style="margin-top: 15px; background: rgba(37, 99, 235, 0.03); border: 1px dashed rgba(37, 99, 235, 0.2);">
-            <div class="total-line" style="font-size: 15px; color: #475569;"><span>Subtotal:</span><span>${f.subtotal.toFixed(2)} ₴</span></div>
-            <div class="total-line" style="font-size: 15px; color: #e11d48; font-weight: 600;"><span>Discount:</span><span>-${f.discount_percent}%</span></div>
-            <div class="total-line" style="font-size: 15px; color: #e11d48; font-weight: 600;"><span>Saved:</span><span>${f.discount_currency.toFixed(2)} ₴</span></div>
-            <div class="total-line" style="font-size: 15px; color: #475569;"><span>Included VAT (20%):</span><span>${f.vat.toFixed(2)} ₴</span></div>
-            <div class="total-line" style="margin-top: 10px;"><span>Final Total:</span><strong style="color: #2563eb;">${f.sum_total.toFixed(2)} ₴</strong></div>
-        </div>
-    `;
+        if (financialsContainer && result.financials) {
+            const f = result.financials;
+            financialsContainer.innerHTML = `
+                <div class="totals-box" style="margin-top: 15px; padding: 18px; border-radius: 18px; background: rgba(37, 99, 235, 0.03); border: 1px dashed rgba(37, 99, 235, 0.2);">
+                    <div class="total-line" style="display: flex; justify-content: space-between; font-size: 14px; color: #475569; margin: 6px 0;"><span>Subtotal:</span><span>${f.subtotal.toFixed(2)} ₴</span></div>
+                    <div class="total-line" style="display: flex; justify-content: space-between; font-size: 14px; color: #e11d48; font-weight: 600; margin: 6px 0;"><span>Discount:</span><span>-${f.discount_percent}%</span></div>
+                    <div class="total-line" style="display: flex; justify-content: space-between; font-size: 14px; color: #e11d48; font-weight: 600; margin: 6px 0;"><span>Saved:</span><span>${f.discount_currency.toFixed(2)} ₴</span></div>
+                    <div class="total-line" style="display: flex; justify-content: space-between; font-size: 14px; color: #475569; margin: 6px 0;"><span>Included VAT (20%):</span><span>${f.vat.toFixed(2)} ₴</span></div>
+                    <div class="total-line" style="display: flex; justify-content: space-between; font-size: 18px; margin-top: 12px; border-top: 1px solid rgba(226,232,240,0.6); padding-top: 10px;"><span>Final Total:</span><strong style="color: #2563eb; font-size: 20px;">${f.sum_total.toFixed(2)} ₴</strong></div>
+                </div>
+            `;
+        }
 
-    document.getElementById("detailsModal").style.display = "flex";
+        const detailsModal = document.getElementById("detailsModal");
+        if (detailsModal) {
+            detailsModal.style.zIndex = "100001";
+            detailsModal.style.display = "flex";
+        }
+    } catch (e) {
+        alert("Failed to fetch receipt details.");
+    }
+}
+
+async function viewReceiptItemsInline(checkNumber) {
+    await openDetailsModal(checkNumber);
 }
 
 function openAddProductModal(){
@@ -551,22 +632,30 @@ function selectModalProduct(upc, name, stock, isPromo) {
         .catch(err => console.error("Error fetching price:", err));
 }
 
-function addProductToReceipt(){
+async function addProductToReceipt(){
     const upc = document.getElementById("product-upc").value;
     const product_name = document.getElementById("product-name-hidden").value;
     const quantity = parseInt(document.getElementById("product-quantity").value);
     const price = parseFloat(document.getElementById("product-price").value);
     const maxStock = parseInt(document.getElementById("product-stock-hidden").value);
 
-    if(!upc) { alert("Please select a product first!"); return; }
-    if(isNaN(quantity) || isNaN(price)){ alert("Enter valid quantity and price"); return; }
-    if(quantity <= 0) { alert("Quantity must be greater than 0"); return; }
-
-    if(quantity > maxStock) {
-        alert(`Error: Not enough stock on floor! Available: ${maxStock} pcs.`);
+    if(!upc) {
+        await showCustomConfirm("Action Blocked", "Please select a product from the list first!", "OK");
         return;
     }
-    if(receiptProducts.find(p => p.upc === upc)){ alert("This product is already in the receipt."); return; }
+    if(isNaN(quantity) || quantity <= 0) {
+        await showCustomConfirm("Action Blocked", "Quantity must be a valid number greater than 0.", "OK");
+        return;
+    }
+    if(quantity > maxStock) {
+        await showCustomConfirm("Action Blocked", f`Not enough stock on the floor! Available: <b>${maxStock} pcs</b>.`, "OK");
+        return;
+    }
+
+    if(receiptProducts.find(p => p.upc === upc)){
+        await showCustomConfirm("Action Blocked", "This product is already in the receipt.", "OK");
+        return;
+    }
 
     receiptProducts.push({ product_name, upc, quantity, price });
     renderProducts();
@@ -616,14 +705,12 @@ function resetReceiptForm(){
     renderProducts();
     updateTotals();
 }
-</script>
 
-<script>
 const popup = document.getElementById('popup');
 function togglePopup(){ popup.classList.toggle('active'); }
 
 window.addEventListener('click', function(e){
-    if(!e.target.closest('.user-wrapper')){ popup.classList.remove('active'); }
+    if(!e.target.closest('.user-wrapper')){ popup?.classList.remove('active'); }
 });
 
 function showProfile(){
@@ -647,7 +734,7 @@ function outsideClick(event){
 
 function toggleFilterMenu(){
     const menu = document.getElementById("filterMenu");
-    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    if(menu) menu.style.display = menu.style.display === "flex" ? "none" : "flex";
 }
 
 function setTodayFilter(){
@@ -659,6 +746,12 @@ function setTodayFilter(){
 }
 function showPeriod(){ document.getElementById("periodBox").style.display = "block"; }
 
+function clearDateFilter() {
+    document.getElementById("filter_type").value = "";
+    document.getElementById("date_from_hidden").value = "";
+    document.getElementById("date_to_hidden").value = "";
+    document.getElementById("searchForm").submit();
+}
 function applyPeriod(){
     const from = document.getElementById("dateFrom").value;
     const to = document.getElementById("dateTo").value;
@@ -688,6 +781,7 @@ function toggleModalDropdown(menuId) {
 function filterModalDropdown(searchId, menuId) {
     const filter = document.getElementById(searchId).value.toUpperCase();
     const menu = document.getElementById(menuId);
+    if(!menu) return;
     const items = menu.querySelectorAll(".modal-select-item");
 
     items.forEach(item => {
@@ -780,28 +874,6 @@ document.getElementById("globalAnalyticsForm").addEventListener("submit", async 
         } else { alert("Error: " + result.message); }
     } catch (error) { alert("Network error."); }
 });
-
-async function viewReceiptItemsInline(checkNumber) {
-    try {
-        const response = await fetch(`/receipts/${checkNumber}/sales`);
-        const result = await response.json();
-        const content = document.getElementById("detailsContent");
-        content.innerHTML = "";
-
-        result.sales.forEach(sale => {
-            content.innerHTML += `
-                <div class="detail-card">
-                    <p><b>Product:</b> ${sale.product_name}</p>
-                    <p><b>Quantity:</b> ${sale.product_number} pcs</p>
-                    <p><b>Price:</b> ${sale.selling_price} ₴</p>
-                </div>
-            `;
-        });
-        const detailsModal = document.getElementById("detailsModal");
-        detailsModal.style.zIndex = "10000";
-        detailsModal.style.display = "flex";
-    } catch (e) { alert("Failed to fetch receipt details."); }
-}
 </script>
 </body>
 </html>

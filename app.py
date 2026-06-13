@@ -1,3 +1,41 @@
+import os
+import sys
+
+if sys.platform == 'darwin':
+    os.environ['PATH'] = '/opt/homebrew/bin:/usr/local/bin:' + os.environ.get('PATH', '')
+    import cffi
+
+    original_dlopen = cffi.FFI.dlopen
+
+    def patched_dlopen(self, name, flags=0):
+        if name and any(lib in name for lib in ['gobject', 'pango', 'cairo', 'glib', 'harfbuzz', 'fontconfig']):
+            possible_dirs = ['/opt/homebrew/lib/', '/usr/local/lib/']
+            for base_dir in possible_dirs:
+                clean_name = name.replace('lib', '').split('.')[
+                    0]
+                variants = [
+                    f"{base_dir}{name}",
+                    f"{base_dir}lib{clean_name}.dylib",
+                    f"{base_dir}lib{clean_name}.0.dylib"
+                ]
+                if 'gobject' in name:
+                    variants.append(f"{base_dir}libgobject-2.0.0.dylib")
+                    variants.append(f"{base_dir}libgobject-2.0.dylib")
+                if 'pango' in name:
+                    variants.append(f"{base_dir}libpango-1.0.0.dylib")
+                    variants.append(f"{base_dir}libpango-1.0.dylib")
+                if 'cairo' in name:
+                    variants.append(f"{base_dir}libcairo.2.dylib")
+                    variants.append(f"{base_dir}libcairo.dylib")
+
+                for variant in variants:
+                    try:
+                        if os.path.exists(variant):
+                            return original_dlopen(self, variant, flags)
+                    except Exception:
+                        continue
+        return original_dlopen(self, name, flags)
+    cffi.FFI.dlopen = patched_dlopen
 import secrets
 from flask import Flask, render_template
 from application.decorators import login_required
