@@ -98,9 +98,16 @@
             font-weight:500;
         }
 
-        /* USER */
+        /* HEADER ACTIONS & USER */
 
-        .user-wrapper{
+        .header-actions{
+            display:flex;
+            align-items:center;
+            gap:16px;
+        }
+
+        .user-wrapper,
+        .requests-wrapper{
             position:relative;
         }
 
@@ -483,27 +490,27 @@
 
         .close-modal-btn{
 
-        margin-top:20px;
+            margin-top:20px;
 
-        border:none;
-        border-radius:18px;
+            border:none;
+            border-radius:18px;
 
-        padding:14px 22px;
+            padding:14px 22px;
 
-        background:#eef2ff;
-        color:#4f46e5;
+            background:#eef2ff;
+            color:#4f46e5;
 
-        font-size:15px;
-        font-weight:600;
+            font-size:15px;
+            font-weight:600;
 
-        cursor:pointer;
+            cursor:pointer;
 
-        transition:0.2s;
-    }
+            transition:0.2s;
+        }
 
-    .close-modal-btn:hover{
-        background:#e0e7ff;
-    }
+        .close-modal-btn:hover{
+            background:#e0e7ff;
+        }
 
     </style>
 </head>
@@ -515,8 +522,6 @@
 
 <div class="container">
 
-    <!-- HEADER -->
-
     <div class="topbar">
 
         <div class="logo">
@@ -524,54 +529,74 @@
             <p>Retail Enterprise System</p>
         </div>
 
-        <!-- USER -->
+        <div class="header-actions">
 
-        <div class="user-wrapper">
+            <div class="requests-wrapper">
 
-            <button class="user-btn" onclick="togglePopup()">
+                <button class="user-btn" onclick="toggleRequestsPopup()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    </svg>
+                </button>
 
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
-                </svg>
+                <div class="user-popup" id="requests-popup">
+                    <div class="popup-buttons">
 
-            </button>
+                        <button class="profile-btn"
+                                onclick="window.location.href='/daria-requests'">
+                            Daria's requests
+                        </button>
 
-            <div class="user-popup" id="popup">
+                        <button class="profile-btn"
+                                onclick="window.location.href='/anastasia-requests'">
+                            Anastasia's requests
+                        </button>
 
-                <div class="profile">
-
-                    <div class="profile-avatar">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
-                        </svg>
                     </div>
-
-                    <div>
-                        <h3>{{ session["username"] }}</h3>
-                        <p>{{ session["role"] }}</p>
-                    </div>
-
                 </div>
 
-                <div class="popup-buttons">
+            </div>
 
-                    <button class="profile-btn"
-                            onclick="showProfile()">
-                        User Information
-                    </button>
+            <div class="user-wrapper">
 
-                    <button class="logout-btn"
-                            onclick="window.location.href='/logout'">
-                        Log out
-                    </button>
+                <button class="user-btn" onclick="togglePopup()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
+                    </svg>
+                </button>
+
+                <div class="user-popup" id="popup">
+
+                    <div class="profile">
+                        <div class="profile-avatar">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5zm0 2c-3.866 0-7 3.134-7 7h14c0-3.866-3.134-7-7-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>{{ session["username"] }}</h3>
+                            <p>{{ session["role"] }}</p>
+                        </div>
+                    </div>
+
+                    <div class="popup-buttons">
+                        <button class="profile-btn"
+                                onclick="showProfile()">
+                            User Information
+                        </button>
+                        <button class="logout-btn"
+                                onclick="window.location.href='/logout'">
+                            Log out
+                        </button>
+                    </div>
 
                 </div>
 
             </div>
 
         </div>
-
     </div>
+
 <div id="profileModal" onclick="outsideClick(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:9999;">
     <div id="profileWindow" style="background:white; width:500px; margin:100px auto; padding:30px; border-radius:20px; position:relative;">
         <h2>User Information</h2>
@@ -579,65 +604,49 @@
         <button class="close-modal-btn" onclick="closeProfileModal()">Close</button>
     </div>
 </div>
-    <!-- DASHBOARD -->
 
     <div class="dashboard">
 
-        <!-- TOP ROW -->
-
         <div class="top-row">
 
-            <!-- EMPLOYEES -->
-             {% if session["role"] == "manager" %}
+            {% if session["role"] == "manager" %}
             <a href="{{ url_for('employee_routes.employees') }}"
                class="card employees">
 
                 <div class="icon-box">
-
-                    <!-- FIXED EMPLOYEE ICON -->
-
                     <svg viewBox="0 0 24 24">
                         <path d="M16 11c1.66 0 2.99-1.79 2.99-4S17.66 3 16 3s-3 1.79-3 4 1.34 4 3 4zm-8 0c1.66 0 3-1.79 3-4S9.66 3 8 3 5 4.79 5 7s1.34 4 3 4zm0 2c-2.67 0-8 1.34-8 4v3h10v-3c0-1.08.39-2.06 1.02-2.9C10.02 13.39 8.72 13 8 13zm8 0c-.93 0-2.05.15-3.18.43 1.3.89 2.18 2.2 2.18 3.57v3h9v-3c0-2.66-5.33-4-8-4z"/>
                     </svg>
-
                 </div>
 
                 <h3>Employees</h3>
 
                 <div class="arrow-circle">→</div>
-
             </a>
              {% endif %}
-            <!-- CUSTOMER CARDS -->
+
             <a href="{{ url_for('customer_card_routes.customer_cards') }}"
                class="card customer-cards">
 
                 <div class="icon-box">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M21 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 12H3V7h18zm-9-2h6v-2h-6zm-7 0h4v-2H5zm0-4h13V9H5z"/>
                     </svg>
-
                 </div>
 
                 <h3>Customer Cards</h3>
 
                 <div class="arrow-circle">→</div>
-
             </a>
 
         </div>
 
-        <!-- BOTTOM ROW -->
-
         <div class="bottom-row">
 
-            <!-- PRODUCTS -->
             <a href="{{ url_for('product_routes.products') }}"
                class="card products">
 
                 <div class="icon-box">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10
                     0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9
@@ -645,51 +654,41 @@
                     0 1.41-.41 1.75-1.03L22 6H6.21l-.94-2H1v2h3l3.6
                     7.59-1.35 2.44C5.52 17.37 6.48 19 8 19h12v-2H8l1.16-2z"/>
                     </svg>
-
                 </div>
 
                 <h3>Products</h3>
 
                 <div class="arrow-circle">→</div>
-
             </a>
 
-            <!-- CATEGORIES -->
             {% if session["role"] == "manager" %}
             <a href="{{ url_for('category_routes.categories') }}"
                class="card categories">
 
                 <div class="icon-box">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M10 3H3v7h7V3zm11 0h-7v7h7V3zM10 14H3v7h7v-7zm11 0h-7v7h7v-7z"/>
                     </svg>
-
                 </div>
 
                 <h3>Categories</h3>
 
                 <div class="arrow-circle">→</div>
-
             </a>
             {% endif %}
-            <!-- CHECKS -->
 
             <a href="{{ url_for('receipt_routes.receipts') }}"
                class="card checks">
 
                 <div class="icon-box">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M6 2h12v2H6V2zm0 4h12l1 14H5L6 6zm3 3v2h6V9H9zm0 4v2h4v-2H9z"/>
                     </svg>
-
                 </div>
 
                 <h3>Receipts</h3>
 
                 <div class="arrow-circle">→</div>
-
             </a>
 
         </div>
@@ -701,15 +700,28 @@
 <script>
 
     const popup = document.getElementById('popup');
+    const requestsPopup = document.getElementById('requests-popup');
 
     function togglePopup(){
         popup.classList.toggle('active');
+        requestsPopup.classList.remove('active');
+    }
+
+    function toggleRequestsPopup(){
+        requestsPopup.classList.toggle('active');
+        popup.classList.remove('active');
     }
 
     window.addEventListener('click', function(e){
 
+        // Закриваємо меню профілю, якщо клік був поза його контейнером
         if(!e.target.closest('.user-wrapper')){
             popup.classList.remove('active');
+        }
+
+        // Закриваємо меню реквестів, якщо клік був поза його контейнером
+        if(!e.target.closest('.requests-wrapper')){
+            requestsPopup.classList.remove('active');
         }
 
     });
@@ -728,26 +740,26 @@
 
     function showProfile(){
 
-    fetch("/profile")
-        .then(response => response.json())
-        .then(data => {
+        fetch("/profile")
+            .then(response => response.json())
+            .then(data => {
 
-            document.getElementById("profileContent").innerHTML = `
-                <p><b>Name:</b> ${data.empl_name}</p>
-                <p><b>Surname:</b> ${data.empl_surname}</p>
-                <p><b>Role:</b> ${data.empl_role}</p>
-                <p><b>Phone:</b> ${data.phone_number}</p>
-                <p><b>City:</b> ${data.city}</p>
-                <p><b>Street:</b> ${data.street}</p>
-                <p><b>Start date:</b> ${data.date_of_start}</p>
-            `;
+                document.getElementById("profileContent").innerHTML = `
+                    <p><b>Name:</b> ${data.empl_name}</p>
+                    <p><b>Surname:</b> ${data.empl_surname}</p>
+                    <p><b>Role:</b> ${data.empl_role}</p>
+                    <p><b>Phone:</b> ${data.phone_number}</p>
+                    <p><b>City:</b> ${data.city}</p>
+                    <p><b>Street:</b> ${data.street}</p>
+                    <p><b>Start date:</b> ${data.date_of_start}</p>
+                `;
 
-            document.getElementById("profileModal").style.display = "block";
-        });
+                document.getElementById("profileModal").style.display = "block";
+            });
     }
 
     function closeProfileModal(){
-    document.getElementById("profileModal").style.display = "none";
+        document.getElementById("profileModal").style.display = "none";
     }
 
     function outsideClick(event) {
