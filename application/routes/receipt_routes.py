@@ -23,7 +23,6 @@ def receipts():
     user_role = session.get("role")
     user_employee_id = session.get("employee_id")
 
-    # Допоміжні дані для UI (Кастомні селекти)
     employees = conn.execute("""
                              SELECT *
                              FROM employees
@@ -197,6 +196,7 @@ def get_receipt_sales(check_number):
 
     subtotal = 0
     sales_list = []
+
     for row in sales_rows:
         subtotal += row["product_number"] * row["selling_price"]
         sales_list.append({
@@ -206,28 +206,28 @@ def get_receipt_sales(check_number):
             "selling_price": float(row["selling_price"])
         })
 
-        discount_percent = int(receipt_info["percent"])
-        sum_total = float(receipt_info["sum_total"])
+    discount_percent = int(receipt_info["percent"])
+    sum_total = float(receipt_info["sum_total"])
 
-        discount_currency = round(subtotal - sum_total, 2)
-        if discount_currency < 0:
-            discount_currency = 0.0
+    discount_currency = round(subtotal - sum_total, 2)
+    if discount_currency < 0:
+        discount_currency = 0.0
 
-        correct_vat = round(sum_total * 0.20, 2)
+    correct_vat = round(sum_total * 0.20, 2)
 
-        conn.close()
+    conn.close()
 
-        return jsonify({
-            "success": True,
-            "sales": sales_list,
-            "financials": {
-                "subtotal": round(subtotal, 2),
-                "discount_percent": discount_percent,
-                "discount_currency": discount_currency,
-                "sum_total": sum_total,
-                "vat": correct_vat  # Тепер тут завжди буде правильне ПДВ після знижки!
-            }
-        })
+    return jsonify({
+        "success": True,
+        "sales": sales_list,
+        "financials": {
+            "subtotal": round(subtotal, 2),
+            "discount_percent": discount_percent,
+            "discount_currency": discount_currency,
+            "sum_total": sum_total,
+            "vat": correct_vat
+        }
+    })
 
 
 @receipt_routes.route("/receipts/delete/<string:check_number>")

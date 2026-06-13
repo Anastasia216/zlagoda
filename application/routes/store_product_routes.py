@@ -62,8 +62,7 @@ def store_products():
     elif sort == "quantity":
         sql += " ORDER BY sp.products_number DESC"
     else:
-        sql += " ORDER BY sp.products_number DESC"  # Дефолт за кількістю [cite: 100]
-
+        sql += " ORDER BY sp.products_number DESC"
     store_products = conn.execute(sql, params).fetchall()
     conn.close()
 
@@ -71,7 +70,7 @@ def store_products():
         "store_products/store_products.html",
         store_products=store_products,
         products=products,
-        all_existing_upcs=all_existing_upcs,  # Передаємо в HTML
+        all_existing_upcs=all_existing_upcs,
         search=search,
         sort=sort,
         promo=promo
@@ -109,8 +108,7 @@ def add_store_product():
         else:
             id_product = request.form["id_product"]
             selling_price = float(request.form["selling_price"])
-            upc_prom_value = None  # Спочатку порожньо, поки не створили акційну пару
-
+            upc_prom_value = None
         conn.execute("""
                      INSERT INTO store_products(UPC, UPC_prom, id_product, selling_price, products_number,
                                                 promotional_product)
@@ -131,44 +129,61 @@ def add_store_product():
     finally:
         conn.close()
 
+
 @store_product_routes.route("/store_products/edit/<string:upc>", methods=["POST"])
 @login_required
 @role_required("manager")
 def edit_store_product(upc):
     conn = get_db_connection()
-    upc_prom = request.form.get("UPC_prom")
+
+    current_item = conn.execute("SELECT promotional_product, UPC_prom FROM store_products WHERE UPC = ?",
+                                (upc,)).fetchone()
+    if not current_item:
+        conn.close()
+        return jsonify({"success": False, "message": "Store product not found."}), 404
+
     id_product = request.form["id_product"]
-    selling_price = float(request.form["selling_price"])
-    products_number = request.form["products_number"]
+    products_number = int(request.form["products_number"])
 
     promotional_product = request.form.get("promotional_product")
     promotional_product = 1 if promotional_product else 0
 
-    if promotional_product == 1:
-        selling_price = round(selling_price * 0.8, 2)
+    if current_item["promotional_product"] == 1:
+        selling_price = float(request.form["selling_price"])
+    else:
+        selling_price = float(request.form["selling_price"])
 
     try:
         conn.execute("""
                      UPDATE store_products
-                     SET UPC_prom            = ?,
-                         id_product          = ?,
-                         selling_price       = ?,
-                         products_number     = ?,
-                         promotional_product = ?
+                     SET id_product      = ?,
+                         selling_price   = ?,
+                         products_number = ?
                      WHERE UPC = ?
                      """,
                      (
-                         upc_prom if upc_prom and upc_prom != "" else None,
                          id_product,
                          selling_price,
                          products_number,
-                         promotional_product,
                          upc
                      ))
+
+        if current_item["promotional_product"] == 0 and current_item["UPC_prom"]:
+            promo_upc = current_item["UPC_prom"]
+            new_promo_price = round(selling_price * 0.8, 2)
+
+            conn.execute("""
+                         UPDATE store_products
+                         SET selling_price = ?
+                         WHERE UPC = ?
+                           AND promotional_product = 1
+                         """, (new_promo_price, promo_upc))
+
         conn.commit()
         return jsonify({"success": True})
     except Exception as e:
-        return jsonify({"success": False, "message": str(e)})
+        conn.rollback()
+        return jsonify({"success": False, "message": str(e)}), 500
     finally:
         conn.close()
 
@@ -186,22 +201,75 @@ def get_store_product(upc):
     conn.close()
     return jsonify(dict(store_product))
 
+
 @store_product_routes.route("/store_products/delete/<string:upc>", methods=["POST"])
 @login_required
 @role_required("manager")
 def delete_store_product(upc):
     conn = get_db_connection()
-    conn.execute("""
-        DELETE FROM store_products
-        WHERE UPC = ?
-    """, (upc,))
-    conn.commit()
-    conn.close()
-    return jsonify({
-        "success": True
-    })
+    try:
+        conn.execute("PRAGMA foreign_keys = ON;")
 
+        item_data = conn.execute(
+            "SELECT promotional_product, UPC_prom FROM store_products WHERE UPC = ?",
+            (upc,)
+        ).fetchone()
 
+        if not item_data:
+            conn.close()
+            return jsonify({"success": False, "message": "Store product not found."}), 404
+
+        if item_data["promotional_product"] == 0 and item_data["UPC_prom"]:
+            promo_upc = item_data["UPC_prom"]
+
+            promo_exists = conn.execute(
+                "SELECT 1 FROM store_products WHERE UPC = ? AND promotional_product = 1 LIMIT 1",
+                (promo_upc,)
+            ).fetchone()
+
+            if promo_exists:
+                conn.close()
+                return jsonify({
+                    "success": False,
+                    "message": f"Cannot delete this base product because its promotional duplicate (UPC: {promo_upc}) is still active on the shop floor. Please remove the promotional variant first."
+                }), 400
+
+        linked_sales = conn.execute(
+            "SELECT 1 FROM sales WHERE UPC = ? LIMIT 1",
+            (upc,)
+        ).fetchone()
+
+        if linked_sales:
+            conn.close()
+            return jsonify({
+                "success": False,
+                "message": "Cannot delete this store product because it is already linked to existing register receipts. Operational history must be preserved."
+            }), 400
+
+        linked_promo = conn.execute(
+            "SELECT 1 FROM store_products WHERE UPC_prom = ? LIMIT 1",
+            (upc,)
+        ).fetchone()
+
+        if linked_promo:
+            conn.close()
+            return jsonify({
+                "success": False,
+                "message": "Cannot delete this product because it is currently configured as a promotional partner for another active item."
+            }), 400
+
+        conn.execute("DELETE FROM store_products WHERE UPC = ?", (upc,))
+        conn.commit()
+        return jsonify({"success": True})
+
+    except Exception as e:
+        conn.rollback()
+        return jsonify({
+            "success": False,
+            "message": f"Database constraint violation: {str(e)}"
+        }), 500
+    finally:
+        conn.close()
 @store_product_routes.route("/store_products/analytics/quantity", methods=["GET"])
 @login_required
 @role_required("manager")

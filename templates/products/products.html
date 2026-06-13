@@ -1093,10 +1093,15 @@
             <h2>Edit Product</h2>
             <form id="editForm" method="POST">
                 <input type="hidden" id="id_product">
+                <input type="hidden" id="product_name" name="product_name">
+
                 <div class="form-group">
                     <label>Product Name</label>
-                    <input type="text" id="product_name" name="product_name" maxlength="50" required>
+                    <div id="edit_product_name_display" style="width: 100%; height: 54px; padding: 15px 18px; border-radius: 18px; background: rgba(15, 23, 42, 0.04); font-size: 15px; font-weight: 700; color: #475569; box-shadow: inset 0 1px 0 rgba(0,0,0,0.05); display: flex; align-items: center;">
+                        Loading product name...
+                    </div>
                 </div>
+
                 <div class="form-group">
                     <label>Manufacturer</label>
                     <input type="text" id="manufacturer" name="manufacturer" maxlength="50" required>
@@ -1168,7 +1173,7 @@
 <div class="floating-buttons">
     {% if session["role"] == "manager" %}
     <button class="main-btn add-btn" onclick="openAddModal()">Add</button>
-    <button class="main-btn report-btn" onclick="window.open('/products/report', '_blank')">Report</button>
+    <button class="main-btn report-btn" onclick="window.location.href='/products/report'">Report</button>
     {% endif %}
 </div>
 
@@ -1292,14 +1297,15 @@ function openEditModal(idProduct){
         .then(product => {
             originalData = {...product};
             document.getElementById("id_product").value = product.id_product;
+
             document.getElementById("product_name").value = product.product_name;
+            document.getElementById("edit_product_name_display").innerText = product.product_name;
+
             document.getElementById("manufacturer").value = product.manufacturer;
             document.getElementById("characteristics").value = product.characteristics;
 
-            // ВСТАНОВЛЮЄМО ІД КАТЕГОРІЇ В ПРИХОВАНИЙ ІНПУТ
             document.getElementById("category_number").value = product.category_number;
 
-            // Беремо назву категорії з тексту рядка таблиці та пишемо на кнопку
             const row = document.getElementById(`product-row-${idProduct}`);
             if (row) {
                 document.getElementById("editCategoryBtn").innerText = row.querySelector(".category").textContent.trim();
@@ -1312,11 +1318,9 @@ function openEditModal(idProduct){
 }
 function closeEditModal(){ document.getElementById("editModal").style.display = "none"; }
 
-// === ОРИГІНАЛЬНИЙ БЛОК, ЯКИЙ ТРЕБА ЗАМІНИТИ (приблизно 353-й рядок) ===
 document.getElementById("editForm").addEventListener("submit", async function(event){
     event.preventDefault();
 
-    // Перевіряємо значення категорії безпосередньо в JavaScript
     const categoryInput = document.getElementById("category_number");
     if(!categoryInput || !categoryInput.value || categoryInput.value.trim() === "") {
         alert("Please select a category from the dropdown list first.");
@@ -1423,18 +1427,16 @@ function toggleModalDropdown(menuId) {
 
     if (!isVisible && menu) {
         menu.style.display = "block";
-        // Очищаємо інпут пошуку всередині цього меню при відкритті
         const searchInput = menu.querySelector(".dropdown-search-input");
         if (searchInput) {
             searchInput.value = "";
             filterModalDropdown(searchInput.id, menuId);
-            searchInput.focus(); // Автоматично ставимо фокус на пошук
+            searchInput.focus();
         }
     } else if (menu) {
         menu.style.display = "none";
     }
 }
-// Вибір елемента зі списку
 function selectModalCategory(mode, id, name) {
     if (mode === 'add') {
         document.getElementById("new_category_number").value = id;
@@ -1447,7 +1449,6 @@ function selectModalCategory(mode, id, name) {
     }
 }
 
-// Глобальне закриття списків при кліку повз них
 document.addEventListener("click", function(event) {
     if (!event.target.closest('.modal-select-wrapper')) {
         document.querySelectorAll('.modal-select-menu').forEach(m => m.style.display = "none");

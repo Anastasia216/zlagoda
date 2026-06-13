@@ -4,76 +4,119 @@
     <meta charset="UTF-8">
     <title>{{ report_title }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        @page {
+            size: A4 portrait;
+            margin: 20mm 15mm 20mm 15mm; /* Офіційні поля бланка */
+
+            @top-left {
+                content: "AIS ZLAGODA — OFFICIAL MANAGEMENT REPORT";
+                font-family: 'Inter', sans-serif;
+                font-size: 8px; color: #475569; font-weight: 600;
+                border-bottom: 1px solid #000000; padding-bottom: 4px; width: 100%;
+            }
+            @bottom-left {
+                content: "Confidential Document. For internal supermarket administration use only.";
+                font-family: 'Inter', sans-serif;
+                font-size: 8px; color: #475569; border-top: 1px solid #000000; padding-top: 6px;
+            }
+            @bottom-right {
+                content: "Page " counter(page) " of " counter(pages);
+                font-family: 'Inter', sans-serif;
+                font-size: 8px; color: #475569; font-weight: 600; border-top: 1px solid #000000; padding-top: 6px;
+            }
+        }
+
+        *{ margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
             color: #0f172a;
-            background-color: #f8fafc;
-            padding: 40px;
-            margin: 0;
+            background: {% if not is_pdf %}radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 28%), radial-gradient(circle at bottom right, rgba(168,85,247,0.10), transparent 24%), linear-gradient(135deg, #f8fbff 0%, #f4f7ff 55%, #f7f5ff 100%){% else %}#ffffff{% endif %};
+            padding: {% if not is_pdf %}40px{% else %}0{% endif %};
         }
+
         .report-card {
             background: #ffffff;
             max-width: 1100px;
             margin: 0 auto;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 4px 30px rgba(15, 23, 42, 0.04);
-            border: 1px solid #e2e8f0;
+            padding: {% if not is_pdf %}40px{% else %}0{% endif %};
+            border-radius: {% if not is_pdf %}20px{% else %}0{% endif %};
+            box-shadow: {% if not is_pdf %}0 4px 30px rgba(15, 23, 42, 0.04){% else %}none{% endif %};
+            border: {% if not is_pdf %}1px solid #e2e8f0{% else %}none{% endif %};
         }
+
         .report-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
+
         .report-header h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
-            margin: 0 0 8px 0;
-            background: linear-gradient(to right, #2563eb, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin: 0 0 6px 0;
+            background: {% if not is_pdf %}linear-gradient(to right, #2563eb, #7c3aed){% else %}none{% endif %};
+            -webkit-background-clip: {% if not is_pdf %}text{% else %}initial{% endif %};
+            -webkit-text-fill-color: {% if not is_pdf %}transparent{% else %}initial{% endif %};
+            color: #000000;
         }
+
         .company-name {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
-            color: #0f172a;
+            color: #000000;
             text-align: right;
+            line-height: 1.2;
         }
+
         .meta-info {
-            font-size: 13px;
-            color: #64748b;
+            font-size: 12px;
+            color: #334155;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 15px;
+            table-layout: {% if is_pdf %}fixed{% else %}auto{% endif %};
         }
+
         th {
-            background: #f1f5f9;
-            color: #475569;
+            background: {% if not is_pdf %}#f1f5f9{% else %}#ffffff{% endif %};
+            color: #000000;
             font-weight: 700;
-            font-size: 13px;
+            font-size: {% if is_pdf %}10px{% else %}13px{% endif %};
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 14px 16px;
+            padding: {% if is_pdf %}8px 6px{% else %}14px 16px Ext{% endif %};
             text-align: left;
-            border-bottom: 2px solid #e2e8f0;
+            border-top: 2px solid #000000;
+            border-bottom: 2px solid #000000;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
+
         td {
-            padding: 14px 16px;
-            font-size: 14px;
-            color: #334155;
-            border-bottom: 1px solid #e2e8f0;
+            padding: {% if is_pdf %}8px 6px{% else %}14px 16px{% endif %};
+            font-size: {% if is_pdf %}10px{% else %}14px{% endif %};
+            color: #000000;
+            border-bottom: 1px solid #cbd5e1;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            vertical-align: top;
         }
+
         tr:nth-child(even) {
-            background: #f8fafc;
+            background: {% if not is_pdf %}#f8fafc{% else %}none{% endif %};
         }
+
+        /* КНОПКИ ВЕБ-ІНТЕРФЕЙСУ */
         .no-print-zone {
             max-width: 1100px;
             margin: 0 auto 20px auto;
@@ -83,77 +126,36 @@
         }
         .print-btn {
             background: linear-gradient(135deg, #2563eb, #4f46e5);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 15px;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
-            transition: 0.2s;
+            color: white; border: none; padding: 12px 24px; font-size: 15px;
+            font-weight: 700; border-radius: 12px; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15); transition: 0.2s;
         }
-        .print-btn:hover {
-            transform: translateY(-2px);
-        }
+        .print-btn:hover { transform: translateY(-2px); }
         .close-btn {
-            background: #f1f5f9;
-            color: #475569;
-            border: none;
-            padding: 12px 24px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.2s;
+            background: #f1f5f9; color: #475569; border: none; padding: 12px 24px;
+            font-size: 15px; font-weight: 600; border-radius: 12px; cursor: pointer;
         }
-
-        @media print {
-            body {
-                background: #ffffff;
-                padding: 0;
-                margin: 0;
-            }
-            .no-print-zone {
-                display: none !important;
-            }
-            .report-card {
-                box-shadow: none !important;
-                border: none !important;
-                padding: 0 !important;
-                max-width: 100% !important;
-            }
-            .report-header h1 {
-                -webkit-text-fill-color: initial !important;
-                color: #000000 !important;
-            }
-            th {
-                background: #e2e8f0 !important;
-                color: #000000 !important;
-                border-bottom: 2px solid #000000 !important;
-            }
-            td {
-                border-bottom: 1px solid #cbd5e1 !important;
-            }
-        }
+        .close-btn:hover { background: #e2e8f0; }
     </style>
 </head>
 <body>
 
+    {% if not is_pdf %}
     <div class="no-print-zone">
-        <button class="close-btn" onclick="window.close()">← Close Document</button>
-        <button class="print-btn" onclick="window.print()">Print Document / Save to PDF</button>
+        <button class="close-btn" onclick="goToDashboard()">← Back to App</button>
+        <button class="print-btn" onclick="window.location.href='/{{ page_source }}/report/pdf'">Generate Official PDF</button>
     </div>
+    {% endif %}
 
     <div class="report-card">
         <div class="report-header">
             <div>
                 <h1>{{ report_title }}</h1>
-                <div class="meta-info">Generated on: <b>{{ generated_at }}</b></div>
+                <div class="meta-info">Report Generation Date: <b>{{ generated_at }}</b></div>
             </div>
             <div class="company-name">
-                ZLAGODA<br>
-                <span style="font-size: 12px; color: #64748b; font-weight: 400;">Supermarket Management System</span>
+                ZLAGODA SUPERMARKET<br>
+                <span style="font-size: 11px; font-weight: 400; color: #475569;">Supermarket Management System</span>
             </div>
         </div>
 
@@ -176,8 +178,8 @@
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="{{ headers|length }}" style="text-align: center; color: #94a3b8; padding: 40px;">
-                            No records found for this report.
+                        <td colspan="{{ headers|length }}" style="text-align: center; padding: 40px; color: #64748b;">
+                            No records found for this operational section.
                         </td>
                     </tr>
                 {% endif %}
@@ -185,5 +187,21 @@
         </table>
     </div>
 
+    <script>
+        function goToDashboard() {
+            const title = "{{ report_title }}".toLowerCase();
+            if (title.includes("receipt") || title.includes("register") || title.includes("check")) {
+                window.location.href = "/receipts";
+            } else if (title.includes("inventory") || title.includes("store")) {
+                window.location.href = "/store_products";
+            } else if (title.includes("category")) {
+                window.location.href = "/categories";
+            } else if (title.includes("customer") || title.includes("card")) {
+                window.location.href = "/customer_cards";
+            } else {
+                window.location.href = "/products";
+            }
+        }
+    </script>
 </body>
 </html>
