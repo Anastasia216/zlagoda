@@ -871,7 +871,7 @@
             </div>
 
             <div class="modal-buttons">
-                 <button type="button" class="reset-btn" onclick="closeEditModal()">Cancel</button>
+                 <button type="button" class="reset-btn" onclick="resetEditForm()">Reset</button>
                 <button type="submit" class="save-btn">Save</button>
             </div>
 
@@ -952,7 +952,7 @@
                 name="search"
                 class="search-bar"
                 autocomplete="off"
-                placeholder="Search categories..."
+                placeholder="Search categories by name..."
                 value="{{ search if search else '' }}">
         </form>
 
@@ -1096,7 +1096,6 @@ window.addEventListener("load", () => {
     }
 });
 
-///add//
 function openAddModal(){
     document.getElementById("addForm").reset();
     document.getElementById("addModal").style.display = "flex";
@@ -1117,7 +1116,6 @@ document.getElementById("addForm").addEventListener("submit", async function(eve
     }
 });
 
-//edit///
 let originalData = {};
 
 function openEditModal(categoryNumber){
@@ -1157,7 +1155,6 @@ document.getElementById("editForm").addEventListener("submit", async function(ev
     }
 });
 
-//delete//
 function showCustomConfirm(title, message, buttonText = "Delete") {
     return new Promise((resolve) => {
         const modal = document.getElementById("customConfirmModal");
@@ -1221,6 +1218,10 @@ async function deleteCategory(categoryNumber) {
     } catch (error) {
         alert("Network error: Could not connect to the server.");
     }
+}
+function resetEditForm(){
+    document.getElementById("category_number").value = originalData.category_number;
+    document.getElementById("category_name").value = originalData.category_name;
 }
 </script>
 </body>

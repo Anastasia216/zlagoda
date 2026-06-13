@@ -7,14 +7,26 @@ def validate_employee(data):
         errors.append(
             "Phone number must be in format +380XXXXXXXXX"
         )
-    try:
-        salary = float(data['salary'])
+    raw_salary = data.get('salary', '').strip()
 
-        if salary < 0:
-            errors.append("Salary can't be negative")
+    if not raw_salary:
+        errors.append("Salary is required.")
+    else:
+        try:
+            salary = float(raw_salary)
+            if salary <= 0:
+                errors.append("Salary must be greater than 0.")
 
-    except ValueError:
-        errors.append("Salary must be a number")
+            elif salary > 1000000:
+                errors.append("Salary exceeds maximum allowed limit.")
+
+            if '.' in raw_salary:
+                decimals = raw_salary.split('.')[1]
+                if len(decimals) > 2:
+                    errors.append("Salary cannot have more than 2 decimal places.")
+
+        except ValueError:
+            errors.append("Salary must be a valid number.")
     try:
         birth_date = datetime.strptime(
             data["date_of_birth"],

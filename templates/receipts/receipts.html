@@ -284,7 +284,7 @@
 
     <div class="search-wrapper">
         <form id="searchForm" method="GET" action="/receipts" style="display:flex; gap:16px; align-items:center;">
-            <input type="text" name="search" class="search-bar" placeholder="Search receipt..." value="{{ search if search else '' }}">
+            <input type="text" name="search" class="search-bar" placeholder="Search receipts by id or cashier id..." value="{{ search if search else '' }}">
             <div class="filter-wrapper">
                 <button type="button" class="filter-chip" onclick="toggleFilterMenu()">Date ▾</button>
                 <div id="filterMenu" class="filter-menu">

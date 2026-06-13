@@ -173,7 +173,7 @@
 
     <div class="search-wrapper">
         <form id="searchForm" method="GET" action="/customer_cards" style="display:flex; gap:16px;">
-            <input type="text" name="search" class="search-bar" placeholder="Search customers by surname or ID..." value="{{ search if search else '' }}">
+            <input type="text" name="search" class="search-bar" placeholder="Search customers by surname or id..." value="{{ search if search else '' }}">
 
             <div class="dropdown">
                 <button type="button" class="dropdown-btn" onclick="togglePercentDropdown()">
@@ -250,7 +250,7 @@
         <button class="close-btn" onclick="closeAddModal()">✕</button>
         <h2>Add Customer Card</h2>
 
-        <form id="addForm">
+        <form id="addForm" novalidate>
             <div class="form-grid">
              <input type="hidden" name="card_number" id="add_card_number">
                 <div class="form-group">
@@ -279,7 +279,7 @@
                 </div>
                 <div class="form-group">
                     <label>Zip Code (Optional)</label>
-                    <input type="text" name="zip_code" maxlength="10" pattern="[0-9]{5,10}" title="ZIP-code has to be from 5 to 10 numbers">
+                    <input type="text" name="zip_code" maxlength="9" pattern="[0-9]{5,9}" title="ZIP-code has to be from 5 to 9 numbers">
                 </div>
                 <div class="form-group">
                     <label>Discount Percent</label>
@@ -328,7 +328,7 @@
                 </div>
                 <div class="form-group">
                     <label>Zip Code (Optional)</label>
-                    <input type="text" id="zip_code" name="zip_code" maxlength="10" pattern="[0-9]{5,10}" title="ZIP-code has to be from 5 to 10 numbers">
+                    <input type="text" id="zip_code" name="zip_code" maxlength="9" pattern="[0-9]{5,9}" title="ZIP-code has to be from 5 to 9 numbers">
                 </div>
                 <div class="form-group">
                     <label>Discount Percent</label>
