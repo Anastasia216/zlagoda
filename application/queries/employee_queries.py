@@ -184,6 +184,3 @@ def get_all_roles():
         roles = cursor.fetchall()
         conn.close()
         return roles
-
-
-

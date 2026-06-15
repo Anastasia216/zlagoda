@@ -1025,7 +1025,7 @@
     <div class="search-wrapper">
         <form id="searchForm" class="search-form" method="GET" action="/products">
             <div class="search-group">
-                <input type="text" name="search" class="search-bar" placeholder="Search products..." value="{{ search if search else '' }}">
+                <input type="text" name="search" class="search-bar" placeholder="Search products by name..." value="{{ search if search else '' }}">
 
                 <div class="category-filter">
                     <div class="dropdown">
@@ -1035,7 +1035,7 @@
                         <div class="dropdown-menu" id="categoryDropdown">
                             <div class="dropdown-item" onclick="selectCategory('')">All categories</div>
                             {% for category in categories %}
-                            <div class="dropdown-item" onclick="selectCategory('{{ category['category_number'] }}')">
+                            <div class="dropdown-item" onclick="selectCategory('{{ category.category_number }}')">
                                 {{ category['category_name'] }}
                             </div>
                             {% endfor %}
@@ -1071,7 +1071,7 @@
        <div class="modal-select-menu" id="addCategoryMenu">
     <input type="text" class="dropdown-search-input" id="addCategorySearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addCategorySearch', 'addCategoryMenu')">
     {% for category in categories %}
-            <div class="modal-select-item" onclick="selectModalCategory('add', '{{ category['category_number'] }}', '{{ category['category_name'] | escape }}')">
+            <div class="modal-select-item" onclick="selectModalCategory('add', '{{ category.category_number }}', '{{ category.category_name | escape }}')">
                 {{ category['category_name'] }}
             </div>
             {% endfor %}
@@ -1117,7 +1117,7 @@
 <div class="modal-select-menu" id="editCategoryMenu">
     <input type="text" class="dropdown-search-input" id="editCategorySearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('editCategorySearch', 'editCategoryMenu')">
     {% for category in categories %}
-            <div class="modal-select-item" onclick="selectModalCategory('edit', '{{ category['category_number'] }}', '{{ category['category_name'] | escape }}')">
+            <div class="modal-select-item" onclick="selectModalCategory('edit', '{{ category.category_number }}', '{{ category.category_name | escape }}')">
                 {{ category['category_name'] }}
             </div>
             {% endfor %}
@@ -1158,8 +1158,8 @@
                     {% if session["role"] == "manager" %}
                     <td>
                         <div class="actions">
-                            <button class="edit-btn" onclick="openEditModal('{{ product['id_product'] }}')">Edit</button>
-                            <button class="delete-btn" onclick="deleteProduct('{{ product['id_product'] }}')">Delete</button>
+                            <button class="edit-btn" onclick="openEditModal('{{ product.id_product }}')">Edit</button>
+                            <button class="delete-btn" onclick="deleteProduct('{{ product.id_product }}')">Delete</button>
                         </div>
                     </td>
                     {% endif %}
