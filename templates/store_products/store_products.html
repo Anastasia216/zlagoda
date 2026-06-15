@@ -814,7 +814,7 @@
                             <div class="modal-select-menu" id="addProductCatalogMenu">
                                 <input type="text" class="dropdown-search-input" id="addCatalogSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addCatalogSearch', 'addProductCatalogMenu')">
                                 {% for product in products %}
-                                <div class="modal-select-item" onclick="selectStoreProduct('add_catalog', '{{ product['id_product'] }}', '{{ product['product_name'] | escape }}')">
+                                <div class="modal-select-item" onclick="selectStoreProduct('add_catalog', '{{ product.id_product }}', '{{ product.product_name | escape }}')">
                                     {{ product['product_name'] }}
                                 </div>
                                 {% endfor %}
@@ -833,13 +833,13 @@
                     <div class="form-group">
                         <label style="color: #2563eb; font-weight: 600;">Select Original Store Product *</label>
                         <div class="modal-select-wrapper">
-                            <button type="button" class="modal-select-btn" id="addPromoPartnerBtn" onclick="toggleModalDropdown('addPromoPartnerMenu')" style="border: 1px solid rgba(37, 99, 235, 0.2);">-- Select product currently in store --</button>
+                            <button type="button" class="modal-select-btn" id="addPromoPartnerBtn" onclick="toggleModalDropdown('addPromoPartnerMenu')" style="border: 1px solid rgba(37, 99, 235, 0.2);">Select product currently in store</button>
                             <div class="modal-select-menu" id="addPromoPartnerMenu">
                                 <input type="text" class="dropdown-search-input" id="addPromoSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addPromoSearch', 'addPromoPartnerMenu')">
-                                <div class="modal-select-item" onclick="selectStoreProduct('add_promo', '', '-- Select product currently in store --', '')">-- Clear selection --</div>
+                                <div class="modal-select-item" onclick="selectStoreProduct('add_promo', '', 'Select product currently in store', '')">Clear selection</div>
                                 {% for item in all_existing_upcs %}
                                     {% if item['promotional_product'] == 0 %}
-                                    <div class="modal-select-item" onclick="selectStoreProduct('add_promo', '{{ item['UPC'] }}', '{{ item['product_name'] | escape }} (UPC: {{ item['UPC'] }})', '{{ item['id_product'] }}')">
+                                    <div class="modal-select-item" onclick="selectStoreProduct('add_promo', '{{ item.UPC }}', '{{ item.product_name | escape }} (UPC: {{ item.UPC }})', '{{ item.id_product }}')">
                                         {{ item['product_name'] }} (In Store UPC: {{ item['UPC'] }})
                                     </div>
                                     {% endif %}
@@ -857,7 +857,7 @@
                 </div>
 
                 <div class="modal-buttons">
-                    <button type="button" class="reset-btn" onclick="closeAddModal()">Cancel</button>
+                    <button type="button" class="reset-btn" onclick="resetAddModal()">Reset</button>
                     <button type="submit" class="save-btn">Add Product</button>
                 </div>
             </form>
@@ -899,12 +899,12 @@
                 <td>
                     <div class="actions">
                         <button class="edit-btn" style="background: #f0fdf4; color: #16a34a;"
-                                onclick="openAnalyticsModal('{{ product['id_product'] }}', '{{ product['product_name'] | escape }}')">
+                                onclick="openAnalyticsModal('{{ product.id_product }}', '{{ product.product_name | escape }}')">
                              Sales Info
                         </button>
 
-                        <button class="edit-btn" onclick="openEditModal('{{ product['UPC'] }}')">Edit</button>
-                        <button class="delete-btn" onclick="deleteStoreProduct('{{ product['UPC'] }}', '{{ product['product_name'] | escape }}')">Delete</button>
+                        <button class="edit-btn" onclick="openEditModal('{{ product.UPC }}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteStoreProduct('{{ product.UPC }}', '{{ product.product_name | escape }}')">Delete</button>
                     </div>
                 </td>
                 {% endif %}
@@ -1485,6 +1485,28 @@ if (analyticsForm) {
             alert("Network error: Could not connect to the server.");
         }
     });
+}
+function resetAddModal() {
+    const form = document.getElementById("addForm");
+    if (form) form.reset();
+
+    document.getElementById("add_upc").value = generateRandomUPC();
+    document.getElementById("addProductCatalogBtn").innerText = "Select product";
+    document.getElementById("addPromoPartnerBtn").innerText = "-- Select product currently in store --";
+    document.getElementById("add_id_product").value = "";
+    document.getElementById("add_upc_prom").value = "";
+    document.getElementById("add_id_product_promo").value = "";
+
+    const promoCheck = document.getElementById("add_promo_check");
+    if (promoCheck) promoCheck.checked = false;
+
+    document.getElementById("regular_fields_group").style.display = "block";
+    document.getElementById("promo_fields_group").style.display = "none";
+    document.getElementById("add_price").setAttribute("required", "required");
+    document.getElementById("add_id_product").setAttribute("required", "required");
+    document.getElementById("add_upc_prom").removeAttribute("required");
+
+    form.querySelectorAll("input").forEach(input => input.setCustomValidity(""));
 }
 </script>
 </body>

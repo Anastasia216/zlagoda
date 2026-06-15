@@ -531,32 +531,6 @@
 
         <div class="header-actions">
 
-            <div class="requests-wrapper">
-
-                <button class="user-btn" onclick="toggleRequestsPopup()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                    </svg>
-                </button>
-
-                <div class="user-popup" id="requests-popup">
-                    <div class="popup-buttons">
-
-                        <button class="profile-btn"
-                                onclick="window.location.href='/daria-requests'">
-                            Daria's requests
-                        </button>
-
-                        <button class="profile-btn"
-                                onclick="window.location.href='/anastasia-requests'">
-                            Anastasia's requests
-                        </button>
-
-                    </div>
-                </div>
-
-            </div>
-
             <div class="user-wrapper">
 
                 <button class="user-btn" onclick="togglePopup()">
@@ -700,26 +674,18 @@
 <script>
 
     const popup = document.getElementById('popup');
-    const requestsPopup = document.getElementById('requests-popup');
 
     function togglePopup(){
         popup.classList.toggle('active');
         requestsPopup.classList.remove('active');
     }
 
-    function toggleRequestsPopup(){
-        requestsPopup.classList.toggle('active');
-        popup.classList.remove('active');
-    }
-
     window.addEventListener('click', function(e){
 
-        // Закриваємо меню профілю, якщо клік був поза його контейнером
         if(!e.target.closest('.user-wrapper')){
             popup.classList.remove('active');
         }
 
-        // Закриваємо меню реквестів, якщо клік був поза його контейнером
         if(!e.target.closest('.requests-wrapper')){
             requestsPopup.classList.remove('active');
         }

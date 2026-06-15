@@ -32,6 +32,31 @@ def add_user():
                 error="Employee not found"
             )
 
+        existing_user = conn.execute(
+            """
+            SELECT 1
+            FROM users
+            WHERE username = ?
+            """,
+            (username,)
+        ).fetchone()
+
+        if existing_user:
+            return jsonify(
+                success=False,
+                error="Username already exists"
+            )
+        existing_user = conn.execute("""
+            SELECT 1
+            FROM users
+            WHERE id_employee = ?
+        """, (id_employee,)).fetchone()
+
+        if existing_user:
+            return jsonify(
+                success=False,
+                error="This employee already has an account."
+            )
 
         id_user = str(uuid4())
 

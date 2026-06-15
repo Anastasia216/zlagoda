@@ -34,7 +34,7 @@ def login():
             session["user_id"] = user["id_user"]
             session["employee_id"] = user["id_employee"]
             session["username"] = user["username"]
-            session["role"] = user["role"]
+            session["role"] = user["role"].lower()
 
 
             session.permanent = False

@@ -154,7 +154,7 @@
                             <input type="text" class="dropdown-search-input" id="addCardSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addCardSearch', 'addCardMenu')">
                             <div class="modal-select-item" onclick="selectModalCard('', 'No card')">No card</div>
                             {% for customer_card in customer_cards %}
-                            <div class="modal-select-item" onclick="selectModalCard('{{ customer_card['card_number'] }}', '{{ customer_card['card_number'] }} - {{ customer_card['cust_surname'] }} {{ customer_card['cust_name'] }}')">
+                            <div class="modal-select-item" onclick="selectModalCard('{{ customer_card.card_number }}', '{{ customer_card.card_number }} - {{ customer_card.cust_surname }} {{ customer_cardcust_name }}')">
                                 {{ customer_card['card_number'] }} - {{ customer_card['cust_surname'] }} {{ customer_card['cust_name'] }}
                             </div>
                             {% endfor %}
@@ -217,7 +217,7 @@
                         <input type="text" class="dropdown-search-input" id="addProductSearch" placeholder="Type to filter..." onclick="event.stopPropagation()" oninput="filterModalDropdown('addProductSearch', 'addProductMenu')">
 
                         {% for product in products %}
-                        <div class="modal-select-item" onclick="selectModalProduct('{{ product['UPC'] }}', '{{ product['product_name'] | escape }}', '{{ product['products_number'] }}', '{{ product['promotional_product'] }}')">
+                        <div class="modal-select-item" onclick="selectModalProduct('{{ product.UPC }}', '{{ product.product_name | escape }}', '{{ product.products_number }}', '{{ product.promotional_product }}')">
                             {% if product['promotional_product'] == 1 or product['promotional_product'] == True %}
                                 <span style="color: #e11d48; font-weight: 700; margin-right: 4px;">[PROMO]</span>
                             {% endif %}
@@ -321,14 +321,14 @@
                 {% for receipt in receipts %}
                 <tr id="receipt-row-{{ receipt['check_number'] }}">
                     <td><b>{{ receipt['check_number'] }}</b></td>
-                    <td><button type="button" class="details-btn" onclick="openDetailsModal('{{ receipt['check_number'] }}')">Details</button></td>
+                    <td><button type="button" class="details-btn" onclick="openDetailsModal('{{ receipt.check_number }}')">Details</button></td>
                     <td class="print-date">{{ receipt['print_date'] }}</td>
                     <td class="sum-total">{{ receipt['sum_total'] }} ₴</td>
                     <td class="vat">{{ receipt['vat'] }} ₴</td>
                     <td class="id-employee">{{ receipt['empl_surname'] }} {{ receipt['empl_name'] }}</td>
                     <td class="customer-card">{{ receipt['card_number'] or '-' }}</td>
                     {% if session["role"] == "manager" %}
-                    <td><div class="actions"><button class="delete-btn" onclick="deleteReceipt('{{ receipt['check_number'] }}')">Delete</button></div></td>
+                    <td><div class="actions"><button class="delete-btn" onclick="deleteReceipt('{{ receipt.check_number }}')">Delete</button></div></td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -358,7 +358,7 @@
 
                             <div id="dynamicCashierItems">
                                 {% for employee in employees %}
-                                <div class="modal-select-item" onclick="selectAnalyticsCashier('{{ employee['id_employee'] }}', '{{ employee['empl_surname'] }} {{ employee['empl_name'] }}')">
+                                <div class="modal-select-item" onclick="selectAnalyticsCashier('{{ employee.id_employee }}', '{{ employee.empl_surname }} {{ employee.empl_name }}')">
                                     {{ employee['empl_surname'] }} {{ employee['empl_name'] }}
                                 </div>
                                 {% endfor %}
@@ -648,7 +648,7 @@ async function addProductToReceipt(){
         return;
     }
     if(quantity > maxStock) {
-        await showCustomConfirm("Action Blocked", f`Not enough stock on the floor! Available: <b>${maxStock} pcs</b>.`, "OK");
+        await showCustomConfirm("Action Blocked", `Not enough stock on the floor! Available: <b>${maxStock} pcs</b>.`, "OK");
         return;
     }
 

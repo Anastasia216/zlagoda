@@ -9,7 +9,7 @@ if sys.platform == 'darwin':
 
     def patched_dlopen(self, name, flags=0):
         if name and any(lib in name for lib in ['gobject', 'pango', 'cairo', 'glib', 'harfbuzz', 'fontconfig']):
-            possible_dirs = ['/opt/homebrew/lib/', '/usr/local/lib/']
+            possible_dirs = ['/opt/homebrew/lib/', '/usr/local/lib/', '/Users/anastasiia/PycharmProjects/zlagoda/.venv/bin/']
             for base_dir in possible_dirs:
                 clean_name = name.replace('lib', '').split('.')[
                     0]

@@ -22,75 +22,76 @@ def receipts():
 
     user_role = session.get("role")
     user_employee_id = session.get("employee_id")
+    try:
+        employees = conn.execute("""
+                                 SELECT *
+                                 FROM employees
+                                 WHERE LOWER(empl_role) = 'cashier'
+                                 ORDER BY empl_surname
+                                 """).fetchall()
 
-    employees = conn.execute("""
-                             SELECT *
-                             FROM employees
-                             WHERE LOWER(empl_role) = 'cashier'
-                             ORDER BY empl_surname
-                             """).fetchall()
+        customer_cards = conn.execute("""
+                                      SELECT *
+                                      FROM customer_cards
+                                      ORDER BY cust_surname
+                                      """).fetchall()
 
-    customer_cards = conn.execute("""
-                                  SELECT *
-                                  FROM customer_cards
-                                  ORDER BY cust_surname
-                                  """).fetchall()
+        products = conn.execute("""
+                                SELECT sp.UPC,
+                                       sp.products_number,
+                                       sp.promotional_product,
+                                       p.product_name
+                                FROM store_products sp
+                                         JOIN products p ON p.id_product = sp.id_product
+                                ORDER BY p.product_name
+                                """).fetchall()
 
-    products = conn.execute("""
-                            SELECT sp.UPC,
-                                   sp.products_number,
-                                   sp.promotional_product,
-                                   p.product_name
-                            FROM store_products sp
-                                     JOIN products p ON p.id_product = sp.id_product
-                            ORDER BY p.product_name
-                            """).fetchall()
+        query = """
+                SELECT r.*,
+                       e.empl_surname,
+                       e.empl_name,
+                       c.cust_surname,
+                       c.cust_name
+                FROM receipts r
+                         JOIN employees e ON r.id_employee = e.id_employee
+                         LEFT JOIN customer_cards c ON r.card_number = c.card_number
+                """
 
-    query = """
-            SELECT r.*,
-                   e.empl_surname,
-                   e.empl_name,
-                   c.cust_surname,
-                   c.cust_name
-            FROM receipts r
-                     JOIN employees e ON r.id_employee = e.id_employee
-                     LEFT JOIN customer_cards c ON r.card_number = c.card_number
-            """
+        where_clauses = []
+        params = []
 
-    where_clauses = []
-    params = []
+        if user_role == "cashier":
+            where_clauses.append("r.id_employee = ?")
+            params.append(user_employee_id)
 
-    if user_role == "cashier":
-        where_clauses.append("r.id_employee = ?")
-        params.append(user_employee_id)
+        if search:
+            where_clauses.append("(r.check_number LIKE ? OR e.empl_surname LIKE ? OR c.cust_surname LIKE ?)")
+            params.extend([f"%{search}%", f"%{search}%", f"%{search}%"])
 
-    if search:
-        where_clauses.append("(r.check_number LIKE ? OR e.empl_surname LIKE ? OR c.cust_surname LIKE ?)")
-        params.extend([f"%{search}%", f"%{search}%", f"%{search}%"])
+        if filter_type == "today":
+            today_str = date.today().isoformat()
+            where_clauses.append("date(r.print_date) = ?")
+            params.append(today_str)
+        elif filter_type == "period" and date_from and date_to:
+            where_clauses.append("date(r.print_date) BETWEEN ? AND ?")
+            params.extend([date_from, date_to])
 
-    if filter_type == "today":
-        today_str = date.today().isoformat()
-        where_clauses.append("date(r.print_date) = ?")
-        params.append(today_str)
-    elif filter_type == "period" and date_from and date_to:
-        where_clauses.append("date(r.print_date) BETWEEN ? AND ?")
-        params.extend([date_from, date_to])
+        if where_clauses:
+            query += " WHERE " + " AND ".join(where_clauses)
 
-    if where_clauses:
-        query += " WHERE " + " AND ".join(where_clauses)
+        query += " ORDER BY r.print_date DESC"
+        receipts_list = conn.execute(query, params).fetchall()
 
-    query += " ORDER BY r.print_date DESC"
-    receipts_list = conn.execute(query, params).fetchall()
-    conn.close()
-
-    return render_template(
-        "receipts/receipts.html",
-        receipts=receipts_list,
-        search=search,
-        employees=employees,
-        customer_cards=customer_cards,
-        products=products
-    )
+        return render_template(
+            "receipts/receipts.html",
+            receipts=receipts_list,
+            search=search,
+            employees=employees,
+            customer_cards=customer_cards,
+            products=products
+        )
+    finally:
+        conn.close()
 
 
 @receipt_routes.route("/receipts/add", methods=["POST"])
@@ -98,76 +99,112 @@ def receipts():
 @role_required("manager", "cashier")
 def add_receipt():
     conn = get_db_connection()
-    if request.method == "POST":
+    try:
         check_number = str(uuid.uuid4())[:10]
 
         employee_id = session.get("employee_id")
         if not employee_id:
-            conn.close()
-            return jsonify({"success": False, "message": "Unauthorized. Employee session expired."}), 401
+            return jsonify({
+                "success": False,
+                "message": "Unauthorized. Employee session expired."
+            }), 401
 
         card_number = request.form.get("card_number")
         print_date = request.form["print_date"]
 
         products = json.loads(request.form["products"])
         if not products:
-            conn.close()
-            return jsonify({"success": False, "message": "Add at least one product."}), 400
+            return jsonify({
+                "success": False,
+                "message": "Add at least one product."
+            }), 400
 
         subtotal = 0
+        stock_cache = {}
+
         for product in products:
             upc = product["upc"]
-            quantity_to_buy = int(product["quantity"])
+            qty = int(product["quantity"])
             price = float(product["price"])
 
-            store_item = conn.execute("SELECT products_number FROM store_products WHERE UPC = ?", (upc,)).fetchone()
+            store_item = conn.execute(
+                "SELECT products_number FROM store_products WHERE UPC = ?",
+                (upc,)
+            ).fetchone()
+
             if not store_item:
-                conn.close()
-                return jsonify({"success": False, "message": f"Product UPC {upc} not found."}), 400
+                return jsonify({
+                    "success": False,
+                    "message": f"Product UPC {upc} not found."
+                }), 400
 
             current_stock = store_item["products_number"]
-            if current_stock < quantity_to_buy:
-                conn.close()
-                return jsonify(
-                    {"success": False, "message": f"Not enough stock for UPC {upc}. Floor has: {current_stock}"}), 400
 
-            subtotal += quantity_to_buy * price
+            if current_stock < qty:
+                return jsonify({
+                    "success": False,
+                    "message": f"Not enough stock for UPC {upc}. Available: {current_stock}"
+                }), 400
+
+            stock_cache[upc] = current_stock
+            subtotal += qty * price
 
         discount_percent = 0
-        if card_number and card_number.strip() != "":
-            card_data = conn.execute("SELECT percent FROM customer_cards WHERE card_number = ?",
-                                     (card_number,)).fetchone()
+        if card_number and card_number.strip():
+            card_data = conn.execute(
+                "SELECT percent FROM customer_cards WHERE card_number = ?",
+                (card_number,)
+            ).fetchone()
+
             if card_data:
                 discount_percent = int(card_data["percent"])
 
-        sum_total = round(subtotal * (1 - (discount_percent / 100.0)), 2)
-
+        sum_total = round(subtotal * (1 - discount_percent / 100.0), 2)
         vat = round(sum_total * 0.20, 2)
 
-        try:
-            conn.execute("""INSERT INTO receipts (check_number, id_employee, card_number, print_date, sum_total, vat)
-                            VALUES (?, ?, ?, ?, ?, ?)""",
-                         (check_number, employee_id, card_number if card_number else None, print_date, sum_total, vat))
+        conn.execute(
+            """
+            INSERT INTO receipts (check_number, id_employee, card_number, print_date, sum_total, vat)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (check_number, employee_id, card_number or None, print_date, sum_total, vat)
+        )
 
-            for product in products:
-                upc = product["upc"]
-                quantity = int(product["quantity"])
-                price = float(product["price"])
+        for product in products:
+            upc = product["upc"]
+            qty = int(product["quantity"])
+            price = float(product["price"])
 
-                conn.execute("""INSERT INTO sales(UPC, check_number, product_number, selling_price)
-                                VALUES (?, ?, ?, ?)""", (upc, check_number, quantity, price))
+            conn.execute(
+                """
+                INSERT INTO sales (UPC, check_number, product_number, selling_price)
+                VALUES (?, ?, ?, ?)
+                """,
+                (upc, check_number, qty, price)
+            )
 
-                conn.execute("""UPDATE store_products
-                                SET products_number = products_number - ?
-                                WHERE UPC = ?""", (quantity, upc))
+            conn.execute(
+                """
+                UPDATE store_products
+                SET products_number = products_number - ?
+                WHERE UPC = ?
+                """,
+                (qty, upc)
+            )
 
-            conn.commit()
-            return jsonify({"success": True})
-        except Exception as e:
-            conn.rollback()
-            return jsonify({"success": False, "message": str(e)}), 500
-        finally:
-            conn.close()
+        conn.commit()
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        conn.rollback()
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
+
+    finally:
+        conn.close()
 
 
 @receipt_routes.route("/receipts/<string:check_number>/sales")

@@ -225,9 +225,9 @@
                 <td><span style="font-weight: 700; color: #2563eb;">{{ customer_card['percent'] }}%</span></td>
                 <td>
                     <div class="actions">
-                        <button class="edit-btn" onclick="openEditModal('{{ customer_card['card_number'] }}')">Edit</button>
+                        <button class="edit-btn" onclick="openEditModal('{{ customer_card.card_number }}')">Edit</button>
                         {% if session["role"] == "manager" %}
-                        <button class="delete-btn" onclick="deleteCustomerCard('{{ customer_card['card_number'] }}', '{{ customer_card['cust_surname'] | escape }}')">Delete</button>
+                        <button class="delete-btn" onclick="deleteCustomerCard('{{ customer_card.card_number }}', '{{ customer_card.cust_surname | escape }}')">Delete</button>
                         {% endif %}
                     </div>
                 </td>
@@ -250,7 +250,7 @@
         <button class="close-btn" onclick="closeAddModal()">✕</button>
         <h2>Add Customer Card</h2>
 
-        <form id="addForm" novalidate>
+        <form id="addForm">
             <div class="form-grid">
              <input type="hidden" name="card_number" id="add_card_number">
                 <div class="form-group">
@@ -267,7 +267,7 @@
                 </div>
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input type="text" name="phone_number" placeholder="+380XXXXXXXXX" maxlength="13" pattern="\+?[0-9]{10,12}" required title="Format: +380XXXXXXXXX (Max 13 characters)">
+                    <input type="text" name="phone_number" placeholder="+380XXXXXXXXX" maxlength="13" pattern="\+?[0-9]{10,12}" required title="Format: +380XXXXXXXXX (Max 13 characters)" required>
                 </div>
                 <div class="form-group">
                     <label>City (Optional)</label>
@@ -561,16 +561,18 @@ function outsideClick(event){
     document.getElementById("percent").value = originalData.percent !== undefined ? originalData.percent : 0;
 }
     document.querySelectorAll('#editForm input[pattern], #addForm input[pattern]').forEach(input => {
-
-    input.addEventListener('invalid', function() {
-        const customMessage = this.getAttribute('title') || 'Invalid format.';
-        this.setCustomValidity(`Please match the requested format: ${customMessage}`);
+        input.addEventListener('invalid', function() {
+            if (this.validity.patternMismatch) {
+                const customMessage = this.getAttribute('title') || 'Invalid format.';
+                this.setCustomValidity(`Please match the requested format: ${customMessage}`);
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+        input.addEventListener('input', function() {
+            this.setCustomValidity('');
+        });
     });
-
-    input.addEventListener('input', function() {
-        this.setCustomValidity('');
-    });
-});
 </script>
 </body>
 </html>
