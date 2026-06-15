@@ -922,6 +922,11 @@ input[type="date"]:focus{
         0 10px 35px rgba(15,23,42,0.06);
 
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
         @media(max-width:1000px){
 
@@ -976,11 +981,6 @@ input[type="date"]:focus{
 <div id="addUserModal" class="modal">
 
     <div class="modal-content">
-
-        <button class="close-btn"
-                onclick="closeAddUserModal()">
-            ✕
-        </button>
 
         <h2>Add User</h2>
 
@@ -1141,9 +1141,10 @@ input[type="date"]:focus{
 
                     <label>Salary</label>
 
-                    <input type="text"
+                    <input type="number"
                            id="new_salary"
                            name="salary"
+                           placeholder="0.0000"
                            required>
 
                 </div>
@@ -1214,8 +1215,11 @@ input[type="date"]:focus{
                     <input type="text"
                            id="new_zip_code"
                            name="zip_code"
+                           maxlength="9"
+                           pattern="[0-9]{5,9}"
+                           title="ZIP-code has to be from 5 to 9 numbers"
                            required>
-                </div>
+                    </div>
                 </div>
 
             <div class="modal-buttons">
@@ -1362,9 +1366,11 @@ input[type="date"]:focus{
 
                     <label>Salary</label>
 
-                    <input type="text"
+                    <input type="number"
                            id="salary"
                            name="salary"
+                           step="any"
+                           placeholder="0.0000"
                            required>
 
                 </div>
@@ -1433,8 +1439,12 @@ input[type="date"]:focus{
 
                     <label>Zip Code</label>
 
-                    <input id="zip_code"
+                    <input type="text"
+                           id="zip_code"
                            name="zip_code"
+                           maxlength="9"
+                           pattern="[0-9]{5,9}"
+                           title="ZIP-code has to be from 5 to 9 numbers"
                            required>
 
                 </div>
@@ -1519,7 +1529,7 @@ input[type="date"]:focus{
             <input type="text"
                name="search"
                class="search-bar"
-               placeholder="Search employees..."
+               placeholder="Search employees by surname or id..."
                value="{{ search if search else '' }}">
 
             <div class="dropdown">
@@ -1676,8 +1686,13 @@ input[type="date"]:focus{
 </div>
 
 <script>
-    function validateEmployeeForm() {
-    const salary =parseFloat(document.getElementById("new_salary").value );
+function validateEmployeeForm(){
+const role = document.getElementById("new_empl_role").value.trim();
+    if (!role) {
+        alert("Please select a role.");
+        return false;
+    }
+    const salary = parseFloat(document.getElementById("new_salary").value );
     if (isNaN(salary) || salary <= 0) {
         alert("Salary must be greater than 0.");
         return false;
@@ -1688,7 +1703,7 @@ input[type="date"]:focus{
         return false;
     }
     const zip = document.getElementById("new_zip_code").value.trim();
-    if (!/^[0-9]{5,10}$/.test(zip)) {
+    if (!/^[0-9]{5,9}$/.test(zip)) {
         alert("Invalid ZIP code.");
         return false;
     }
@@ -1800,6 +1815,11 @@ document.getElementById("editForm").addEventListener("submit", saveEmployee);
 
 async function saveEmployee(event){
     event.preventDefault();
+    const role = document.getElementById("empl_role").value.trim();
+    if (!role) {
+        alert("Please select a role.");
+        return;
+    }
     const salary = parseFloat(document.getElementById("salary").value);
     if (isNaN(salary) || salary <= 0){
         alert("Please enter a correct value. Salary must be greater than 0.");
@@ -1811,7 +1831,7 @@ async function saveEmployee(event){
         return;
     }
     const zip = document.getElementById("zip_code").value.trim();
-    if(!/^[0-9]{5,10}$/.test(zip)){
+    if(!/^[0-9]{5,9}$/.test(zip)){
         alert("Invalid ZIP code.");
         return;
     }
@@ -1836,7 +1856,7 @@ async function saveEmployee(event){
             `${document.getElementById("city").value}, ${document.getElementById("street").value}`;
         row.querySelector(".zip-code").textContent = document.getElementById("zip_code").value;
         closeEditModal();
-    } else { alert(result.message); }
+    } else { alert(result.message.replace(/<br\s*\/?>/gi, '\n')); }
 }
 </script>
 
@@ -1859,7 +1879,7 @@ async function addEmployee(event){
     if(result.success){
         closeAddModal();
         openAddUserModal(result.id_employee);
-    }else{ alert(result.message); }
+    }else{ alert(result.message.replace(/<br\s*\/?>/gi, '\n')); }
 }
 </script>
 
@@ -1961,13 +1981,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function selectAddRole(value, text){
-    document.getElementById("new_empl_role").value = value;
+    document.getElementById("new_empl_role").value = text;
     document.getElementById("addRoleBtn").innerText = text;
     document.getElementById("addRoleMenu").style.display = "none";
 }
 
 function selectEditRole(value, text){
-    document.getElementById("empl_role").value = value;
+    document.getElementById("empl_role").value = text;
     document.getElementById("editRoleBtn").innerText = text;
     document.getElementById("editRoleMenu").style.display = "none";
 }

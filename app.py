@@ -68,6 +68,14 @@ def create_app():
     def home():
         return render_template("home.html")
 
+    @app.route('/anastasia-requests')
+    def anastasia_requests():
+        return render_template('anastasia-requests.html')
+
+    @app.route('/daria-requests')
+    def daria_requests():
+        return render_template('daria-requests.html')
+
     app.config.from_object("configure.Config")
     app.config["SESSION_PERMANENT"] = False
 
