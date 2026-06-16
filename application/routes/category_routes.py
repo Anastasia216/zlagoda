@@ -114,3 +114,71 @@ def delete_category(category_number):
         return jsonify({"success": False, "message": str(e)}), 500
     finally:
         conn.close()
+
+
+@category_routes.route('/categories/analytics/revenue', methods=['POST'])
+@login_required
+@role_required("manager", "cashier")
+def category_revenue_analytics():
+    start_date = request.form.get('start_date', '').strip()
+    end_date = request.form.get('end_date', '').strip()
+
+    if not start_date or not end_date:
+        return jsonify({"success": False, "message": "Please specify both start and end dates."}), 400
+
+    conn = get_db_connection()
+    try:
+        rows = conn.execute("""
+                            SELECT c.category_name,
+                                   SUM(s.product_number)                   AS total_sold,
+                                   SUM(s.product_number * s.selling_price) AS total_revenue
+                            FROM categories c
+                                     INNER JOIN products p ON c.category_number = p.category_number
+                                     INNER JOIN store_products sp ON p.id_product = sp.id_product
+                                     INNER JOIN sales s ON sp.UPC = s.UPC
+                                     INNER JOIN receipts r ON s.check_number = r.check_number
+                            WHERE r.print_date BETWEEN ? AND ?
+                            GROUP BY c.category_name
+                            ORDER BY total_revenue DESC 
+                            """, (start_date, end_date)).fetchall()
+
+        results_list = [
+            {
+                "category_name": row["category_name"],
+                "total_sold": row["total_sold"],
+                "total_revenue": float(row["total_revenue"])
+            } for row in rows
+        ]
+        return jsonify({"success": True, "results": results_list})
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+    finally:
+        conn.close()
+
+
+@category_routes.route('/categories/analytics/coverage', methods=['POST'])
+@login_required
+@role_required("manager")
+def category_coverage_analytics():
+    conn = get_db_connection()
+    try:
+        rows = conn.execute("""
+                            SELECT c.category_name
+                            FROM categories c
+                            WHERE NOT EXISTS (SELECT p.id_product
+                                              FROM products p
+                                              WHERE p.category_number = c.category_number
+                                                AND NOT EXISTS (SELECT s.UPC
+                                                                FROM store_products sp
+                                                                         INNER JOIN sales s ON sp.UPC = s.UPC
+                                                                WHERE sp.id_product = p.id_product))
+                            """).fetchall()
+
+        results_list = [{"category_name": row["category_name"]} for row in rows]
+        return jsonify({"success": True, "results": results_list})
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+    finally:
+        conn.close()

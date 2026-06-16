@@ -791,6 +791,92 @@
             }
         }
 
+/* ІНТЕГРОВАНИЙ АНАЛІТИЧНИЙ БЛОК У СТИЛІ ТОВАРІВ */
+        .analytics-filter {
+            position: relative;
+            width: 220px;
+        }
+
+        .analytics-dropdown-btn {
+            height: 68px;
+            width: 100%;
+            padding: 0 20px;
+            border: none;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 35px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #334155;
+        }
+
+        .analytics-dropdown-btn::after {
+            content: "⌄";
+            margin-left: 10px;
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .analytics-dropdown-menu {
+            position: absolute;
+            top: 75px;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(14px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(15,23,42,0.12);
+            display: none;
+            z-index: 1000;
+            padding: 6px 0;
+        }
+
+        .analytics-dropdown-item {
+            padding: 14px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.2s;
+            color: #334155;
+        }
+
+        .analytics-dropdown-item:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+        
+        .analytics-table-wrapper {
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+        .analytics-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+        .analytics-table th {
+            padding: 12px 16px;
+            background: #f8fafc;
+            font-weight: 700;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .analytics-table td {
+            padding: 12px 16px;
+            border-top: 1px solid #f1f5f9;
+            color: #334155;
+        }
     </style>
 </head>
 
@@ -943,19 +1029,22 @@
 
     </div>
 
-    <div class="search-wrapper">
+   <div class="search-wrapper">
+        <div style="display: flex; gap: 16px; width: 100%;">
+            <form id="searchForm" method="GET" action="/categories" style="flex: 1;">
+                <input type="text" name="search" class="search-bar" autocomplete="off" placeholder="Search categories by name..." value="{{ search if search else '' }}" style="width: 100%;">
+            </form>
 
-        <form id="searchForm" method="GET" action="/categories">
-
-            <input
-                type="text"
-                name="search"
-                class="search-bar"
-                autocomplete="off"
-                placeholder="Search categories by name..."
-                value="{{ search if search else '' }}">
-        </form>
-
+            <div class="analytics-filter">
+                <button type="button" class="analytics-dropdown-btn" onclick="toggleAnalyticsDropdown()">
+                    System Analytics
+                </button>
+                <div class="analytics-dropdown-menu" id="analyticsDropdown">
+                    <div class="analytics-dropdown-item" onclick="openRevenueModal()">Revenue</div>
+                    <div class="analytics-dropdown-item" onclick="openCoverageModal()">Bestsellers</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="table-container">
@@ -1047,7 +1136,59 @@
         </div>
     </div>
 </div>
+<div id="revenueReportModal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeRevenueModal()">✕</button>
+        <h2>Revenue</h2>
+        <form id="revenueForm" style="display: flex; gap: 16px; align-items: flex-end; margin-top: 10px;">
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                <label>Start Date</label>
+                <input type="date" id="start_date" name="start_date" required>
+            </div>
+            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                <label>End Date</label>
+                <input type="date" id="end_date" name="end_date" required>
+            </div>
+            <button type="submit" class="save-btn" style="height: 54px; border-radius: 18px;">Generate</button>
+        </form>
 
+        <div id="revenueTableContainer" class="analytics-table-wrapper" style="display: none;">
+            <table class="analytics-table">
+                <thead>
+                    <tr>
+                        <th>Category Name</th>
+                        <th style="text-align: right;">Units Sold</th>
+                        <th style="text-align: right;">Total Revenue</th>
+                    </tr>
+                </thead>
+                <tbody id="revenueTableBody"></tbody>
+            </table>
+        </div>
+        <div id="revenueEmptyMessage" style="display:none; margin-top:16px; padding:12px 16px; background:#fffbeb; color:#92400e; border-radius:12px; font-size:14px;"></div>
+    </div>
+</div>
+
+<div id="coverageAnalysisModal" class="modal">
+    <div class="modal-content" style="max-width: 520px;">
+        <button class="close-btn" onclick="closeCoverageModal()">✕</button>
+        <h2>Bestsellers</h2>
+        <p style="color:#64748b; font-size:14px; margin-bottom:20px; margin-top: 8px; line-height:1.5;">
+            List of categories where every product have been sold at least once.
+        </p>
+
+        <div id="coverageTableContainer" class="analytics-table-wrapper" style="display: none;">
+            <table class="analytics-table">
+                <thead>
+                    <tr>
+                        <th>Fully Coverage Categories</th>
+                    </tr>
+                </thead>
+                <tbody id="coverageTableBody"></tbody>
+            </table>
+        </div>
+        <div id="coverageEmptyMessage" style="display:none; margin-top:16px; padding:12px 16px; background:#f1f5f9; color:#475569; border-radius:12px; font-size:14px;"></div>
+    </div>
+</div>
 <script>
 const popup = document.getElementById('popup');
 function togglePopup() { if(popup) popup.classList.toggle('active'); }
@@ -1223,6 +1364,84 @@ function resetEditForm(){
     document.getElementById("category_number").value = originalData.category_number;
     document.getElementById("category_name").value = originalData.category_name;
 }
+function toggleAnalyticsDropdown() {
+    const menu = document.getElementById("analyticsDropdown");
+    if(menu) menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+document.addEventListener("click", function(event) {
+    const filterWrapper = event.target.closest('.analytics-filter');
+    if (!filterWrapper) {
+        const menu = document.getElementById("analyticsDropdown");
+        if(menu) menu.style.display = "none";
+    }
+});
+
+function openRevenueModal() {
+    document.getElementById("analyticsDropdown").style.display = "none";
+    document.getElementById("revenueForm").reset();
+    document.getElementById("revenueTableContainer").style.display = "none";
+    document.getElementById("revenueEmptyMessage").style.display = "none";
+    document.getElementById("revenueReportModal").style.display = "flex";
+}
+function closeRevenueModal() { document.getElementById("revenueReportModal").style.display = "none"; }
+
+document.getElementById("revenueForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const response = await fetch("/categories/analytics/revenue", {
+        method: "POST",
+        body: new FormData(this)
+    });
+    const data = await response.json();
+    const tbody = document.getElementById("revenueTableBody");
+    tbody.innerHTML = "";
+
+    if (data.success && data.results.length > 0) {
+        data.results.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td style="font-weight:600;">${row.category_name}</td>
+                <td style="text-align:right;">${row.total_sold}</td>
+                <td style="text-align:right; color:#16a34a; font-weight:700;">${parseFloat(row.total_revenue).toFixed(2)} ₴</td>
+            `;
+            tbody.appendChild(tr);
+        });
+        document.getElementById("revenueEmptyMessage").style.display = "none";
+        document.getElementById("revenueTableContainer").style.display = "block";
+    } else {
+        document.getElementById("revenueTableContainer").style.display = "none";
+        const msgBox = document.getElementById("revenueEmptyMessage");
+        msgBox.innerText = data.message || "No active records found for this period.";
+        msgBox.style.display = "block";
+    }
+});
+
+async function openCoverageModal() {
+    document.getElementById("analyticsDropdown").style.display = "none";
+    document.getElementById("coverageTableContainer").style.display = "none";
+    document.getElementById("coverageEmptyMessage").style.display = "none";
+    document.getElementById("coverageAnalysisModal").style.display = "flex";
+
+    const response = await fetch("/categories/analytics/coverage", { method: "POST" });
+    const data = await response.json();
+    const tbody = document.getElementById("coverageTableBody");
+    tbody.innerHTML = "";
+
+    if (data.success && data.results.length > 0) {
+        data.results.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td style="font-weight:600; color:#0f172a;">${row.category_name}</td>`;
+            tbody.appendChild(tr);
+        });
+        document.getElementById("coverageTableContainer").style.display = "block";
+    } else {
+        document.getElementById("coverageTableContainer").style.display = "none";
+        const msgBox = document.getElementById("coverageEmptyMessage");
+        msgBox.innerText = "No categories match the criteria at the moment.";
+        msgBox.style.display = "block";
+    }
+}
+function closeCoverageModal() { document.getElementById("coverageAnalysisModal").style.display = "none"; }
 </script>
 </body>
 </html>
