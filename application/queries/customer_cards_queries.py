@@ -169,3 +169,51 @@ def get_all_percents():
     conn.close()
 
     return [row['percent'] if hasattr(row, 'keys') else row[0] for row in raw_percents]
+
+
+def get_customer_purchase_statistics(card_number, date_from, date_to):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(""" 
+                    SELECT cc.card_number, cc.cust_surname, cc.cust_name,
+                            COUNT(DISTINCT r.check_number) AS receipts_count,
+                            SUM(s.product_number * s.selling_price) AS total_spent,
+                            ROUND(SUM(s.product_number * s.selling_price) * 1.0 /COUNT(DISTINCT r.check_number), 2) AS average_receipt
+                    FROM customer_cards cc
+                    JOIN receipts r
+                        ON cc.card_number = r.card_number
+                    JOIN sales s
+                        ON r.check_number = s.check_number
+                    WHERE cc.card_number = ?
+                      AND DATE(r.print_date) BETWEEN ? AND ?
+                    GROUP BY cc.card_number, cc.cust_surname, cc.cust_name
+    """, (card_number, date_from, date_to))
+    stats = cursor.fetchone()
+    conn.close()
+    return stats
+
+def is_universal_customer(card_number, date_from, date_to):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+                SELECT NOT EXISTS (
+                SELECT 1
+                FROM categories c
+                WHERE NOT EXISTS (  SELECT 1
+                                    FROM receipts r
+                                    JOIN sales s
+                                        ON r.check_number = s.check_number
+                                    JOIN store_products sp
+                                        ON s.UPC = sp.UPC
+                                    JOIN products p
+                                        ON sp.id_product = p.id_product
+                                    WHERE r.card_number = ?
+                                      AND p.category_number = c.category_number
+                                    AND DATE(r.print_date) BETWEEN ? AND ?  
+                                    )
+                ) AS universal_customer;
+    """, (card_number, date_from, date_to))
+    result = cursor.fetchone()
+    conn.close()
+    return bool(result["universal_customer"])

@@ -3,7 +3,9 @@ from flask import (Blueprint, render_template, request, redirect, url_for, jsoni
 from application.queries.customer_cards_queries import (
     get_all_customer_cards, get_customer_card_by_number,
     create_customer_card, update_customer_card,
-    delete_customer_card, get_all_percents
+    delete_customer_card, get_all_percents,
+    get_customer_purchase_statistics,
+    is_universal_customer
 )
 from application.decorators import login_required, role_required
 
@@ -123,3 +125,28 @@ def delete_customer_card_route(card_number):
             "success": False,
             "message": "Cannot delete this customer card because it has already been used in existing store receipts. Operational history must be preserved."
         }), 400
+
+@customer_card_routes.route('/customer_cards/<card_number>/statistics')
+@login_required
+@role_required('manager')
+def customer_statistics(card_number):
+    date_from = request.args.get('date_from')
+    date_to = request.args.get('date_to')
+    stats = get_customer_purchase_statistics( card_number, date_from, date_to)
+    universal = is_universal_customer(card_number, date_from, date_to)
+    if not stats:
+        return jsonify({
+            "success": True,
+            "receipts_count": 0,
+            "total_spent": 0,
+            "average_receipt": 0,
+            "universal_customer": universal
+        })
+
+    return jsonify({
+        "success": True,
+        "receipts_count": stats["receipts_count"],
+        "total_spent": float(stats["total_spent"]),
+        "average_receipt": float(stats["average_receipt"]),
+        "universal_customer": universal
+    })
